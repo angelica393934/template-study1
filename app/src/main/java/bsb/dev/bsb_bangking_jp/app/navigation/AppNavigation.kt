@@ -38,7 +38,6 @@ import bsb.dev.bsb_bangking_jp.feature.transfer.PinTfPage
 import bsb.dev.bsb_bangking_jp.feature.transfer.TransferBSBPage
 import bsb.dev.bsb_bangking_jp.feature.transfer.TransferBaruPage
 import bsb.dev.bsb_bangking_jp.feature.transfer.TransferBerhasilDijadwalkanPage
-import bsb.dev.bsb_bangking_jp.feature.transfer.TransferBerhasilPage
 import bsb.dev.bsb_bangking_jp.feature.transfer.TransferHomePage
 import bsb.dev.bsb_bangking_jp.feature.transfer.TransferUmumPage
 import bsb.dev.bsb_bangking_jp.feature.transfer.component.PeriksaKembaliData
@@ -58,6 +57,8 @@ import androidx.compose.ui.platform.LocalContext
 import bsb.dev.bsb_bangking_jp.core.notification.NotificationHelper
 import bsb.dev.bsb_bangking_jp.core.util.RupiahFormat
 import bsb.dev.bsb_bangking_jp.feature.news.NewsDetailPage
+import bsb.dev.bsb_bangking_jp.feature.transfer.toTransactionResultInfo
+import bsb.dev.bsb_bangking_jp.shared.transaction_result.TransactionResultPage
 
 @Composable
 fun AppNavigation(
@@ -418,8 +419,8 @@ fun AppNavigation(
                     if (confirmResult == null) {
                         navController.popBackStack()
                     } else {
-                        TransferBerhasilPage(
-                            result = confirmResult,
+                        TransactionResultPage(
+                            data = confirmResult.toTransactionResultInfo(),
                             onClose = {
                                 navController.navigate("navbar") {
                                     popUpTo(0)

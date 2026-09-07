@@ -6,6 +6,8 @@ data class MessageItem(
     val id: Int,
     val createdDate: Date,
     val accountDestination: String,
+    val accountDestinationName: String,
+    val accountSourceName: String,
     val note: String,
     val amount: Long,
     val totalAmount: Long,
@@ -18,4 +20,6 @@ data class MessageItem(
     val bankCode: String,
     val transactionId: Int,
     val scheduledTransferId: Int?,
+    val scheduledType: String,
+    val selectTransaction: String,
 )

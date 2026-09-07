@@ -1,4 +1,4 @@
-package bsb.dev.bsb_bangking_jp.feature.transfer
+package bsb.dev.bsb_bangking_jp.shared.transaction_result
 
 import android.content.ContentValues
 import android.content.Context
@@ -21,8 +21,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Download
+import androidx.compose.material.icons.filled.HourglassEmpty
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
@@ -54,7 +56,6 @@ import bsb.dev.bsb_bangking_jp.R
 import bsb.dev.bsb_bangking_jp.core.component.AppButton
 import bsb.dev.bsb_bangking_jp.core.component.LocalToastState
 import bsb.dev.bsb_bangking_jp.core.component.TransactionDetailRow
-import bsb.dev.bsb_bangking_jp.core.dummy.ConfirmTransferResult
 import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
 import bsb.dev.bsb_bangking_jp.core.util.RupiahFormat
 import bsb.dev.bsb_bangking_jp.core.util.maskAccountNumber
@@ -64,10 +65,13 @@ import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-
+/**
+ * supaya reusable di fitur lain (mis. detail message), karena hasilnya BELUM TENTU "berhasil".
+ * Judul + ikon header di bawah MENGIKUTI [TransactionResultInfo.status].
+ */
 @Composable
-fun TransferBerhasilPage(
-    result: ConfirmTransferResult,
+fun TransactionResultPage(
+    data: TransactionResultInfo,
     modifier: Modifier = Modifier,
     onClose: () -> Unit = {},
 ) {
@@ -76,12 +80,12 @@ fun TransferBerhasilPage(
     val graphicsLayer = rememberGraphicsLayer()
     val toastState = LocalToastState.current
 
+
     var isSaving by remember { mutableStateOf(false) }
 
-    val tanggalFormatted = remember(result.transactionDate) {
-        SimpleDateFormat("d MMMM yyyy - HH:mm 'WIB'", Locale("id", "ID")).format(result.transactionDate)
+    val tanggalFormatted = remember(data.transactionDate) {
+        SimpleDateFormat("dd MMMM yyyy - HH:mm 'WIB'", Locale("id", "ID")).format(data.transactionDate)
     }
-
 
     fun saveScreenshot() {
         coroutineScope.launch {
@@ -89,11 +93,8 @@ fun TransferBerhasilPage(
             try {
                 val bitmap = graphicsLayer.toImageBitmap().asAndroidBitmap()
                 val saved = saveBitmapToGallery(context, bitmap)
-                if (saved) {
-                    toastState.showSuccess("Bukti transaksi disimpan ke galeri")
-                } else {
-                    toastState.showError("Gagal menyimpan bukti transaksi")
-                }
+                if (saved) toastState.showSuccess("Bukti transaksi disimpan ke galeri")
+                else toastState.showError("Gagal menyimpan bukti transaksi")
             } catch (e: Exception) {
                 toastState.showError("Gagal menyimpan: ${e.message}")
             } finally {
@@ -121,7 +122,6 @@ fun TransferBerhasilPage(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
     ) {
-        // 🔹 Lapisan yang di-screenshot (background + konten), padanan RepaintBoundary di Dart
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -167,20 +167,19 @@ fun TransferBerhasilPage(
                             .aspectRatio(143f / 40f),
                         contentScale = ContentScale.Fit
                     )
-                    Image(
-                        painter = painterResource(id = R.drawable.cheklist),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(120.dp)
-                    )
+
+                    // 🔹 Titik utama perubahan -- gambar/ikon header sekarang MENGIKUTI status,
+                    // bukan selalu R.drawable.cheklist seperti versi lama.
+                    StatusVisual(status = data.status)
+
                     Spacer(modifier = Modifier.height(10.dp))
                     Text(
-                        text = "Transaksi Berhasil",
+                        text = statusTitle(data.status),
                         style = MaterialTheme.typography.displaySmall
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = "$tanggalFormatted\nRef:${result.reffNum}",
+                        text = "$tanggalFormatted\nRef:${data.referenceNumber}",
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.bodySmall.copy(fontSize = 10.sp),
                         color = MaterialTheme.extendedColors.textSecondary,
@@ -191,6 +190,7 @@ fun TransferBerhasilPage(
                         modifier = Modifier.padding(horizontal = 18.dp),
                         color = MaterialTheme.extendedColors.divider)
                 }
+
                 Text(
                     text = "Penerima",
                     style = MaterialTheme.typography.bodyMedium,
@@ -198,9 +198,9 @@ fun TransferBerhasilPage(
                     color = MaterialTheme.extendedColors.textSecondary,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(text = result.beneficiaryName.uppercase(), style = MaterialTheme.typography.titleMedium)
+                Text(text = data.beneficiaryName.uppercase(), style = MaterialTheme.typography.titleMedium)
                 Text(
-                    text = "${result.beneficiaryBankName} - ${result.beneficiaryAccountNo}",
+                    text = "${data.beneficiaryBankName} - ${data.beneficiaryAccountNo}",
                     style = MaterialTheme.typography.bodySmall.copy(fontSize = 10.sp),
                     color = MaterialTheme.extendedColors.textSecondary,
                 )
@@ -215,13 +215,13 @@ fun TransferBerhasilPage(
                 )
                 Spacer(modifier = Modifier.height(3.dp))
 
-                TransactionDetailRow("Layanan Transfer", "Transfer Sesama")
-                TransactionDetailRow("Nominal Transfer", RupiahFormat(result.amount))
-                TransactionDetailRow("Biaya Layanan", RupiahFormat(result.adminFee))
+                TransactionDetailRow("Layanan Transfer", data.serviceLabel ?: "-")
+                TransactionDetailRow("Nominal Transfer", RupiahFormat(data.amount.toInt()))
+                TransactionDetailRow("Biaya Layanan", RupiahFormat(data.adminFee.toInt()))
                 Spacer(modifier = Modifier.height(8.dp))
                 TransactionDetailRow(
                     title = "Total Transfer",
-                    value = RupiahFormat(result.totalDebit),
+                    value = RupiahFormat(data.totalDebit.toInt()),
                     titleStyle = MaterialTheme.typography.titleMedium,
                     valueStyle = MaterialTheme.typography.titleLarge,
                 )
@@ -231,23 +231,29 @@ fun TransferBerhasilPage(
                     color = MaterialTheme.extendedColors.divider)
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Text(
-                    text = "Pengirim",
-                    style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.Medium,
-                    color = MaterialTheme.extendedColors.textSecondary,
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(text = result.senderName.uppercase(), style = MaterialTheme.typography.titleMedium)
-                Text(text = "${result.beneficiaryBankName} - ${maskAccountNumber(result.senderAccountNo)}")
-                Spacer(modifier = Modifier.height(8.dp))
-                HorizontalDivider(
-                    modifier = Modifier.padding(horizontal = 18.dp),
-                    color = MaterialTheme.extendedColors.divider)
+                // 🔹 Bagian "Pengirim" opsional -- auto-hide kalau senderName tidak ada
+                // (mis. dari detail message yang tidak mengirim rekening pengirim).
+                if (!data.senderName.isNullOrBlank()) {
+                    Text(
+                        text = "Pengirim",
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Medium,
+                        color = MaterialTheme.extendedColors.textSecondary,
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(text = data.senderName.uppercase(), style = MaterialTheme.typography.titleMedium)
+                    if (!data.senderAccountNo.isNullOrBlank()) {
+                        Text(text = "${data.beneficiaryBankName} - ${maskAccountNumber(data.senderAccountNo)}")
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    HorizontalDivider(
+                        modifier = Modifier.padding(horizontal = 18.dp),
+                        color = MaterialTheme.extendedColors.divider)
+                }
 
                 TransactionDetailRow(
                     title = "Keterangan",
-                    value = result.remark?.takeIf { it.isNotBlank() } ?: "-",
+                    value = data.remark?.takeIf { it.isNotBlank() } ?: "-",
                     titleStyle = MaterialTheme.typography.bodySmall,
                     valueStyle = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.extendedColors.textSecondary),
                 )
@@ -259,7 +265,6 @@ fun TransferBerhasilPage(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Spacer(modifier = Modifier.height(8.dp))
-
                     Text(
                         text = "Resi ini merupakan bukti transaksi yang sah.",
                         style = MaterialTheme.typography.bodySmall,
@@ -274,7 +279,7 @@ fun TransferBerhasilPage(
                             text = "Simpan",
                             icon = Icons.Default.Download,
                             iconBeforeText = true,
-                            backgroundColor = MaterialTheme.colorScheme.inverseSurface ,
+                            backgroundColor = MaterialTheme.colorScheme.inverseSurface,
                             textColor = MaterialTheme.colorScheme.primary,
                             onClick = { saveScreenshot() },
                             modifier = Modifier.weight(1f),
@@ -293,7 +298,6 @@ fun TransferBerhasilPage(
             }
         }
 
-        // 🔹 Tombol close (di luar lapisan screenshot, sama seperti AppBar actions di Dart)
         if (!isSaving) {
             IconButton(
                 onClick = onClose,
@@ -309,7 +313,6 @@ fun TransferBerhasilPage(
             }
         }
 
-        // 🔹 Overlay loading saat menyimpan/membagikan
         if (isSaving) {
             Box(
                 modifier = Modifier
@@ -321,6 +324,44 @@ fun TransferBerhasilPage(
             }
         }
     }
+}
+
+/** Ikon/gambar header -- mengikuti [TransactionResultInfo.status]. */
+@Composable
+private fun StatusVisual(status: TransactionResultStatus) {
+    when (status) {
+        TransactionResultStatus.SUCCESS, TransactionResultStatus.SCHEDULED -> {
+            Image(
+                painter = painterResource(id = R.drawable.cheklist),
+                contentDescription = null,
+                modifier = Modifier.size(120.dp),
+            )
+        }
+        TransactionResultStatus.FAILED -> {
+            // TODO: ganti ke ilustrasi resmi kalau sudah ada asetnya dari desain.
+            Icon(
+                imageVector = Icons.Filled.Cancel,
+                contentDescription = null,
+                tint = MaterialTheme.extendedColors.danger,
+                modifier = Modifier.size(120.dp),
+            )
+        }
+        TransactionResultStatus.PENDING -> {
+            Icon(
+                imageVector = Icons.Filled.HourglassEmpty,
+                contentDescription = null,
+                tint = MaterialTheme.extendedColors.warning,
+                modifier = Modifier.size(120.dp),
+            )
+        }
+    }
+}
+
+private fun statusTitle(status: TransactionResultStatus): String = when (status) {
+    TransactionResultStatus.SUCCESS -> "Transaksi Berhasil"
+    TransactionResultStatus.SCHEDULED -> "Transaksi Telah Dijadwalkan"
+    TransactionResultStatus.FAILED -> "Transaksi Gagal"
+    TransactionResultStatus.PENDING -> "Transaksi Sedang Diproses"
 }
 
 private fun saveBitmapToGallery(context: Context, bitmap: Bitmap): Boolean {
@@ -348,8 +389,6 @@ private fun shareBitmap(context: Context, bitmap: Bitmap) {
     val file = File(cacheDir, "bukti_transaksi.png")
     FileOutputStream(file).use { out -> bitmap.compress(Bitmap.CompressFormat.PNG, 100, out) }
 
-    // Butuh FileProvider terdaftar di AndroidManifest.xml (authority "${applicationId}.fileprovider")
-    // + res/xml/file_paths.xml yang meng-cover cache path.
     val uri = FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
     val intent = Intent(Intent.ACTION_SEND).apply {
         type = "image/png"

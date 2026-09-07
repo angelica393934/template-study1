@@ -31,6 +31,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import bsb.dev.bsb_bangking_jp.core.theme.Green700
+import bsb.dev.bsb_bangking_jp.core.theme.Red700
 import bsb.dev.bsb_bangking_jp.core.util.RupiahFormat
 import bsb.dev.bsb_bangking_jp.feature.message.domain.MessageItem
 
@@ -53,7 +55,7 @@ fun MessageSectionTanggal(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.background)
+                .background(MaterialTheme.colorScheme.primaryContainer)
                 .padding(horizontal = 24.dp, vertical = 8.dp),
         ) {
             Text(
@@ -79,10 +81,18 @@ fun MessageItemRow(
     onClick: (() -> Unit)? = null,
 ) {
     val title = message.jenisTransaksi.ifBlank { message.type.ifBlank { "Transaksi" } }
-    val subtitle = message.note.ifBlank { "-" }
+    val destination = message.accountDestinationName.ifBlank {
+        message.accountDestination
+    }
+    val subtitle = listOf(
+        message.bankName.trim(),
+        destination.trim()
+    )
+        .filter { it.isNotBlank() }
+        .joinToString(" - ")
+        .ifBlank { "-" }
     val amountText = RupiahFormat(message.totalAmount.toInt())
     val displayAmount = if (message.totalAmount < 0) amountText else "- $amountText"
-
     val icon = getMessageIcon(title)
     val statusColor = getStatusColor(message.status)
 
@@ -160,9 +170,9 @@ private fun getMessageIcon(title: String): ImageVector {
 
 /** Padanan dari _getStatusColor() di Dart -- warna badge status otomatis. */
 @Composable
-private fun getStatusColor(status: String): Color = when (status.lowercase()) {
-    "berhasil" -> Color(0xFF4CAF50)
-    "gagal" -> Color(0xFFF44336)
-    "pending" -> MaterialTheme.colorScheme.outline
+private fun getStatusColor(status: String): Color = when (status.uppercase()) {
+    "SUCCESS" -> Green700
+    "FAIL" -> Red700
+    "PENDING" -> MaterialTheme.colorScheme.outline
     else -> MaterialTheme.colorScheme.onSurfaceVariant
 }

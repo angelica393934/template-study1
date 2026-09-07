@@ -10,15 +10,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CircularProgressIndicator
@@ -36,23 +31,27 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bsb.dev.bsb_bangking_jp.R
 import bsb.dev.bsb_bangking_jp.core.component.AppHeader
-import bsb.dev.bsb_bangking_jp.core.component.AppModalBottomSheet
 import bsb.dev.bsb_bangking_jp.core.component.EmptyState
 import bsb.dev.bsb_bangking_jp.core.filter.TransactionFilterPayload
 import bsb.dev.bsb_bangking_jp.core.skeleton.SkeletonList
 import bsb.dev.bsb_bangking_jp.core.util.TransactionFilterChipMapper
 import bsb.dev.bsb_bangking_jp.core.component.FilterChipBar
+import bsb.dev.bsb_bangking_jp.core.component.LocalLoadingOverlay
+import bsb.dev.bsb_bangking_jp.core.component.LocalToastState
 import bsb.dev.bsb_bangking_jp.core.filter.FilterTransaksiModal
 import bsb.dev.bsb_bangking_jp.feature.message.domain.MessageItem
+import bsb.dev.bsb_bangking_jp.feature.message.domain.toTransactionResultInfo
 import bsb.dev.bsb_bangking_jp.feature.message.presentation.MessageDetailUiState
 import bsb.dev.bsb_bangking_jp.feature.message.presentation.MessageDetailViewModel
 import bsb.dev.bsb_bangking_jp.feature.message.presentation.MessageHistoryViewModel
 import bsb.dev.bsb_bangking_jp.feature.message.section.MessageSectionTanggal
+import bsb.dev.bsb_bangking_jp.shared.transaction_result.TransactionResultPage
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import java.text.SimpleDateFormat
@@ -75,6 +74,21 @@ fun MessagePage(
     }
 
     val grouped = remember(state.items) { groupMessagesByDate(state.items) }
+    val loadingOverlay = LocalLoadingOverlay.current
+    val toastState = LocalToastState.current
+    LaunchedEffect(detailState) {
+        when (val ds = detailState) {
+            is MessageDetailUiState.Loading -> loadingOverlay.show()
+            is MessageDetailUiState.Success -> loadingOverlay.hide()
+            is MessageDetailUiState.Error -> {
+                loadingOverlay.hide()
+                toastState.showError(ds.message)
+                selectedMessageId = null
+                detailViewModel.reset()
+            }
+            is MessageDetailUiState.Initial -> loadingOverlay.hide()
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -202,41 +216,18 @@ fun MessagePage(
         )
     }
 
-    // 🔹 Sheet sementara -- cuma buat lihat raw response getmessagebyid sebelum bikin UI final.
+    // 🔹 Detail message sekarang pakai TransactionResultPage (full-screen dialog)
     if (selectedMessageId != null) {
-        AppModalBottomSheet(
-            onDismissRequest = {
-                selectedMessageId = null
-                detailViewModel.reset()
-            },
-        ) {
-            Column(modifier = Modifier.heightIn(max = 500.dp).verticalScroll(rememberScrollState())) {
-                Text(
-                    text = "Detail message (raw response, sementara)",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
+        val ds = detailState
+        if (ds is MessageDetailUiState.Success) {
+            Dialog(
+                onDismissRequest = { selectedMessageId = null; detailViewModel.reset() },
+                properties = DialogProperties(usePlatformDefaultWidth = false),
+            ) {
+                TransactionResultPage(
+                    data = ds.detail.toTransactionResultInfo(),
+                    onClose = { selectedMessageId = null; detailViewModel.reset() },
                 )
-                Spacer(modifier = Modifier.height(12.dp))
-
-                when (val ds = detailState) {
-                    is MessageDetailUiState.Loading, MessageDetailUiState.Initial -> {
-                        Box(modifier = Modifier.fillMaxWidth().height(100.dp), contentAlignment = Alignment.Center) {
-                            CircularProgressIndicator()
-                        }
-                    }
-                    is MessageDetailUiState.Error -> {
-                        Text(text = ds.message, color = MaterialTheme.colorScheme.error)
-                    }
-                    is MessageDetailUiState.Success -> {
-                        SelectionContainer {
-                            Text(
-                                text = ds.rawJson,
-                                style = MaterialTheme.typography.bodySmall,
-                            )
-                        }
-                    }
-                }
-                Spacer(modifier = Modifier.height(20.dp))
             }
         }
     }
@@ -244,7 +235,7 @@ fun MessagePage(
 
 /** Padanan groupByDateSortedDesc, tapi berbasis Date lengkap dari createdDate. */
 private fun groupMessagesByDate(items: List<MessageItem>): Map<String, List<MessageItem>> {
-    val formatter = SimpleDateFormat("d MMMM yyyy", Locale("id", "ID"))
+    val formatter = SimpleDateFormat("dd MMMM yyyy", Locale("id", "ID"))
     val sorted = items.sortedByDescending { it.createdDate }
     return sorted.groupBy { formatter.format(it.createdDate) }
 }
