@@ -55,9 +55,9 @@ class BerandaViewModel(
 
     /** Dipertahankan supaya call-site di BerandaPage tidak perlu tahu detail 3 ViewModel. */
     fun refreshAll() {
-        profileViewModel.loadProfile(forceRefresh = true)
+        profileViewModel.loadProfile()
         rekeningViewModel.load(forceRefresh = true)
-        loadBanner(forceRefresh = true)
+        loadBanner()
     }
     /**
      * Padanan reset state lokal Beranda SETELAH logout sukses (bukan proses logout

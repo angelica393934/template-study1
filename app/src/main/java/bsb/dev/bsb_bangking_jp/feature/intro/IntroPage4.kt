@@ -112,7 +112,7 @@ fun IntroPage4(
                         textColor = MaterialTheme.colorScheme.primary,
                         backgroundColor = MaterialTheme.colorScheme.primaryContainer,
                         onClick = {
-                            navController.navigate("portal")
+                            navController.navigate("registration")
                         }
                     )
 

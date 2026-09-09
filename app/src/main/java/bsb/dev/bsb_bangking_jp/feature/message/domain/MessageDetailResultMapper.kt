@@ -19,8 +19,6 @@ fun MessageDetailItem.toTransactionResultInfo(): TransactionResultInfo = Transac
     serviceLabel = service( jenisTransaksi.takeIf { it.isNotBlank() })
 )
 
-// TODO: konfirmasi ke backend daftar lengkap nilai `status` yang mungkin dikirim
-// (di luar "SUCCESS") -- selain itu, default aman ke PENDING (bukan FAILED/SUCCESS).
 private fun mapMessageStatus(raw: String): TransactionResultStatus = when (raw.trim().uppercase()) {
     "SUCCESS", "BERHASIL" -> TransactionResultStatus.SUCCESS
     "FAILED", "GAGAL" -> TransactionResultStatus.FAILED

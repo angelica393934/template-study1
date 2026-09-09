@@ -1,15 +1,8 @@
-package bsb.dev.bsb_bangking_jp.core.dummy
+package bsb.dev.bsb_bangking_jp.feature.transfer.transfer_core.domain
 
 import java.util.Date
 
-/**
- * Padanan `ConfirmTransferResultModel` () -- hasil dari API confirm-transfer.
- *
- * TODO: ganti jadi model response API asli begitu backend transfer sudah terintegrasi. Struktur
- * field di bawah disesuaikan dengan field yang dipakai `TransferBerhasilPage` &
- * `TransferBerhasilDijadwalkanPage` di versi .
- */
-data class ConfirmTransferResult(
+data class ConfirmTransferResultItem(
     val reffNum: String,
     val transactionDate: Date,
     val beneficiaryName: String,

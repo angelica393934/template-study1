@@ -49,8 +49,8 @@ import bsb.dev.bsb_bangking_jp.feature.pengaturan.PengaturanPage
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
-import bsb.dev.bsb_bangking_jp.feature.aktivitas.presentation.ActivityHistoryViewModel
-import bsb.dev.bsb_bangking_jp.feature.aktivitas.AktivitasPage
+import bsb.dev.bsb_bangking_jp.feature.activity.presentation.ActivityHistoryViewModel
+import bsb.dev.bsb_bangking_jp.feature.activity.ActivityPage
 import bsb.dev.bsb_bangking_jp.feature.beranda.BerandaPage
 import bsb.dev.bsb_bangking_jp.feature.message.MessagePage
 import org.koin.compose.koinInject
@@ -129,7 +129,7 @@ fun Navbar(
                     onTagihanClick = onTagihanClick,
                     onCardlessClick = onCardlessClick,
                 )
-                1 -> AktivitasPage()
+                1 -> ActivityPage()
                 2 -> MessagePage()
                 3 -> PengaturanPage(
                     darkTheme = darkTheme,

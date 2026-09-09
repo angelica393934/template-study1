@@ -1,4 +1,4 @@
-package bsb.dev.bsb_bangking_jp.feature.aktivitas
+package bsb.dev.bsb_bangking_jp.feature.activity
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -62,20 +62,17 @@ import bsb.dev.bsb_bangking_jp.core.util.groupByDateSortedDesc
 import bsb.dev.bsb_bangking_jp.core.filter.FilterTransaksiModal
 import bsb.dev.bsb_bangking_jp.core.filter.TransactionFilterPayload
 import bsb.dev.bsb_bangking_jp.core.util.TransactionFilterChipMapper
-import bsb.dev.bsb_bangking_jp.feature.aktivitas.data.HistoryItem
-import bsb.dev.bsb_bangking_jp.feature.aktivitas.presentation.ActivityHistoryViewModel
-import bsb.dev.bsb_bangking_jp.feature.aktivitas.section.SaldoCardSelector
+import bsb.dev.bsb_bangking_jp.feature.activity.data.HistoryItem
+import bsb.dev.bsb_bangking_jp.feature.activity.presentation.ActivityHistoryViewModel
+import bsb.dev.bsb_bangking_jp.feature.activity.section.SaldoCardSelector
 import bsb.dev.bsb_bangking_jp.shared.rekening_lainnya.presentation.RekeningLainnyaViewModel
 import org.koin.compose.koinInject
 import kotlin.math.roundToInt
-
-// 🔹 Sama seperti PULL_REFRESH_MAX_PUSH di BerandaPage.kt -- seberapa jauh konten
-// terdorong turun saat pull-to-refresh full/aktif.
 private val PULL_REFRESH_MAX_PUSH = 30.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AktivitasPage(
+fun ActivityPage(
     activityViewModel: ActivityHistoryViewModel = koinInject(), // 🔹 koinInject, bukan koinViewModel
     rekeningViewModel: RekeningLainnyaViewModel = koinInject(),
 ) {

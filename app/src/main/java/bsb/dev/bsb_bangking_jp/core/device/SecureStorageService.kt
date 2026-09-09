@@ -44,6 +44,20 @@ class SecureStorageService(context: Context) {
         }
     }
 
+    // token untuk phase "regist" -- dipakai untuk addiduserlogin & addpasscode
+    fun getRegistAccessToken(): String? = prefs.getString(KEY_REGIST_ACCESS_TOKEN, null)
+    fun saveRegistAccessToken(token: String) = prefs.edit { putString(KEY_REGIST_ACCESS_TOKEN, token) }
+
+    fun getRegistRefreshToken(): String? = prefs.getString(KEY_REGIST_REFRESH_TOKEN, null)
+    fun saveRegistRefreshToken(token: String) = prefs.edit { putString(KEY_REGIST_REFRESH_TOKEN, token) }
+
+    fun clearRegistTokens() {
+        prefs.edit {
+            remove(KEY_REGIST_ACCESS_TOKEN)
+            remove(KEY_REGIST_REFRESH_TOKEN)
+        }
+    }
+
     //Token untuk phase "login" -- dipakai untuk semua endpoint setelah user login
     fun getLoginAccessToken(): String? = prefs.getString(KEY_LOGIN_ACCESS_TOKEN, null)
     fun saveLoginAccessToken(token: String) = prefs.edit { putString(KEY_LOGIN_ACCESS_TOKEN, token) }
@@ -68,6 +82,8 @@ class SecureStorageService(context: Context) {
         private const val KEY_PRIVATE_KEY = "ed25519_private_key"
         private const val KEY_INIT_ACCESS_TOKEN = "init_access_token"
         private const val KEY_INIT_REFRESH_TOKEN = "init_refresh_token"
+        private const val KEY_REGIST_ACCESS_TOKEN = "regist_access_token"
+        private const val KEY_REGIST_REFRESH_TOKEN = "regist_refresh_token"
         private const val KEY_LOGIN_ACCESS_TOKEN = "login_access_token"
         private const val KEY_LOGIN_REFRESH_TOKEN = "login_refresh_token"
         private const val KEY_TRANSFER_ACCESS_TOKEN = "transfer_access_token"

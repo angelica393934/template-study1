@@ -50,6 +50,7 @@ class TokenRefreshInterceptor(
 
     private fun getStoredAccessToken(phase: TokenPhase): String? = when (phase) {
         TokenPhase.INIT -> secureStorage.getInitAccessToken()
+        TokenPhase.REGIST -> secureStorage.getRegistAccessToken()
         TokenPhase.LOGIN -> secureStorage.getLoginAccessToken()
         TokenPhase.TRANSFER -> secureStorage.getTransferAccessToken()
     }
@@ -57,6 +58,7 @@ class TokenRefreshInterceptor(
     private suspend fun tryRefresh(phase: TokenPhase): String? = try {
         when (phase) {
             TokenPhase.INIT -> refreshInitToken()
+            TokenPhase.REGIST ->  refreshRegistToken()
             TokenPhase.LOGIN -> refreshLoginToken()
             TokenPhase.TRANSFER -> null
         }
@@ -82,6 +84,22 @@ class TokenRefreshInterceptor(
 
         secureStorage.saveInitAccessToken(newAccess)
         data.refreshToken?.let { secureStorage.saveInitRefreshToken(it) }
+        return newAccess
+    }
+
+    private suspend fun refreshRegistToken(): String? {
+        val refreshToken = secureStorage.getRegistRefreshToken() ?: return null
+
+        val headers = mapOf("Authorization" to "Bearer $refreshToken")
+
+        val response = refreshApiService().refreshRegistToken(headers = headers)
+        if (!response.isSuccessful) return null
+
+        val data = response.body()?.data ?: return null
+        val newAccess = data.accessToken ?: return null
+
+        secureStorage.saveRegistAccessToken(newAccess)
+        data.refreshToken?.let { secureStorage.saveRegistRefreshToken(it) }
         return newAccess
     }
 

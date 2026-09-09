@@ -1,7 +1,7 @@
-package bsb.dev.bsb_bangking_jp.feature.aktivitas.domain
+package bsb.dev.bsb_bangking_jp.feature.activity.domain
 
 import bsb.dev.bsb_bangking_jp.core.filter.TransactionFilterPayload
-import bsb.dev.bsb_bangking_jp.feature.aktivitas.data.HistoryItem
+import bsb.dev.bsb_bangking_jp.feature.activity.data.HistoryItem
 
 interface ActivityHistoryRepository {
     val hasMore: Boolean

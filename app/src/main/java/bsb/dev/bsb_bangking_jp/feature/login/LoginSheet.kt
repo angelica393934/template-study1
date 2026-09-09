@@ -210,7 +210,7 @@ fun LoginSheet(
                 icon = Icons.Outlined.PersonAdd,
                 label = registration,
                 onTap = {
-                    // TODO: navigasi ke halaman Registrasi Akun -- belum ada rute di project ini
+                    // TODO: navigasi ke halaman Registration Akun -- belum ada rute di project ini
                 },
             )
 

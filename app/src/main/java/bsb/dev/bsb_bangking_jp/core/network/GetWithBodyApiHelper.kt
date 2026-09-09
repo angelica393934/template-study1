@@ -5,7 +5,6 @@ import bsb.dev.bsb_bangking_jp.core.device.SecureStorageService
 import bsb.dev.bsb_bangking_jp.core.network.header.ApiHeaders
 import bsb.dev.bsb_bangking_jp.core.network.token.RefreshTokenApiService
 import com.google.gson.Gson
-import com.google.gson.JsonSyntaxException
 
 private const val EXPIRED_RESP_CODE = "0465" // sama dengan TokenRefreshInterceptor
 
@@ -48,7 +47,7 @@ class GetWithBodyApiHelper(
         val signature = SignatureUtils.sign(body, timestamp, privateKey)
         val baseHeaders = ApiHeaders.withSignature(signature, ApiHeaders.full(timestamp))
 
-        var accessToken = getStoredAccessToken(useLoginPhaseToken)
+        val accessToken = getStoredAccessToken(useLoginPhaseToken)
         var headers = baseHeaders + accessTokenHeader(accessToken)
 
         var result = GetWithBodyHttpClient.getWithBody(url = url, headers = headers, body = body)
@@ -74,7 +73,7 @@ class GetWithBodyApiHelper(
     private fun <T> parseOrNull(raw: String, type: Class<T>): T? =
         try {
             gson.fromJson(raw, type)
-        } catch (e: JsonSyntaxException) {
+        } finally  {
             null
         }
 
@@ -113,7 +112,7 @@ class GetWithBodyApiHelper(
                 data.refreshToken?.let { secureStorage.saveInitRefreshToken(it) }
             }
             newAccess
-        } catch (e: Exception) {
+        } finally {
             null
         }
     }

@@ -24,7 +24,7 @@
 
     <!-- Menu -->
     <string name="menu_activation">Aktivasi</string>
-    <string name="menu_registration">Registrasi</string>
+    <string name="menu_registration">Registration</string>
     <string name="menu_atm_location">Lokasi ATM</string>
 
     <string name="nav_home">Beranda</string>

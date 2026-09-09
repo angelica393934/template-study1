@@ -1,5 +1,6 @@
 package bsb.dev.bsb_bangking_jp.feature.message
 
+import android.view.WindowManager
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -21,6 +23,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -30,13 +34,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.compose.ui.window.DialogWindowProvider
+import androidx.core.view.WindowCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bsb.dev.bsb_bangking_jp.R
 import bsb.dev.bsb_bangking_jp.core.component.AppHeader
+import bsb.dev.bsb_bangking_jp.core.component.CustomRefreshIndicator
 import bsb.dev.bsb_bangking_jp.core.component.EmptyState
 import bsb.dev.bsb_bangking_jp.core.filter.TransactionFilterPayload
 import bsb.dev.bsb_bangking_jp.core.skeleton.SkeletonList
@@ -44,6 +54,7 @@ import bsb.dev.bsb_bangking_jp.core.util.TransactionFilterChipMapper
 import bsb.dev.bsb_bangking_jp.core.component.FilterChipBar
 import bsb.dev.bsb_bangking_jp.core.component.LocalLoadingOverlay
 import bsb.dev.bsb_bangking_jp.core.component.LocalToastState
+import bsb.dev.bsb_bangking_jp.core.component.SideEffect
 import bsb.dev.bsb_bangking_jp.core.filter.FilterTransaksiModal
 import bsb.dev.bsb_bangking_jp.feature.message.domain.MessageItem
 import bsb.dev.bsb_bangking_jp.feature.message.domain.toTransactionResultInfo
@@ -56,7 +67,9 @@ import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import java.text.SimpleDateFormat
 import java.util.Locale
+import kotlin.math.roundToInt
 
+private val PULL_REFRESH_MAX_PUSH = 50.dp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MessagePage(
@@ -89,6 +102,8 @@ fun MessagePage(
             is MessageDetailUiState.Initial -> loadingOverlay.hide()
         }
     }
+    val pullToRefreshState = rememberPullToRefreshState()
+    val density = LocalDensity.current
 
     Column(
         modifier = Modifier
@@ -177,30 +192,59 @@ fun MessagePage(
                         }
                     }
 
-                    LazyColumn(modifier = Modifier.fillMaxSize(), state = listState) {
-                        grouped.forEach { (tanggalLabel, itemsForDate) ->
-                            item(key = "section_$tanggalLabel") {
-                                MessageSectionTanggal(
-                                    tanggal = tanggalLabel,
-                                    items = itemsForDate,
-                                    onItemClick = { pesan ->
-                                        selectedMessageId = pesan.id
-                                        detailViewModel.load(pesan.id)
-                                    },
-                                )
-                            }
-                        }
-                        if (state.isLoadMore) {
-                            item(key = "load_more") {
-                                Box(
-                                    modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
-                                    contentAlignment = Alignment.Center,
-                                ) {
-                                    CircularProgressIndicator(modifier = Modifier.size(28.dp))
+                    // 🔹 Padanan ActivityPage -- reload data TERBARU, tetap pakai filter
+                    // yang sedang aktif (messageViewModel.refresh() sudah baca state.activeFilter).
+                    val isRefreshing = state.isLoading
+                    val maxPushPx = with(density) { PULL_REFRESH_MAX_PUSH.toPx() }
+                    val pushOffsetPx = if (isRefreshing) {
+                        maxPushPx
+                    } else {
+                        (pullToRefreshState.distanceFraction.coerceIn(0f, 1f) * maxPushPx)
+                    }
+
+                    PullToRefreshBox(
+                        isRefreshing = isRefreshing,
+                        onRefresh = { messageViewModel.refresh() },
+                        state = pullToRefreshState,
+                        indicator = {
+                            CustomRefreshIndicator(
+                                state = pullToRefreshState,
+                                isRefreshing = isRefreshing,
+                                modifier = Modifier.align(Alignment.TopCenter),
+                            )
+                        },
+                        modifier = Modifier.fillMaxSize(),
+                    ) {
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .offset { IntOffset(x = 0, y = pushOffsetPx.roundToInt()) },
+                            state = listState,
+                        ) {
+                            grouped.forEach { (tanggalLabel, itemsForDate) ->
+                                item(key = "section_$tanggalLabel") {
+                                    MessageSectionTanggal(
+                                        tanggal = tanggalLabel,
+                                        items = itemsForDate,
+                                        onItemClick = { pesan ->
+                                            selectedMessageId = pesan.id
+                                            detailViewModel.load(pesan.id)
+                                        },
+                                    )
                                 }
                             }
+                            if (state.isLoadMore) {
+                                item(key = "load_more") {
+                                    Box(
+                                        modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
+                                        contentAlignment = Alignment.Center,
+                                    ) {
+                                        CircularProgressIndicator(modifier = Modifier.size(28.dp))
+                                    }
+                                }
+                            }
+                            item(key = "bottom_spacer") { Spacer(modifier = Modifier.height(40.dp)) }
                         }
-                        item(key = "bottom_spacer") { Spacer(modifier = Modifier.height(40.dp)) }
                     }
                 }
             }
@@ -224,6 +268,16 @@ fun MessagePage(
                 onDismissRequest = { selectedMessageId = null; detailViewModel.reset() },
                 properties = DialogProperties(usePlatformDefaultWidth = false),
             ) {
+                val dialogWindow = (LocalView.current.parent as? DialogWindowProvider)?.window
+                SideEffect {
+                    dialogWindow?.let { window ->
+                        WindowCompat.setDecorFitsSystemWindows(window, false)
+                        window.setLayout(
+                            WindowManager.LayoutParams.MATCH_PARENT,
+                            WindowManager.LayoutParams.MATCH_PARENT,
+                        )
+                    }
+                }
                 TransactionResultPage(
                     data = ds.detail.toTransactionResultInfo(),
                     onClose = { selectedMessageId = null; detailViewModel.reset() },

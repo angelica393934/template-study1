@@ -1,4 +1,4 @@
-package bsb.dev.bsb_bangking_jp.feature.aktivitas.section
+package bsb.dev.bsb_bangking_jp.feature.activity.section
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -30,7 +30,7 @@ import bsb.dev.bsb_bangking_jp.feature.beranda.section.SaldoCardBase
 /**
  * Padanan SaldoCardSelector.dart -- BEDA dengan SaldoCardDashboard (di Beranda):
  * memilih rekening di sini HANYA mengganti rekening yang sedang "dilihat" histori
- * transaksinya (accountNo lokal di AktivitasPage), TIDAK memanggil API setprimaryaccount.
+ * transaksinya (accountNo lokal di ActivityPage), TIDAK memanggil API setprimaryaccount.
  */
 @Composable
 fun SaldoCardSelector(

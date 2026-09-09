@@ -1,5 +1,6 @@
 package bsb.dev.bsb_bangking_jp.core.component
 
+import android.view.WindowManager
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -23,12 +24,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.compose.ui.window.DialogWindowProvider
+import androidx.core.view.WindowCompat
 
 class LoadingOverlayState {
     var isVisible by mutableStateOf(false)
@@ -53,21 +57,29 @@ fun rememberLoadingOverlayState(): LoadingOverlayState = remember { LoadingOverl
 val LocalLoadingOverlay = compositionLocalOf<LoadingOverlayState> {
     error("LoadingOverlayState belum di-provide")
 }
-
 @Composable
 fun LoadingOverlayHost(state: LoadingOverlayState) {
     if (!state.isVisible) return
 
-    // 🔹 Dialog = window Android terpisah, sama seperti ModalBottomSheet.
-    // Ini yang bikin overlay muncul DI ATAS ModalBottomSheet, bukan tertutup olehnya.
     Dialog(
-        onDismissRequest = { /* no-op -- tidak bisa ditutup manual oleh user */ },
+        onDismissRequest = { /* no-op */ },
         properties = DialogProperties(
             dismissOnBackPress = false,
             dismissOnClickOutside = false,
-            usePlatformDefaultWidth = false, // supaya bisa fillMaxSize, bukan dibatasi lebar default dialog
+            usePlatformDefaultWidth = false,
         ),
     ) {
+        val dialogWindow = (LocalView.current.parent as? DialogWindowProvider)?.window
+        SideEffect {
+            dialogWindow?.let { window ->
+                WindowCompat.setDecorFitsSystemWindows(window, false)
+                window.setLayout(
+                    WindowManager.LayoutParams.MATCH_PARENT,
+                    WindowManager.LayoutParams.MATCH_PARENT,
+                )
+            }
+        }
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -110,4 +122,9 @@ fun LoadingOverlayHost(state: LoadingOverlayState) {
             }
         }
     }
+}
+
+@Composable
+fun SideEffect(content: @Composable () -> Unit?) {
+    TODO("Not yet implemented")
 }

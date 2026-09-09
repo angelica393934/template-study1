@@ -2,7 +2,7 @@ package bsb.dev.bsb_bangking_jp.feature.transfer.transfer_core.data
 
 import bsb.dev.bsb_bangking_jp.core.crypto.SignatureUtils
 import bsb.dev.bsb_bangking_jp.core.device.SecureStorageService
-import bsb.dev.bsb_bangking_jp.core.dummy.ConfirmTransferResult
+import bsb.dev.bsb_bangking_jp.feature.transfer.transfer_core.domain.ConfirmTransferResultItem
 import bsb.dev.bsb_bangking_jp.core.network.ApiErrorParser
 import bsb.dev.bsb_bangking_jp.core.network.ApiException
 import bsb.dev.bsb_bangking_jp.core.network.NetworkErrorMapper
@@ -95,7 +95,7 @@ class TransferRepositoryImpl(
         data.toDomain()
     }
 
-    override suspend fun confirmTransfer(mobilePin: String): Result<ConfirmTransferResult> = runCatchingApi {
+    override suspend fun confirmTransfer(mobilePin: String): Result<ConfirmTransferResultItem> = runCatchingApi {
         val body = ConfirmTransferRequest(mobilePin = mobilePin)
         val headers = signedHeaders(body)
 

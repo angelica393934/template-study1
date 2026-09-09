@@ -1,7 +1,7 @@
-package bsb.dev.bsb_bangking_jp.feature.aktivitas.presentation
+package bsb.dev.bsb_bangking_jp.feature.activity.presentation
 
 import bsb.dev.bsb_bangking_jp.core.filter.TransactionFilterPayload
-import bsb.dev.bsb_bangking_jp.feature.aktivitas.data.HistoryItem
+import bsb.dev.bsb_bangking_jp.feature.activity.data.HistoryItem
 
 data class ActivityHistoryUiState(
     val accountNumber: String? = null,

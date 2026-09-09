@@ -19,7 +19,7 @@ import androidx.navigation.navArgument
 import bsb.dev.bsb_bangking_jp.core.component.LocalToastState
 import bsb.dev.bsb_bangking_jp.core.component.ToastHost
 import bsb.dev.bsb_bangking_jp.core.component.rememberToastState
-import bsb.dev.bsb_bangking_jp.core.dummy.ConfirmTransferResult
+import bsb.dev.bsb_bangking_jp.feature.transfer.transfer_core.domain.ConfirmTransferResultItem
 import bsb.dev.bsb_bangking_jp.feature.lokasi_atm.LokasiAtmPage
 import bsb.dev.bsb_bangking_jp.feature.Navbar.Navbar
 import bsb.dev.bsb_bangking_jp.feature.bsb_cash.BsbCashHomePage
@@ -32,6 +32,10 @@ import bsb.dev.bsb_bangking_jp.feature.lainnya.LainnyaPage
 import bsb.dev.bsb_bangking_jp.feature.pajak_pendidikan.LainnyaPajakPage
 import bsb.dev.bsb_bangking_jp.feature.pajak_pendidikan.PajakPendidikanPage
 import bsb.dev.bsb_bangking_jp.feature.login.PortalPage
+import bsb.dev.bsb_bangking_jp.feature.registration.BuatIdPenggunaPage
+import bsb.dev.bsb_bangking_jp.feature.registration.BuatKataSandiPage
+import bsb.dev.bsb_bangking_jp.feature.registration.OtpRegistrationAkunPage
+import bsb.dev.bsb_bangking_jp.feature.registration.RegistrationAkunPage
 import bsb.dev.bsb_bangking_jp.feature.splash.SplashScreen
 import bsb.dev.bsb_bangking_jp.feature.tagihan.TagihanPage
 import bsb.dev.bsb_bangking_jp.feature.transfer.PinTfPage
@@ -57,6 +61,7 @@ import androidx.compose.ui.platform.LocalContext
 import bsb.dev.bsb_bangking_jp.core.notification.NotificationHelper
 import bsb.dev.bsb_bangking_jp.core.util.RupiahFormat
 import bsb.dev.bsb_bangking_jp.feature.news.NewsDetailPage
+import bsb.dev.bsb_bangking_jp.feature.registration.presentation.RegistrationViewModel
 import bsb.dev.bsb_bangking_jp.feature.transfer.toTransactionResultInfo
 import bsb.dev.bsb_bangking_jp.shared.transaction_result.TransactionResultPage
 
@@ -70,7 +75,7 @@ fun AppNavigation(
     val toastState = rememberToastState()
     val loadingOverlayState = rememberLoadingOverlayState()
     var pendingTransfer by remember { mutableStateOf<PeriksaKembaliData?>(null) }
-    var pendingConfirmResult by remember { mutableStateOf<ConfirmTransferResult?>(null) }
+    var pendingConfirmResult by remember { mutableStateOf<ConfirmTransferResultItem?>(null) }
     var pendingSumberKlasifikasi by remember { mutableStateOf("Tabungan Sekarang") }
     var pendingSumberSaldoInt by remember { mutableStateOf(0) }
 
@@ -138,7 +143,56 @@ fun AppNavigation(
                         )
                     }
                 }
+//registration page
+                navigation(startDestination = "registration_akun", route = "registration") {
 
+                    composable("registration_akun") { backStackEntry ->
+                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("registration") }
+                        val viewModel: RegistrationViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
+
+                        RegistrationAkunPage(
+                            viewModel = viewModel,
+                            onBackClick = { navController.popBackStack() },
+                            onNavigateToOtp = { navController.navigate("registration_otp") },
+                        )
+                    }
+
+                    composable("registration_otp") { backStackEntry ->
+                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("registration") }
+                        val viewModel: RegistrationViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
+
+                        OtpRegistrationAkunPage(
+                            viewModel = viewModel,
+                            onBackClick = { navController.popBackStack() },
+                            onVerified = { navController.navigate("registration_buat_id") },
+                        )
+                    }
+
+                    composable("registration_buat_id") { backStackEntry ->
+                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("registration") }
+                        val viewModel: RegistrationViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
+
+                        BuatIdPenggunaPage(
+                            viewModel = viewModel,
+                            onBackClick = { navController.popBackStack() },
+                            onNavigateToPasswordPage = { navController.navigate("registration_buat_password") },
+                        )
+                    }
+
+                    composable("registration_buat_password") { backStackEntry ->
+                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("registration") }
+                        val viewModel: RegistrationViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
+
+                        BuatKataSandiPage(
+                            viewModel = viewModel,
+                            onBackClick = { navController.popBackStack() },
+                            onRegistrationSelesai = {
+                                navController.navigate("portal") { popUpTo(0) }
+                            },
+                        )
+                    }
+                }
+//
                 composable("portal") {
                     PortalPage(navController)
                 }

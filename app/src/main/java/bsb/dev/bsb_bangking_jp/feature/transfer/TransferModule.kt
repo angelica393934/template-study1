@@ -31,7 +31,7 @@ val transferModule = module {
     single<TransferRepository> { TransferRepositoryImpl(get(), get()) }
     // 🔹 single, BUKAN viewModel -- state harus bertahan lintas route
     // (transfer_baru -> transfer_bsb/umum -> pin_transfer)
-    single { TransferViewModel(get()) }
+    single { TransferViewModel(get(), get(),get (), get(),get()) }
 
     // -- flow saved recipient (daftar tersimpan) --
     single { get<Retrofit>().create(SavedRecipientApiService::class.java) }

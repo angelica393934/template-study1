@@ -2,8 +2,12 @@
 package bsb.dev.bsb_bangking_jp.feature.transfer.transfer_core.presentation
 
 import bsb.dev.bsb_bangking_jp.core.network.ApiException
+import bsb.dev.bsb_bangking_jp.feature.activity.presentation.ActivityHistoryViewModel
+import bsb.dev.bsb_bangking_jp.feature.message.presentation.MessageHistoryViewModel
+import bsb.dev.bsb_bangking_jp.feature.transfer.last_transfer.presentation.LastTransferViewModel
 import bsb.dev.bsb_bangking_jp.feature.transfer.transfer_core.domain.TransferRepository
 import bsb.dev.bsb_bangking_jp.feature.transfer.transfer_core.domain.TransferRequestPayload
+import bsb.dev.bsb_bangking_jp.shared.rekening_lainnya.presentation.RekeningLainnyaViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -33,6 +37,10 @@ private const val SESSION_EXPIRED_MESSAGE =
     "Sesi transaksi transfer Anda telah berakhir. Silakan ajukan permintaan transfer kembali."
 
 class TransferViewModel(
+    private val rekeningViewModel: RekeningLainnyaViewModel,
+    private val messageViewModel: MessageHistoryViewModel,
+    private val activityViewModel: ActivityHistoryViewModel,
+    private val lastTransferViewModel: LastTransferViewModel,
     private val repository: TransferRepository,
 ) {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
@@ -150,10 +158,18 @@ class TransferViewModel(
             repository.confirmTransfer(mobilePin)
                 .onSuccess { result ->
                     _uiState.update { it.copy(isConfirming = false) }
+                    // 🔹 Cuma reload rekening vie model untuk transfer SEGERA (bukan terjadwal) -- padanan
+                    if (result.scheduleType != "SCHEDULED") {
+                        rekeningViewModel.load(forceRefresh = true)
+                        activityViewModel.refresh()
+                        messageViewModel.refresh()
+                        lastTransferViewModel.load(forceRefresh = true)
+                    }
                     _navEvent.send(TransferNavEvent.ConfirmSuccess(result))
                 }
                 .onFailure { error ->
                     _uiState.update { it.copy(isConfirming = false) }
+
                     val respCode = (error as? ApiException)?.respCode
                     val message = error.message ?: "Konfirmasi transfer gagal."
 

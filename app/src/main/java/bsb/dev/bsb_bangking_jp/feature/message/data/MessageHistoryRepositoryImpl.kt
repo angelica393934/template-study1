@@ -3,6 +3,7 @@ package bsb.dev.bsb_bangking_jp.feature.message.data
 import bsb.dev.bsb_bangking_jp.core.filter.TransactionFilterPayload
 import bsb.dev.bsb_bangking_jp.core.network.ApiException
 import bsb.dev.bsb_bangking_jp.core.network.GetWithBodyApiHelper
+import bsb.dev.bsb_bangking_jp.core.network.NetworkErrorMapper
 import bsb.dev.bsb_bangking_jp.core.session.ClearableRepository
 import bsb.dev.bsb_bangking_jp.core.util.BackendDateTimeUtil
 import bsb.dev.bsb_bangking_jp.core.util.retry
@@ -51,31 +52,39 @@ class MessageHistoryRepositoryImpl(
         accountNumber: String,
         filter: TransactionFilterPayload,
     ): List<MessageItem> {
-        val body = GetMessageRequest(
-            accountNumber = accountNumber,
-            limit = LIMIT,
-            offset = offset,
-            fromDateTime = filter.fromDate?.let { BackendDateTimeUtil.startOfDay(it) },
-            toDateTime = filter.toDate?.let {
-                if (filter.isDefaultDate) BackendDateTimeUtil.now() else BackendDateTimeUtil.endOfDay(it)
-            },
-            quickRange = filter.quickRange,
-            jenis = filter.jenis?.takeIf { it.isNotEmpty() },
-            category = filter.category?.takeIf { it.isNotEmpty() },
-        )
+        try {
+            val body = GetMessageRequest(
+                accountNumber = accountNumber,
+                limit = LIMIT,
+                offset = offset,
+                fromDateTime = filter.fromDate?.let { BackendDateTimeUtil.startOfDay(it) },
+                toDateTime = filter.toDate?.let {
+                    if (filter.isDefaultDate) BackendDateTimeUtil.now() else BackendDateTimeUtil.endOfDay(it)
+                },
+                quickRange = filter.quickRange,
+                jenis = filter.jenis?.takeIf { it.isNotEmpty() },
+                category = filter.category?.takeIf { it.isNotEmpty() },
+            )
 
-        val response = apiHelper.execute(
-            path = "v1/dashboard/getmessage",
-            body = body,
-            responseType = MessageHistoryResponse::class.java,
-        )
+            val response = apiHelper.execute(
+                path = "v1/dashboard/getmessage",
+                body = body,
+                responseType = MessageHistoryResponse::class.java,
+            )
 
-        if (response.respCode != SUCCESS_CODE) {
-            throw ApiException(response.respCode, response.respMessage ?: "Gagal memuat riwayat message.")
+            if (response.respCode != SUCCESS_CODE) {
+                throw ApiException(response.respCode, response.respMessage ?: "Gagal memuat riwayat message.")
+            }
+
+
+            return response.data.history.map { it.toDomain() }
+        } catch (e: ApiException) {
+            throw e
+        } catch (e: Exception) {
+            throw ApiException(null, NetworkErrorMapper.toUserMessage(e))
         }
-
-        return response.data.history.map { it.toDomain() }
     }
+
 
     override fun clear() = reset()
 

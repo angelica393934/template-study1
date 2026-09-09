@@ -1,4 +1,4 @@
-package bsb.dev.bsb_bangking_jp.feature.aktivitas.data
+package bsb.dev.bsb_bangking_jp.feature.activity.data
 
 import com.google.gson.annotations.SerializedName
 

@@ -1,5 +1,5 @@
 package bsb.dev.bsb_bangking_jp.core.util
-import bsb.dev.bsb_bangking_jp.feature.aktivitas.data.HistoryItem
+import bsb.dev.bsb_bangking_jp.feature.activity.data.HistoryItem
 import java.time.LocalDate
 
 private val indonesianMonths = listOf(

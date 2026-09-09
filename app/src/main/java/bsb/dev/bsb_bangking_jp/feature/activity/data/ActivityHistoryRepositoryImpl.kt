@@ -1,12 +1,13 @@
-package bsb.dev.bsb_bangking_jp.feature.aktivitas.data
+package bsb.dev.bsb_bangking_jp.feature.activity.data
 
 import bsb.dev.bsb_bangking_jp.core.filter.TransactionFilterPayload
 import bsb.dev.bsb_bangking_jp.core.network.ApiException
 import bsb.dev.bsb_bangking_jp.core.network.GetWithBodyApiHelper
+import bsb.dev.bsb_bangking_jp.core.network.NetworkErrorMapper
 import bsb.dev.bsb_bangking_jp.core.session.ClearableRepository
 import bsb.dev.bsb_bangking_jp.core.util.BackendDateTimeUtil
 import bsb.dev.bsb_bangking_jp.core.util.retry
-import bsb.dev.bsb_bangking_jp.feature.aktivitas.domain.ActivityHistoryRepository
+import bsb.dev.bsb_bangking_jp.feature.activity.domain.ActivityHistoryRepository
 
 private const val SUCCESS_CODE = "0000"
 private const val LIMIT = 10
@@ -50,6 +51,7 @@ class ActivityHistoryRepositoryImpl(
         accountNumber: String,
         filter:TransactionFilterPayload,
     ): List<HistoryItem> {
+        try{
         val body = GetHistoryRequest(
             accountNumber = accountNumber,
             limit = LIMIT,
@@ -74,6 +76,11 @@ class ActivityHistoryRepositoryImpl(
         }
 
         return response.data.history
+        } catch (e: ApiException) {
+            throw e
+        } catch (e: Exception) {
+            throw ApiException(null, NetworkErrorMapper.toUserMessage(e))
+        }
     }
 
     override fun clear() = reset()

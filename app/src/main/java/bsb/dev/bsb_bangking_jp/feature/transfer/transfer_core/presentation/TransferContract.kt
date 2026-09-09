@@ -1,7 +1,7 @@
 // feature/transfer/presentation/TransferContract.kt
 package bsb.dev.bsb_bangking_jp.feature.transfer.transfer_core.presentation
 
-import bsb.dev.bsb_bangking_jp.core.dummy.ConfirmTransferResult
+import bsb.dev.bsb_bangking_jp.feature.transfer.transfer_core.domain.ConfirmTransferResultItem
 import bsb.dev.bsb_bangking_jp.feature.transfer.transfer_core.domain.TransferInquiry
 import bsb.dev.bsb_bangking_jp.feature.transfer.transfer_core.domain.TransferPurpose
 
@@ -31,7 +31,7 @@ sealed class TransferNavEvent {
     object TransferSessionExpired : TransferNavEvent()
 
     data class ConfirmSuccess(
-        val result: ConfirmTransferResult,
+        val result: ConfirmTransferResultItem,
     ) : TransferNavEvent()
 
     /** Padanan respCode "0732"/"0465" di failure handler confirmTransfer() (fase 4, PinTfPage). */

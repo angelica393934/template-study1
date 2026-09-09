@@ -39,7 +39,7 @@ import androidx.compose.ui.unit.sp
 import bsb.dev.bsb_bangking_jp.R
 import bsb.dev.bsb_bangking_jp.core.component.AppButton
 import bsb.dev.bsb_bangking_jp.core.component.TransactionDetailRow
-import bsb.dev.bsb_bangking_jp.core.dummy.ConfirmTransferResult
+import bsb.dev.bsb_bangking_jp.feature.transfer.transfer_core.domain.ConfirmTransferResultItem
 import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
 import bsb.dev.bsb_bangking_jp.core.component.InitialAvatar
 import bsb.dev.bsb_bangking_jp.core.util.RupiahFormat
@@ -49,7 +49,7 @@ import java.util.Locale
 
 @Composable
 fun TransferBerhasilDijadwalkanPage(
-    result: ConfirmTransferResult,
+    result: ConfirmTransferResultItem,
     sumberKlasifikasi: String,
     sumberSaldo: Int,
     modifier: Modifier = Modifier,

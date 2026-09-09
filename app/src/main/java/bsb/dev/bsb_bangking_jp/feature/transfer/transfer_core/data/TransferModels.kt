@@ -1,6 +1,6 @@
 package bsb.dev.bsb_bangking_jp.feature.transfer.transfer_core.data
 
-import bsb.dev.bsb_bangking_jp.core.dummy.ConfirmTransferResult
+import bsb.dev.bsb_bangking_jp.feature.transfer.transfer_core.domain.ConfirmTransferResultItem
 import bsb.dev.bsb_bangking_jp.feature.transfer.transfer_core.domain.TransferAdminFee
 import bsb.dev.bsb_bangking_jp.feature.transfer.transfer_core.domain.TransferInquiry
 import bsb.dev.bsb_bangking_jp.feature.transfer.transfer_core.domain.TransferPurpose
@@ -146,10 +146,10 @@ data class ConfirmTransferRequest(
 data class ConfirmTransferApiResponse(
     @SerializedName("respCode") val respCode: String? = null,
     @SerializedName("respMessage") val respMessage: String? = null,
-    @SerializedName("data") val data: ConfirmTransferResultDto? = null,
+    @SerializedName("data") val data: ConfirmTransferResultItemDto? = null,
 )
 
-data class ConfirmTransferResultDto(
+data class ConfirmTransferResultItemDto(
     @SerializedName("adminFee") val adminFee: Double = 0.0,
     @SerializedName("amount") val amount: Double = 0.0,
     @SerializedName("beneficiary") val beneficiary: ConfirmBeneficiaryDto = ConfirmBeneficiaryDto(),
@@ -179,7 +179,7 @@ data class ConfirmSenderDto(
     @SerializedName("name") val name: String = "",
 )
 
-fun ConfirmTransferResultDto.toDomain(): ConfirmTransferResult = ConfirmTransferResult(
+fun ConfirmTransferResultItemDto.toDomain(): ConfirmTransferResultItem = ConfirmTransferResultItem(
     reffNum = reffNum,
     transactionDate = runCatching { isoDateTimeParser.parse(transactionDate) }.getOrNull() ?: Date(),
     beneficiaryName = beneficiary.accountName,

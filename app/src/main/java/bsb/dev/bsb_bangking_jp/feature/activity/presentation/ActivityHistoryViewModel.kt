@@ -1,9 +1,9 @@
-package bsb.dev.bsb_bangking_jp.feature.aktivitas.presentation
+package bsb.dev.bsb_bangking_jp.feature.activity.presentation
 
 import bsb.dev.bsb_bangking_jp.core.filter.TransactionFilterPayload
 import bsb.dev.bsb_bangking_jp.core.network.ApiException
 import bsb.dev.bsb_bangking_jp.core.util.DefaultRangeDate
-import bsb.dev.bsb_bangking_jp.feature.aktivitas.domain.ActivityHistoryRepository
+import bsb.dev.bsb_bangking_jp.feature.activity.domain.ActivityHistoryRepository
 import bsb.dev.bsb_bangking_jp.shared.rekening_lainnya.presentation.RekeningLainnyaViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -18,16 +18,16 @@ import kotlinx.coroutines.launch
 
 /**
  * Koin `single` (BUKAN `viewModel`), sama seperti BerandaViewModel -- supaya 1 instance
- * dipakai di seluruh app dan proses fetch histori TIDAK tergantung apakah AktivitasPage
+ * dipakai di seluruh app dan proses fetch histori TIDAK tergantung apakah ActivityPage
  * sedang di-compose atau tidak (Navbar cuma compose page yang aktif via `when(currentIndex)`,
- * jadi trigger tidak boleh diletakkan di LaunchedEffect milik AktivitasPage).
+ * jadi trigger tidak boleh diletakkan di LaunchedEffect milik ActivityPage).
  *
  * Begitu class ini pertama kali di-resolve Koin, dia langsung "mengamati" state rekening
  * dari BerandaViewModel lewat coroutine sendiri. Saat rekeningList berhasil terisi untuk
  * PERTAMA KALI, otomatis pilih rekening utama & fetch histori -- tanpa perlu UI mana pun
  * memicunya secara eksplisit.
  */
-class ActivityHistoryViewModel(
+    class ActivityHistoryViewModel(
     private val repository: ActivityHistoryRepository,
     private val rekeningViewModel: RekeningLainnyaViewModel,
 ) {
@@ -42,7 +42,7 @@ class ActivityHistoryViewModel(
     }
 
     /**
-     * Padanan `BlocListener<RekeningLainnyaBloc>` di AktivitasPage.dart lama --
+     * Padanan `BlocListener<RekeningLainnyaBloc>` di ActivityPage.dart lama --
      * tunggu rekening lainnya berhasil dulu, baru jalankan fetch histori pertama kali.
      * Hanya trigger SEKALI (selama accountNumber belum pernah di-set) supaya tidak
      * menimpa pilihan rekening manual user setiap kali BerandaViewModel refresh.

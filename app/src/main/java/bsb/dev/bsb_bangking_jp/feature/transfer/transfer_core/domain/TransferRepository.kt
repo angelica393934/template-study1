@@ -1,12 +1,12 @@
 package bsb.dev.bsb_bangking_jp.feature.transfer.transfer_core.domain
 
-import bsb.dev.bsb_bangking_jp.core.dummy.ConfirmTransferResult
+import bsb.dev.bsb_bangking_jp.feature.transfer.transfer_core.domain.ConfirmTransferResultItem
 
 interface TransferRepository {
     suspend fun getAccountDest(code: String, accountNumber: String): Result<TransferInquiry>
     suspend fun saveRecipient(alias: String): Result<Unit>
     suspend fun transfer(request: TransferRequestPayload): Result<TransferResult>
-    suspend fun confirmTransfer(mobilePin: String): Result<ConfirmTransferResult>
+    suspend fun confirmTransfer(mobilePin: String): Result<ConfirmTransferResultItem>
     suspend fun getTransferPurpose(): Result<List<TransferPurpose>>
 }
 

@@ -7,7 +7,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bsb.dev.bsb_bangking_jp.core.component.InputPinPage
 import bsb.dev.bsb_bangking_jp.core.component.LocalLoadingOverlay
 import bsb.dev.bsb_bangking_jp.core.component.LocalToastState
-import bsb.dev.bsb_bangking_jp.core.dummy.ConfirmTransferResult
+import bsb.dev.bsb_bangking_jp.feature.transfer.transfer_core.domain.ConfirmTransferResultItem
 import bsb.dev.bsb_bangking_jp.feature.transfer.component.PeriksaKembaliData
 import bsb.dev.bsb_bangking_jp.feature.transfer.transfer_core.presentation.TransferNavEvent
 import bsb.dev.bsb_bangking_jp.feature.transfer.transfer_core.presentation.TransferUiEvent
@@ -18,8 +18,8 @@ import org.koin.compose.koinInject
 fun PinTfPage(
     data: PeriksaKembaliData,
     onBack: () -> Unit,
-    onBerhasilSegera: (ConfirmTransferResult) -> Unit,
-    onBerhasilDijadwalkan: (ConfirmTransferResult) -> Unit,
+    onBerhasilSegera: (ConfirmTransferResultItem) -> Unit,
+    onBerhasilDijadwalkan: (ConfirmTransferResultItem) -> Unit,
     onSessionExpired: () -> Unit = {},
     viewModel: TransferViewModel = koinInject(),
 ) {
