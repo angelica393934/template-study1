@@ -202,8 +202,8 @@ fun LoginSheet(
                 icon = Icons.Outlined.Security,
                 label = activation,
                 onTap = {
-                    // TODO: navigasi ke halaman Aktivasi Akun -- belum ada rute di project ini
-                },
+                    navController.navigate("activation")
+                   },
             )
 
             AppMenu(

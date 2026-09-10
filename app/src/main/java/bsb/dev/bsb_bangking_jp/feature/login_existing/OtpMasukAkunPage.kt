@@ -10,7 +10,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bsb.dev.bsb_bangking_jp.core.component.LocalLoadingOverlay
 import bsb.dev.bsb_bangking_jp.core.component.LocalToastState
 import bsb.dev.bsb_bangking_jp.feature.login_existing.presentation.LoginExistingViewModel
-import bsb.dev.bsb_bangking_jp.feature.login_existing.component.OtpForm
+import bsb.dev.bsb_bangking_jp.core.component.OtpForm
 import bsb.dev.bsb_bangking_jp.feature.login_existing.presentation.LoginExistingNavEvent
 import bsb.dev.bsb_bangking_jp.feature.login_existing.presentation.LoginExistingUiEvent
 

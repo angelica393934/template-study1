@@ -8,6 +8,7 @@ import bsb.dev.bsb_bangking_jp.core.device.deviceModule
 import bsb.dev.bsb_bangking_jp.shared.get_image.imageModule
 import bsb.dev.bsb_bangking_jp.core.network.networkModule
 import bsb.dev.bsb_bangking_jp.core.notification.NotificationHelper
+import bsb.dev.bsb_bangking_jp.feature.activation.activationModule
 import bsb.dev.bsb_bangking_jp.feature.activity.activityModule
 import bsb.dev.bsb_bangking_jp.feature.beranda.BerandaModule
 import bsb.dev.bsb_bangking_jp.feature.init.initModule
@@ -38,6 +39,7 @@ class BsbApplication : Application() {
                 splashModule,
                 loginExistingModule,
                 registrationModule,
+                activationModule,
                 loginModule,
                 BerandaModule,
                 activityModule,

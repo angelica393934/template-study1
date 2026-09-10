@@ -88,21 +88,24 @@ class LoginExistingViewModel(
         }
     }
 
-    fun resendOtp() {
+    /** 🔹 Suspend + return Boolean -- dipanggil dari OtpForm, yang baru restart countdown kalau true. */
+    suspend fun resendOtp(): Boolean {
         val phoneNumber = _uiState.value.phoneNumber
-        viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, otpErrorMessage = null) }
 
-            resendOtpUseCase(phoneNumber)
-                .onSuccess {
-                    _uiState.update { it.copy(isLoading = false) }
-                    _uiEvent.emit(LoginExistingUiEvent.ShowOtpResentToast)
-                }
-                .onFailure { error ->
-                    _uiState.update { it.copy(isLoading = false) }
-                    handleFailure(error, FailureContext.OTP)
-                }
-        }
+        val result = resendOtpUseCase(phoneNumber)
+        _uiState.update { it.copy(isLoading = false) }
+
+        return result.fold(
+            onSuccess = {
+                _uiEvent.emit(LoginExistingUiEvent.ShowOtpResentToast)
+                true
+            },
+            onFailure = { error ->
+                handleFailure(error, FailureContext.OTP)
+                false
+            },
+        )
     }
 
     fun confirmMpin(pin: String) {

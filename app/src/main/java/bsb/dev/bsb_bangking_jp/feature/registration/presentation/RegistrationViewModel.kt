@@ -104,23 +104,25 @@ class RegistrationViewModel(
     }
 
     /** 3) RESEND OTP. */
-    fun resendOtp() {
+    suspend fun resendOtp(): Boolean {
         val mobileNumber = _uiState.value.mobileNumber
-        viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true, otpErrorMessage = null) }
+        _uiState.update { it.copy(isLoading = true, otpErrorMessage = null) }
 
-            resendOtpUseCase(mobileNumber)
-                .onSuccess {
-                    _uiState.update { it.copy(isLoading = false) }
-                    _uiEvent.emit(RegistrationUiEvent.ShowOtpResentToast)
-                }
-                .onFailure { error ->
-                    _uiState.update { it.copy(isLoading = false) }
-                    _uiEvent.emit(
-                        RegistrationUiEvent.ShowToastError(error.message ?: "Gagal mengirim ulang OTP.")
-                    )
-                }
-        }
+        val result = resendOtpUseCase(mobileNumber)
+        _uiState.update { it.copy(isLoading = false) }
+
+        return result.fold(
+            onSuccess = {
+                _uiEvent.emit(RegistrationUiEvent.ShowOtpResentToast)
+                true
+            },
+            onFailure = { error ->
+                _uiEvent.emit(
+                    RegistrationUiEvent.ShowToastError(error.message ?: "Gagal mengirim ulang OTP.")
+                )
+                false
+            },
+        )
     }
 
     /** 4) ADD ID USER. */

@@ -1,5 +1,4 @@
-// feature/login_existing/component/OtpForm.kt
-package bsb.dev.bsb_bangking_jp.feature.login_existing.component
+package bsb.dev.bsb_bangking_jp.core.component
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
@@ -32,6 +31,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import bsb.dev.bsb_bangking_jp.R
 import bsb.dev.bsb_bangking_jp.core.component.AppHeader
+import bsb.dev.bsb_bangking_jp.core.component.OtpPinInput
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -45,13 +45,14 @@ fun OtpForm(
     isProcessing: Boolean,
     errorMessage: String?,
     onVerify: (otp: String) -> Unit,
-    onResend: () -> Unit,
+    onResend: suspend () -> Boolean,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var otpValue by remember { mutableStateOf("") }
     var remainingSeconds by remember { mutableIntStateOf(COUNTDOWN_SECONDS) }
     var isExpired by remember { mutableStateOf(false) }
+    var isResending by remember { mutableStateOf(false) }
 
     val otpShakeOffset = remember { Animatable(0f) }
     val resendShakeOffset = remember { Animatable(0f) }
@@ -173,15 +174,25 @@ fun OtpForm(
                     style = MaterialTheme.typography.bodyMedium,
                 )
                 Text(
-                    text = "Kirim Ulang OTP",
+                    text = if (isResending) "Mengirim..." else "Kirim Ulang OTP",
                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-                    color = if (isExpired) MaterialTheme.colorScheme.primary else Color.Gray,
+                    color = if (isExpired && !isResending) MaterialTheme.colorScheme.primary else Color.Gray,
                     modifier = Modifier.clip(RoundedCornerShape(4.dp))
                         .then(
-                            if (isExpired) {
+                            if (isExpired && !isResending) {
                                 Modifier.androidx_clickable(onClick = {
-                                    onResend()
-                                    restartCountdown()
+                                    scope.launch {
+                                        isResending = true
+                                        val success = onResend()
+                                        isResending = false
+                                        // 🔹 KUNCI PERBAIKAN: countdown & status "aktif kembali"
+                                        // HANYA direset kalau resend benar-benar sukses.
+                                        // Kalau gagal, isExpired tetap true dan tombol
+                                        // "Kirim Ulang OTP" tetap bisa ditekan ulang.
+                                        if (success) {
+                                            restartCountdown()
+                                        }
+                                    }
                                 })
                             } else Modifier
                         ),

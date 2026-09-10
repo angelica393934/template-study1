@@ -1,4 +1,4 @@
-package bsb.dev.bsb_bangking_jp.feature.registration
+package bsb.dev.bsb_bangking_jp.feature.activation
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -8,14 +8,15 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bsb.dev.bsb_bangking_jp.core.component.LocalLoadingOverlay
 import bsb.dev.bsb_bangking_jp.core.component.LocalToastState
+import bsb.dev.bsb_bangking_jp.core.util.maskPhoneNumber
+import bsb.dev.bsb_bangking_jp.feature.activation.presentation.ActivationNavEvent
+import bsb.dev.bsb_bangking_jp.feature.activation.presentation.ActivationUiEvent
+import bsb.dev.bsb_bangking_jp.feature.activation.presentation.ActivationViewModel
 import bsb.dev.bsb_bangking_jp.core.component.OtpForm
-import bsb.dev.bsb_bangking_jp.feature.registration.presentation.RegistrationNavEvent
-import bsb.dev.bsb_bangking_jp.feature.registration.presentation.RegistrationUiEvent
-import bsb.dev.bsb_bangking_jp.feature.registration.presentation.RegistrationViewModel
 
 @Composable
-fun OtpPageRegistration(
-    viewModel: RegistrationViewModel,
+fun OtpPageActivation(
+    viewModel: ActivationViewModel,
     onBackClick: () -> Unit,
     onVerified: () -> Unit,
 ) {
@@ -28,21 +29,22 @@ fun OtpPageRegistration(
     }
     LaunchedEffect(Unit) {
         viewModel.navEvent.collect { event ->
-            if (event is RegistrationNavEvent.ToBuatIdPage) onVerified()
+            if (event is ActivationNavEvent.ToPasswordPage) onVerified()
         }
     }
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { event ->
             when (event) {
-                is RegistrationUiEvent.ShowToastError -> toastState.showError(event.message)
-                RegistrationUiEvent.ShowOtpResentToast -> toastState.showSuccess("Kode OTP baru berhasil dikirim")
+                is ActivationUiEvent.ShowToastError -> toastState.showError(event.message)
+                ActivationUiEvent.ShowOtpResentToast -> toastState.showSuccess("Kode OTP baru berhasil dikirim")
             }
         }
     }
 
+    // 🔹 Padanan maskPhoneNumber() -- OTP page Flutter menampilkan nomor tersamar.
     OtpForm(
         title = "Masukkan OTP",
-        phoneNumber = uiState.mobileNumber,
+        phoneNumber = maskPhoneNumber(uiState.mobileNumber),
         isProcessing = uiState.isLoading,
         errorMessage = uiState.otpErrorMessage,
         onVerify = { otp -> viewModel.verifyOtp(otp) },

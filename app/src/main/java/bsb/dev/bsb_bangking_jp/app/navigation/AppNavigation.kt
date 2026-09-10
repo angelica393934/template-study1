@@ -64,7 +64,12 @@ import bsb.dev.bsb_bangking_jp.feature.news.NewsDetailPage
 import bsb.dev.bsb_bangking_jp.feature.registration.presentation.RegistrationViewModel
 import bsb.dev.bsb_bangking_jp.feature.transfer.toTransactionResultInfo
 import bsb.dev.bsb_bangking_jp.shared.transaction_result.TransactionResultPage
-
+import bsb.dev.bsb_bangking_jp.feature.activation.FindAccountPageActivation
+import bsb.dev.bsb_bangking_jp.feature.activation.InputIdPageActivation
+import bsb.dev.bsb_bangking_jp.feature.activation.OtpPageActivation
+import bsb.dev.bsb_bangking_jp.feature.activation.InputPwPageActivation
+import bsb.dev.bsb_bangking_jp.feature.activation.ActivationPinFlow
+import bsb.dev.bsb_bangking_jp.feature.activation.presentation.ActivationViewModel
 @Composable
 fun AppNavigation(
     darkTheme: Boolean,
@@ -193,6 +198,69 @@ fun AppNavigation(
                     }
                 }
 //
+
+                //alur activation
+                navigation(startDestination = "aktivasi_akun", route = "activation") {
+
+                    composable("aktivasi_akun") { backStackEntry ->
+                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("activation") }
+                        val viewModel: ActivationViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
+
+                        FindAccountPageActivation(
+                            viewModel = viewModel,
+                            onBackClick = { navController.popBackStack() },
+                            onNavigateToIdPengguna = { navController.navigate("aktivasi_id") },
+                        )
+                    }
+
+                    composable("aktivasi_id") { backStackEntry ->
+                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("activation") }
+                        val viewModel: ActivationViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
+
+                        InputIdPageActivation(
+                            viewModel = viewModel,
+                            onBackClick = { navController.popBackStack() },
+                            onNavigateToOtp = { navController.navigate("aktivasi_otp") },
+                        )
+                    }
+
+                    composable("aktivasi_otp") { backStackEntry ->
+                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("activation") }
+                        val viewModel: ActivationViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
+
+                        OtpPageActivation(
+                            viewModel = viewModel,
+                            onBackClick = { navController.popBackStack() },
+                            onVerified = { navController.navigate("aktivasi_password") },
+                        )
+                    }
+
+                    composable("aktivasi_password") { backStackEntry ->
+                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("activation") }
+                        val viewModel: ActivationViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
+
+                        InputPwPageActivation(
+                            viewModel = viewModel,
+                            onBackClick = { navController.popBackStack() },
+                            onNavigateToPin = { navController.navigate("aktivasi_pin") },
+                        )
+                    }
+
+                    composable("aktivasi_pin") { backStackEntry ->
+                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("activation") }
+                        val viewModel: ActivationViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
+
+                        ActivationPinFlow(
+                            viewModel = viewModel,
+                            onBackClick = { navController.popBackStack() },
+                            onCompleted = {
+                                navController.navigate("portal") { popUpTo(0) }
+                            },
+                        )
+                    }
+                }
+                //
+
                 composable("portal") {
                     LoginPage(navController)
                 }
