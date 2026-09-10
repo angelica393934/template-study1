@@ -1,29 +1,11 @@
 package bsb.dev.bsb_bangking_jp.shared.logout
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bsb.dev.bsb_bangking_jp.R
-import bsb.dev.bsb_bangking_jp.core.component.AppButton
-import bsb.dev.bsb_bangking_jp.core.component.AppModalBottomSheet
 import bsb.dev.bsb_bangking_jp.core.component.AppModalConfirm
 import bsb.dev.bsb_bangking_jp.core.component.LocalLoadingOverlay
 import bsb.dev.bsb_bangking_jp.core.component.LocalToastState
@@ -64,7 +46,7 @@ fun LogoutConfirmSheet(
 
     AppModalConfirm(
         onDismissRequest = onDismiss,
-        imageRes = R.drawable.logout,
+        topimage = R.drawable.logout,
         title = "Apakah Anda yakin ingin keluar dari aplikasi?",
         cancelText = "Batal",
         onCancel = onDismiss,

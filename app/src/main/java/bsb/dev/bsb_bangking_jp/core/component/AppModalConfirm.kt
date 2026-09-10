@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
@@ -25,9 +26,11 @@ import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppModalConfirm(
-    onDismissRequest: () -> Unit,
+    onDismissRequest: (() -> Unit),
     sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-    @DrawableRes imageRes: Int? = null,
+    @DrawableRes topimage: Int? = null,
+    @DrawableRes centerimage: Int? = null,
+    modifier_image: Modifier = Modifier.height(110.dp).fillMaxSize(),
     title: String? = null,
     description: String? = null,
     cancelText: String? = null,
@@ -45,15 +48,13 @@ fun AppModalConfirm(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            // Gambar (opsional)
-            imageRes?.let {
+            // Gambar (atas sebelum judul opsional)
+            topimage?.let {
                 Image(
                     painter = painterResource(id = it),
                     contentDescription = null,
                     contentScale = ContentScale.Fit,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(110.dp),
+                    modifier = modifier_image
                 )
                 Spacer(modifier = Modifier.height(20.dp))
             }
@@ -66,6 +67,16 @@ fun AppModalConfirm(
                     textAlign = TextAlign.Center,
                 )
                 Spacer(modifier = Modifier.height(15.dp))
+            }
+
+            centerimage?.let {
+                Image(
+                    painter = painterResource(id = it),
+                    contentDescription = null,
+                    contentScale = ContentScale.Fit,
+                    modifier = modifier_image
+                )
+                Spacer(modifier = Modifier.height(20.dp))
             }
 
             // Description (opsional)

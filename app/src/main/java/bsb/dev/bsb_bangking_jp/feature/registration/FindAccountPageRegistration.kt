@@ -1,8 +1,10 @@
 package bsb.dev.bsb_bangking_jp.feature.registration
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -18,8 +20,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bsb.dev.bsb_bangking_jp.R
@@ -34,7 +37,7 @@ import bsb.dev.bsb_bangking_jp.feature.registration.presentation.RegistrationUiE
 import bsb.dev.bsb_bangking_jp.feature.registration.presentation.RegistrationViewModel
 
 @Composable
-fun RegistrationAkunPage(
+fun FindAccountPageRegistration(
     viewModel: RegistrationViewModel,
     onBackClick: () -> Unit,
     onNavigateToOtp: () -> Unit,
@@ -65,18 +68,25 @@ fun RegistrationAkunPage(
 
         Column(
             modifier = Modifier
+                .fillMaxWidth()
                 .padding(horizontal = 24.dp)
                 .padding(top = 30.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            Image(
+                painter = painterResource(R.drawable.asset_atur_id),
+                contentDescription = "asset_atur_id"
+            )
             Text(
                 text = "Registration dan Mulai Kelola Keuanganmu",
+                textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.displaySmall,
             )
             Spacer(modifier = Modifier.height(10.dp))
             Text(
                 text = "Lengkapi data dirimu untuk membuat akun dan nikmati kemudahan transaksi.",
                 style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Center,
                 color = MaterialTheme.extendedColors.textSecondary,
             )
             Spacer(modifier = Modifier.height(30.dp))

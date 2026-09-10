@@ -27,6 +27,7 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -54,7 +55,6 @@ import bsb.dev.bsb_bangking_jp.core.util.TransactionFilterChipMapper
 import bsb.dev.bsb_bangking_jp.core.component.FilterChipBar
 import bsb.dev.bsb_bangking_jp.core.component.LocalLoadingOverlay
 import bsb.dev.bsb_bangking_jp.core.component.LocalToastState
-import bsb.dev.bsb_bangking_jp.core.component.SideEffect
 import bsb.dev.bsb_bangking_jp.core.filter.FilterTransaksiModal
 import bsb.dev.bsb_bangking_jp.feature.message.domain.MessageItem
 import bsb.dev.bsb_bangking_jp.feature.message.domain.toTransactionResultInfo

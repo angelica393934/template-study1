@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-// 🔹 Padanan pengecekan `code == "0611"` / `code == "0612"` di RegistrationAkunPage.dart.
+// 🔹 Padanan pengecekan `code == "0611"` / `code == "0612"` di FindAccountPageRegistration.dart.
 private const val PHONE_ERROR_CODE = "0611"
 private const val ATM_CARD_ERROR_CODE = "0612"
 
@@ -43,7 +43,7 @@ class RegistrationViewModel(
     private val _uiEvent = MutableSharedFlow<RegistrationUiEvent>(replay = 0)
     val uiEvent: SharedFlow<RegistrationUiEvent> = _uiEvent.asSharedFlow()
 
-    /** 1) GET ACCOUNT -- padanan `_onSubmit()` di RegistrationAkunPage.dart. */
+    /** 1) GET ACCOUNT -- padanan `_onSubmit()` di FindAccountPageRegistration.dart. */
     fun getAccount(atmCardNo: String, mobileNumber: String) {
         if (atmCardNo.isBlank() || atmCardNo.length < 6) {
             _uiState.update { it.copy(atmCardError = "Masukkan nomor rekening yang valid.") }

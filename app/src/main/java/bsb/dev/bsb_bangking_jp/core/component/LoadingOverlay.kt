@@ -15,6 +15,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -122,9 +123,4 @@ fun LoadingOverlayHost(state: LoadingOverlayState) {
             }
         }
     }
-}
-
-@Composable
-fun SideEffect(content: @Composable () -> Unit?) {
-    TODO("Not yet implemented")
 }

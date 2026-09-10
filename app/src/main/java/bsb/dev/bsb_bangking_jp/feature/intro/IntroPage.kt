@@ -20,11 +20,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import kotlinx.coroutines.launch
 import bsb.dev.bsb_bangking_jp.R
 import bsb.dev.bsb_bangking_jp.core.component.AppButton
+import bsb.dev.bsb_bangking_jp.core.component.AppModalConfirm
 import bsb.dev.bsb_bangking_jp.core.component.AppSwitch
 import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
+import kotlinx.coroutines.launch
 
 data class IntroPageData(
     val title: String,
@@ -32,6 +33,7 @@ data class IntroPageData(
     val image: Int
 )
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun IntroPage(
     navController: NavController,

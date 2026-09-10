@@ -14,7 +14,7 @@ import bsb.dev.bsb_bangking_jp.feature.registration.presentation.RegistrationUiE
 import bsb.dev.bsb_bangking_jp.feature.registration.presentation.RegistrationViewModel
 
 @Composable
-fun OtpRegistrationAkunPage(
+fun OtpPageRegistration(
     viewModel: RegistrationViewModel,
     onBackClick: () -> Unit,
     onVerified: () -> Unit,

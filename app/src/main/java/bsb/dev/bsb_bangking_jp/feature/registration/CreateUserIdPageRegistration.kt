@@ -35,7 +35,7 @@ import bsb.dev.bsb_bangking_jp.feature.registration.presentation.RegistrationNav
 import bsb.dev.bsb_bangking_jp.feature.registration.presentation.RegistrationUiEvent
 
 @Composable
-fun BuatIdPenggunaPage(
+fun CreateUserIdPageRegistration(
     viewModel: RegistrationViewModel,
     onBackClick: () -> Unit,
     onNavigateToPasswordPage: () -> Unit,
@@ -148,7 +148,7 @@ fun BuatIdPenggunaPage(
     }
 }
 
-/** Reusable juga oleh BuatKataSandiPage.kt (satu package yang sama). */
+/** Reusable juga oleh CreateUserPwPageRegistration.kt (satu package yang sama). */
 @Composable
 internal fun RuleBullet(text: String, hasInput: Boolean, isValid: Boolean) {
     val color = when {

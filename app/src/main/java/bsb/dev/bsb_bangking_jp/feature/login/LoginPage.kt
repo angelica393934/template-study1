@@ -26,7 +26,7 @@ import bsb.dev.bsb_bangking_jp.core.component.AppModalBottomSheet
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PortalPage(
+fun LoginPage(
     navController: NavController
 ) {
     val login = stringResource(R.string.login_button)

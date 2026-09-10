@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import bsb.dev.bsb_bangking_jp.R
 import bsb.dev.bsb_bangking_jp.core.component.AppButton
 import bsb.dev.bsb_bangking_jp.core.component.AppHeader
 import bsb.dev.bsb_bangking_jp.core.component.AppModalConfirm
@@ -33,7 +34,7 @@ import bsb.dev.bsb_bangking_jp.feature.registration.presentation.RegistrationVie
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BuatKataSandiPage(
+fun CreateUserPwPageRegistration(
     viewModel: RegistrationViewModel,
     onBackClick: () -> Unit,
     onRegistrationSelesai: () -> Unit,
@@ -62,6 +63,7 @@ fun BuatKataSandiPage(
     }
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { event ->
+            if (event is RegistrationNavEvent.ToPortal) showSuccessSheet = true
             if (event is RegistrationUiEvent.ShowToastError) toastState.showError(event.message)
         }
     }
@@ -158,6 +160,7 @@ fun BuatKataSandiPage(
             title = "Registration Berhasil!",
             description = "Silakan lakukan aktivasi akun Anda terlebih dahulu, dengan menggunakan ID Pengguna " +
                     "dan kata sandi baru untuk menggunakan layanan kami.",
+            centerimage = R.drawable.asset_centang,
             confirmText = "Masuk Kembali",
             onConfirm = {
                 showSuccessSheet = false

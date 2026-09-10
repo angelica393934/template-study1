@@ -16,7 +16,7 @@ import retrofit2.Retrofit
 
 val registrationModule = module {
     single { get<Retrofit>().create(RegistrationApiService::class.java) }
-    single<RegistrationRepository> { RegistrationRepositoryImpl(get(), get()) }
+    single<RegistrationRepository> { RegistrationRepositoryImpl(get(), get(), get()) }
 
     factory { GetAccountUseCase(get()) }
     factory { RegistResendOtpUseCase(get()) }

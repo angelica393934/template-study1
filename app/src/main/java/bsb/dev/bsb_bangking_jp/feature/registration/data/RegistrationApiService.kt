@@ -15,7 +15,7 @@ interface RegistrationApiService {
         @Body body: GetAccountRequest,
     ): Response<GetAccountResponse>
 
-    @POST("regist/resend-otp")
+    @POST("v1/resend-otp/initregistration")
     suspend fun resendOtp(
         @HeaderMap headers: Map<String, String>,
         @Body body: RegistResendOtpRequest,

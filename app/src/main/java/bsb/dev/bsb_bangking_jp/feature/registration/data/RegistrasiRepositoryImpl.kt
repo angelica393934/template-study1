@@ -2,6 +2,7 @@ package bsb.dev.bsb_bangking_jp.feature.registration.data
 
 import bsb.dev.bsb_bangking_jp.core.crypto.JwtUtils
 import bsb.dev.bsb_bangking_jp.core.crypto.SignatureUtils
+import bsb.dev.bsb_bangking_jp.core.device.AppPreferences
 import bsb.dev.bsb_bangking_jp.core.device.SecureStorageService
 import bsb.dev.bsb_bangking_jp.core.network.ApiErrorParser
 import bsb.dev.bsb_bangking_jp.core.network.ApiException
@@ -10,12 +11,12 @@ import bsb.dev.bsb_bangking_jp.core.network.header.ApiHeaders
 import bsb.dev.bsb_bangking_jp.core.network.token.TokenPhase
 import bsb.dev.bsb_bangking_jp.core.network.token.TokenPhaseTag
 import bsb.dev.bsb_bangking_jp.feature.registration.domain.RegistrationRepository
-
 private const val SUCCESS_CODE = "0000"
 
 class RegistrationRepositoryImpl(
     private val api: RegistrationApiService,
     private val secureStorage: SecureStorageService,
+    private val appPreferences: AppPreferences,
 ) : RegistrationRepository {
 
     override suspend fun getAccount(atmCardNo: String, mobileNumber: String): Result<Unit> {
@@ -32,9 +33,11 @@ class RegistrationRepositoryImpl(
                 )
             }
             Result.success(Unit)
+
         } catch (e: Exception) {
             Result.failure(ApiException(null, NetworkErrorMapper.toUserMessage(e)))
         }
+
     }
 
     override suspend fun resendOtp(mobileNumber: String): Result<Unit> {
@@ -178,10 +181,8 @@ class RegistrationRepositoryImpl(
                     ApiException(respBody?.respCode, respBody?.respMessage ?: "Gagal membuat kata sandi.")
                 )
             }
-
-            // 🔹 Padanan SecureStorageService.clearRegistTokens() di listener addPasscode Flutter.
             secureStorage.clearRegistTokens()
-
+            appPreferences.saveRegistStatus(true)
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(ApiException(null, NetworkErrorMapper.toUserMessage(e)))

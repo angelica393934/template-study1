@@ -58,6 +58,20 @@ class SecureStorageService(context: Context) {
         }
     }
 
+    // token untuk phase "activation" -- dipakai validationpasscodeforactivation & activation-confirmmpin
+    fun getActivationAccessToken(): String? = prefs.getString(KEY_ACTIVATION_ACCESS_TOKEN, null)
+    fun saveActivationAccessToken(token: String) = prefs.edit { putString(KEY_ACTIVATION_ACCESS_TOKEN, token) }
+
+    fun getActivationRefreshToken(): String? = prefs.getString(KEY_ACTIVATION_REFRESH_TOKEN, null)
+    fun saveActivationRefreshToken(token: String) = prefs.edit { putString(KEY_ACTIVATION_REFRESH_TOKEN, token) }
+
+    fun clearActivationTokens() {
+        prefs.edit {
+            remove(KEY_ACTIVATION_ACCESS_TOKEN)
+            remove(KEY_ACTIVATION_REFRESH_TOKEN)
+        }
+    }
+
     //Token untuk phase "login" -- dipakai untuk semua endpoint setelah user login
     fun getLoginAccessToken(): String? = prefs.getString(KEY_LOGIN_ACCESS_TOKEN, null)
     fun saveLoginAccessToken(token: String) = prefs.edit { putString(KEY_LOGIN_ACCESS_TOKEN, token) }
@@ -87,5 +101,8 @@ class SecureStorageService(context: Context) {
         private const val KEY_LOGIN_ACCESS_TOKEN = "login_access_token"
         private const val KEY_LOGIN_REFRESH_TOKEN = "login_refresh_token"
         private const val KEY_TRANSFER_ACCESS_TOKEN = "transfer_access_token"
+        private const val KEY_ACTIVATION_ACCESS_TOKEN = "activation_access_token"
+        private const val KEY_ACTIVATION_REFRESH_TOKEN = "activation_refresh_token"
+
     }
 }

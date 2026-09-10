@@ -31,11 +31,11 @@ import bsb.dev.bsb_bangking_jp.feature.intro.IntroPage4
 import bsb.dev.bsb_bangking_jp.feature.lainnya.LainnyaPage
 import bsb.dev.bsb_bangking_jp.feature.pajak_pendidikan.LainnyaPajakPage
 import bsb.dev.bsb_bangking_jp.feature.pajak_pendidikan.PajakPendidikanPage
-import bsb.dev.bsb_bangking_jp.feature.login.PortalPage
-import bsb.dev.bsb_bangking_jp.feature.registration.BuatIdPenggunaPage
-import bsb.dev.bsb_bangking_jp.feature.registration.BuatKataSandiPage
-import bsb.dev.bsb_bangking_jp.feature.registration.OtpRegistrationAkunPage
-import bsb.dev.bsb_bangking_jp.feature.registration.RegistrationAkunPage
+import bsb.dev.bsb_bangking_jp.feature.login.LoginPage
+import bsb.dev.bsb_bangking_jp.feature.registration.CreateUserIdPageRegistration
+import bsb.dev.bsb_bangking_jp.feature.registration.CreateUserPwPageRegistration
+import bsb.dev.bsb_bangking_jp.feature.registration.OtpPageRegistration
+import bsb.dev.bsb_bangking_jp.feature.registration.FindAccountPageRegistration
 import bsb.dev.bsb_bangking_jp.feature.splash.SplashScreen
 import bsb.dev.bsb_bangking_jp.feature.tagihan.TagihanPage
 import bsb.dev.bsb_bangking_jp.feature.transfer.PinTfPage
@@ -85,7 +85,7 @@ fun AppNavigation(
         Box(modifier = Modifier.fillMaxSize()) {
             NavHost(
                 navController = navController,
-                startDestination = "navbar",
+                startDestination = "splash",
             ) {
 
                 composable("splash") {
@@ -150,7 +150,7 @@ fun AppNavigation(
                         val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("registration") }
                         val viewModel: RegistrationViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
 
-                        RegistrationAkunPage(
+                        FindAccountPageRegistration(
                             viewModel = viewModel,
                             onBackClick = { navController.popBackStack() },
                             onNavigateToOtp = { navController.navigate("registration_otp") },
@@ -161,7 +161,7 @@ fun AppNavigation(
                         val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("registration") }
                         val viewModel: RegistrationViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
 
-                        OtpRegistrationAkunPage(
+                        OtpPageRegistration(
                             viewModel = viewModel,
                             onBackClick = { navController.popBackStack() },
                             onVerified = { navController.navigate("registration_buat_id") },
@@ -172,7 +172,7 @@ fun AppNavigation(
                         val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("registration") }
                         val viewModel: RegistrationViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
 
-                        BuatIdPenggunaPage(
+                        CreateUserIdPageRegistration(
                             viewModel = viewModel,
                             onBackClick = { navController.popBackStack() },
                             onNavigateToPasswordPage = { navController.navigate("registration_buat_password") },
@@ -183,7 +183,7 @@ fun AppNavigation(
                         val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("registration") }
                         val viewModel: RegistrationViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
 
-                        BuatKataSandiPage(
+                        CreateUserPwPageRegistration(
                             viewModel = viewModel,
                             onBackClick = { navController.popBackStack() },
                             onRegistrationSelesai = {
@@ -194,7 +194,7 @@ fun AppNavigation(
                 }
 //
                 composable("portal") {
-                    PortalPage(navController)
+                    LoginPage(navController)
                 }
 
                 composable("lokasiatm") {

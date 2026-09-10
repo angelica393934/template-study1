@@ -32,7 +32,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import bsb.dev.bsb_bangking_jp.R
 import bsb.dev.bsb_bangking_jp.core.component.AppHeader
-import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -109,7 +108,7 @@ fun OtpForm(
             Spacer(modifier = Modifier.height(30.dp))
 
             Image(
-                painter = painterResource(id = R.drawable.message), // TODO: sesuaikan nama drawable
+                painter = painterResource(id = R.drawable.asset_message), // TODO: sesuaikan nama drawable
                 contentDescription = null,
                 modifier = Modifier.size(100.dp),
                 contentScale = ContentScale.Fit,

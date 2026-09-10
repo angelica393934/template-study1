@@ -12,13 +12,18 @@ interface RefreshTokenApiService {
         @HeaderMap headers: Map<String, String>,
     ): Response<RefreshTokenResponse>
 
-    @GET("v1/refresh-token/login")
-    suspend fun refreshLoginToken(
+    @GET("v1/refresh-token/initregistration")
+    suspend fun refreshRegistToken(
         @HeaderMap headers: Map<String, String>,
     ): Response<RefreshTokenResponse>
 
-    @GET("v1/refresh-token/initregistration")
-    suspend fun refreshRegistToken(
+    @GET("v1/refresh-token/validactivation")
+    suspend fun refreshActivationToken(
+        @HeaderMap headers: Map<String, String>,
+    ): Response<RefreshTokenResponse>
+
+    @GET("v1/refresh-token/login")
+    suspend fun refreshLoginToken(
         @HeaderMap headers: Map<String, String>,
     ): Response<RefreshTokenResponse>
 }

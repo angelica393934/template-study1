@@ -38,6 +38,7 @@ class BsbApplication : Application() {
                 splashModule,
                 loginExistingModule,
                 registrationModule,
+                loginModule,
                 BerandaModule,
                 activityModule,
                 transferModule,
