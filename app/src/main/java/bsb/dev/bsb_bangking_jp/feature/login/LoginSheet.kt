@@ -70,6 +70,7 @@ fun LoginSheet(
     var useridInput by remember(uiState.useridLogin) { mutableStateOf(uiState.useridLogin) }
     var passcodeInput by remember { mutableStateOf("") }
     val profileViewModel: ProfileViewModel = koinInject()
+    var showForgotAccountSheet by remember { mutableStateOf(false) }
 
     LaunchedEffect(uiState.isLoading) {
         if (uiState.isLoading) loadingOverlay.show() else loadingOverlay.hide()
@@ -99,11 +100,11 @@ fun LoginSheet(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding( top=6.dp),
+                .padding(top = 6.dp),
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = loginTitle ,
+                text = loginTitle,
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center
@@ -181,7 +182,7 @@ fun LoginSheet(
 
         TextButton(
             onClick = {
-                // TODO: buka LupaAkunBottomSheet -- belum ada padanannya di project ini
+                showForgotAccountSheet = true
             },
             modifier = Modifier.align(Alignment.CenterHorizontally),
         ) {
@@ -203,7 +204,7 @@ fun LoginSheet(
                 label = activation,
                 onTap = {
                     navController.navigate("activation")
-                   },
+                },
             )
 
             AppMenu(
@@ -224,5 +225,20 @@ fun LoginSheet(
         }
 
         Spacer(modifier = Modifier.height(20.dp))
+    }
+
+    if (showForgotAccountSheet) {
+        bsb.dev.bsb_bangking_jp.feature.login.
+        ForgotAccountBottomSheet(
+            onDismiss = { showForgotAccountSheet = false },
+            onSelectUserId = {
+                showForgotAccountSheet = false
+                navController.navigate("forget_iduser")
+            },
+            onSelectPassword = {
+                showForgotAccountSheet = false
+                // TODO: alur "Lupa Kata Sandi" belum dibuat di iterasi ini
+            },
+        )
     }
 }

@@ -56,7 +56,7 @@ fun AppModalConfirm(
                     contentScale = ContentScale.Fit,
                     modifier = modifier_image
                 )
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(10.dp))
             }
 
             // Title (opsional)
@@ -66,7 +66,7 @@ fun AppModalConfirm(
                     style = MaterialTheme.typography.titleLarge,
                     textAlign = TextAlign.Center,
                 )
-                Spacer(modifier = Modifier.height(15.dp))
+                Spacer(modifier = Modifier.height(10.dp))
             }
 
             centerimage?.let {
@@ -76,7 +76,7 @@ fun AppModalConfirm(
                     contentScale = ContentScale.Fit,
                     modifier = modifier_image
                 )
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(10.dp))
             }
 
             // Description (opsional)
@@ -87,7 +87,7 @@ fun AppModalConfirm(
                     color = MaterialTheme.extendedColors.textSecondary,
                     textAlign = TextAlign.Center,
                 )
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(10.dp))
             }
 
             // Row tombol -- fleksibel, bisa cuma 1 atau keduanya.

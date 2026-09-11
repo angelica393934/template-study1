@@ -7,6 +7,7 @@ enum class TokenPhase {
     TRANSFER,
     REGIST,
     ACTIVATION,
+    FORGET_ID_USER,
 }
 
 data class TokenPhaseTag(val phase: TokenPhase)

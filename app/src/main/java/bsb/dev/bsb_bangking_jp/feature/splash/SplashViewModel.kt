@@ -62,7 +62,7 @@ class SplashViewModel(
 
     private suspend fun checkStatus() {
         try {
-            val isConfirmMpinDone = appPreferences.getConfirmMpinStatus()
+            val isConfirmMpinDone = appPreferences.getLoginExistingStatus()
             val isRegistDone = appPreferences.getRegistStatus()
 
             if (isConfirmMpinDone || isRegistDone) {

@@ -11,6 +11,7 @@ import bsb.dev.bsb_bangking_jp.core.notification.NotificationHelper
 import bsb.dev.bsb_bangking_jp.feature.activation.activationModule
 import bsb.dev.bsb_bangking_jp.feature.activity.activityModule
 import bsb.dev.bsb_bangking_jp.feature.beranda.BerandaModule
+import bsb.dev.bsb_bangking_jp.feature.forget_iduser.forgetIdUserModule
 import bsb.dev.bsb_bangking_jp.feature.init.initModule
 import bsb.dev.bsb_bangking_jp.feature.login.loginModule
 import bsb.dev.bsb_bangking_jp.feature.login_existing.loginExistingModule
@@ -41,6 +42,7 @@ class BsbApplication : Application() {
                 registrationModule,
                 activationModule,
                 loginModule,
+                forgetIdUserModule,
                 BerandaModule,
                 activityModule,
                 transferModule,

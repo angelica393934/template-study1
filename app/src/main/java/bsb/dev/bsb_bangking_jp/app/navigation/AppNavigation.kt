@@ -70,6 +70,10 @@ import bsb.dev.bsb_bangking_jp.feature.activation.OtpPageActivation
 import bsb.dev.bsb_bangking_jp.feature.activation.InputPwPageActivation
 import bsb.dev.bsb_bangking_jp.feature.activation.ActivationPinFlow
 import bsb.dev.bsb_bangking_jp.feature.activation.presentation.ActivationViewModel
+import bsb.dev.bsb_bangking_jp.feature.forget_iduser.FindAccountPageForgetId
+import bsb.dev.bsb_bangking_jp.feature.forget_iduser.OtpPageForgetId
+import bsb.dev.bsb_bangking_jp.feature.forget_iduser.ResetIdPageForgetId
+import bsb.dev.bsb_bangking_jp.feature.forget_iduser.presentation.ForgetIdUserViewModel
 @Composable
 fun AppNavigation(
     darkTheme: Boolean,
@@ -254,6 +258,45 @@ fun AppNavigation(
                             viewModel = viewModel,
                             onBackClick = { navController.popBackStack() },
                             onCompleted = {
+                                navController.navigate("portal") { popUpTo(0) }
+                            },
+                        )
+                    }
+                }
+
+                //lupa id user
+                navigation(startDestination = "forget_iduser_home", route = "forget_iduser") {
+
+                    composable("forget_iduser_home") { backStackEntry ->
+                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("forget_iduser") }
+                        val viewModel: ForgetIdUserViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
+
+                        FindAccountPageForgetId(
+                            viewModel = viewModel,
+                            onBackClick = { navController.popBackStack() },
+                            onNavigateToOtp = { navController.navigate("forget_iduser_otp") },
+                        )
+                    }
+
+                    composable("forget_iduser_otp") { backStackEntry ->
+                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("forget_iduser") }
+                        val viewModel: ForgetIdUserViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
+
+                        OtpPageForgetId(
+                            viewModel = viewModel,
+                            onBackClick = { navController.popBackStack() },
+                            onVerified = { navController.navigate("forget_iduser_reset") },
+                        )
+                    }
+
+                    composable("forget_iduser_reset") { backStackEntry ->
+                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("forget_iduser") }
+                        val viewModel: ForgetIdUserViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
+
+                        ResetIdPageForgetId(
+                            viewModel = viewModel,
+                            onBackClick = { navController.popBackStack() },
+                            onResetSuccessComplete = {
                                 navController.navigate("portal") { popUpTo(0) }
                             },
                         )

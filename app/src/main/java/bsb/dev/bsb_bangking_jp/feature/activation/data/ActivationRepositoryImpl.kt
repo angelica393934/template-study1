@@ -201,10 +201,6 @@ class ActivationRepositoryImpl(
                     ApiException(respBody?.respCode, respBody?.respMessage ?: "Konfirmasi PIN gagal.")
                 )
             }
-
-            // 🔹 Padanan: saveRegistStatus(true) di ActivationService.confirmMpinActivation
-            // + saveLoginAllowed(true) & clearActivationTokens() di listener ActivationBloc sukses.
-            appPreferences.saveRegistStatus(true)
             appPreferences.saveLoginAllowed(true)
             secureStorage.clearActivationTokens()
 

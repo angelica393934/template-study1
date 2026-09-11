@@ -1,4 +1,3 @@
-// core/device/AppPreferences.kt
 package bsb.dev.bsb_bangking_jp.core.device
 
 import android.content.Context
@@ -16,8 +15,8 @@ class AppPreferences(context: Context) {
     fun isInitSuccess(): Boolean = prefs.getBoolean(KEY_INIT_SUCCESS, false)
     fun saveInitSuccess(value: Boolean) = prefs.edit { putBoolean(KEY_INIT_SUCCESS, value) }
 
-    fun getConfirmMpinStatus(): Boolean = prefs.getBoolean(KEY_CONFIRM_MPIN, false)
-    fun saveConfirmMpinStatus(value: Boolean) = prefs.edit { putBoolean(KEY_CONFIRM_MPIN, value) }
+    fun getLoginExistingStatus(): Boolean = prefs.getBoolean(KEY_CONFIRM_MPIN, false)
+    fun saveLoginExistingStatus(value: Boolean) = prefs.edit { putBoolean(KEY_CONFIRM_MPIN, value) }
 
     fun getRegistStatus(): Boolean = prefs.getBoolean(KEY_REGIST, false)
     fun saveRegistStatus(value: Boolean) = prefs.edit { putBoolean(KEY_REGIST, value) }
