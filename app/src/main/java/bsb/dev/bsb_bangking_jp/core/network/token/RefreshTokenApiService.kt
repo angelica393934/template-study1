@@ -31,6 +31,11 @@ interface RefreshTokenApiService {
     suspend fun refreshForgetIdUserToken(
         @HeaderMap headers: Map<String, String>,
     ): Response<RefreshTokenResponse>
+
+    @GET("/v1/refresh-token/forgetpasscode")
+    suspend fun refreshForgetPwUserToken(
+        @HeaderMap headers: Map<String, String>,
+    ): Response<RefreshTokenResponse>
 }
 
 data class RefreshTokenResponse(

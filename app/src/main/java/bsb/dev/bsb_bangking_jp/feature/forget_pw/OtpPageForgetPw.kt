@@ -1,4 +1,4 @@
-package bsb.dev.bsb_bangking_jp.feature.forget_iduser
+package bsb.dev.bsb_bangking_jp.feature.forget_pw
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -9,13 +9,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bsb.dev.bsb_bangking_jp.core.component.LocalLoadingOverlay
 import bsb.dev.bsb_bangking_jp.core.component.LocalToastState
 import bsb.dev.bsb_bangking_jp.core.component.OtpForm
-import bsb.dev.bsb_bangking_jp.feature.forget_iduser.presentation.ForgetIdUserNavEvent
-import bsb.dev.bsb_bangking_jp.feature.forget_iduser.presentation.ForgetIdUserUiEvent
-import bsb.dev.bsb_bangking_jp.feature.forget_iduser.presentation.ForgetIdUserViewModel
+import bsb.dev.bsb_bangking_jp.feature.forget_pw.presentation.ForgetPwNavEvent
+import bsb.dev.bsb_bangking_jp.feature.forget_pw.presentation.ForgetPwUiEvent
+import bsb.dev.bsb_bangking_jp.feature.forget_pw.presentation.ForgetPwViewModel
 
 @Composable
-fun OtpPageForgetId(
-    viewModel: ForgetIdUserViewModel,
+fun OtpPageForgetPw(
+    viewModel: ForgetPwViewModel,
     onBackClick: () -> Unit,
     onVerified: () -> Unit,
 ) {
@@ -28,14 +28,14 @@ fun OtpPageForgetId(
     }
     LaunchedEffect(Unit) {
         viewModel.navEvent.collect { event ->
-            if (event is ForgetIdUserNavEvent.ToResetIdPage) onVerified()
+            if (event is ForgetPwNavEvent.ToResetPasswordPage) onVerified()
         }
     }
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { event ->
             when (event) {
-                is ForgetIdUserUiEvent.ShowToastError -> toastState.showError(event.message)
-                ForgetIdUserUiEvent.ShowOtpResentToast -> toastState.showSuccess("New OTP code has been sent")
+                is ForgetPwUiEvent.ShowToastError -> toastState.showError(event.message)
+                ForgetPwUiEvent.ShowOtpResentToast -> toastState.showSuccess("New OTP code has been sent")
             }
         }
     }

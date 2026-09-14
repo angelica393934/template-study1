@@ -12,6 +12,7 @@ import bsb.dev.bsb_bangking_jp.feature.activation.activationModule
 import bsb.dev.bsb_bangking_jp.feature.activity.activityModule
 import bsb.dev.bsb_bangking_jp.feature.beranda.BerandaModule
 import bsb.dev.bsb_bangking_jp.feature.forget_iduser.forgetIdUserModule
+import bsb.dev.bsb_bangking_jp.feature.forget_pw.forgetPwUserModule
 import bsb.dev.bsb_bangking_jp.feature.init.initModule
 import bsb.dev.bsb_bangking_jp.feature.login.loginModule
 import bsb.dev.bsb_bangking_jp.feature.login_existing.loginExistingModule
@@ -43,6 +44,7 @@ class BsbApplication : Application() {
                 activationModule,
                 loginModule,
                 forgetIdUserModule,
+                forgetPwUserModule,
                 BerandaModule,
                 activityModule,
                 transferModule,

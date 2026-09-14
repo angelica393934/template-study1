@@ -1,5 +1,6 @@
 package bsb.dev.bsb_bangking_jp.feature.login
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import bsb.dev.bsb_bangking_jp.core.component.AppButton
 import bsb.dev.bsb_bangking_jp.core.component.AppModalBottomSheet
 import bsb.dev.bsb_bangking_jp.core.component.SelectableOptionCard
+import bsb.dev.bsb_bangking_jp.core.theme.appSpacing
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -26,24 +28,25 @@ fun ForgotAccountBottomSheet(
     var selectedOption by remember { mutableStateOf<String?>(null) }
 
     AppModalBottomSheet(onDismissRequest = onDismiss) {
-        Column(modifier = Modifier.fillMaxWidth()) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+
+            verticalArrangement = Arrangement.spacedBy(appSpacing.xs)
+        ) {
             SelectableOptionCard(
-                title = "User ID",
-                description = "Reset your account's User ID to restore access and keep your profile secure.",
+                title = "ID Pengguna",
+                description = "Proses untuk mengatur ulang ID Pengguna akun Anda guna memulihkan akses dan memastikan keamanan profil.",
                 isSelected = selectedOption == "user_id",
                 onTap = { selectedOption = "user_id" },
             )
-            Spacer(modifier = Modifier.height(10.dp))
             SelectableOptionCard(
-                title = "Password",
-                description = "Reset your account's password to restore access and protect your data.",
+                title = "Kata Sandi",
+                description = "Proses untuk mengatur ulang kata sandi akun Anda guna memulihkan akses dan menjaga keamanan data.",
                 isSelected = selectedOption == "password",
                 onTap = { selectedOption = "password" },
             )
-            Spacer(modifier = Modifier.height(15.dp))
-
             AppButton(
-                text = "Continue",
+                text = "Lanjutkan",
                 enabled = selectedOption != null,
                 onClick = {
                     when (selectedOption) {
@@ -52,7 +55,6 @@ fun ForgotAccountBottomSheet(
                     }
                 },
             )
-            Spacer(modifier = Modifier.height(10.dp))
         }
     }
 }

@@ -1,4 +1,4 @@
-package bsb.dev.bsb_bangking_jp.feature.forget_iduser
+package bsb.dev.bsb_bangking_jp.feature.forget_pw
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -21,7 +21,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -36,13 +35,13 @@ import bsb.dev.bsb_bangking_jp.core.component.LocalToastState
 import bsb.dev.bsb_bangking_jp.core.theme.appLayout
 import bsb.dev.bsb_bangking_jp.core.theme.appSpacing
 import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
-import bsb.dev.bsb_bangking_jp.feature.forget_iduser.presentation.ForgetIdUserNavEvent
-import bsb.dev.bsb_bangking_jp.feature.forget_iduser.presentation.ForgetIdUserUiEvent
-import bsb.dev.bsb_bangking_jp.feature.forget_iduser.presentation.ForgetIdUserViewModel
+import bsb.dev.bsb_bangking_jp.feature.forget_pw.presentation.ForgetPwNavEvent
+import bsb.dev.bsb_bangking_jp.feature.forget_pw.presentation.ForgetPwUiEvent
+import bsb.dev.bsb_bangking_jp.feature.forget_pw.presentation.ForgetPwViewModel
 
 @Composable
-fun FindAccountPageForgetId(
-    viewModel: ForgetIdUserViewModel,
+fun FindAccountPageForgetPw(
+    viewModel: ForgetPwViewModel,
     onBackClick: () -> Unit,
     onNavigateToOtp: () -> Unit,
 ) {
@@ -55,12 +54,12 @@ fun FindAccountPageForgetId(
 
     LaunchedEffect(Unit) {
         viewModel.navEvent.collect { event ->
-            if (event is ForgetIdUserNavEvent.ToOtpPage) onNavigateToOtp()
+            if (event is ForgetPwNavEvent.ToOtpPage) onNavigateToOtp()
         }
     }
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { event ->
-            if (event is ForgetIdUserUiEvent.ShowToastError) toastState.showError(event.message)
+            if (event is ForgetPwUiEvent.ShowToastError) toastState.showError(event.message)
         }
     }
     LaunchedEffect(uiState.isLoading) {
@@ -68,25 +67,25 @@ fun FindAccountPageForgetId(
     }
 
     Column(modifier = Modifier.fillMaxSize()) {
-        AppHeader(title = "Atur ulang ID Pengguna ", onBackClick = onBackClick)
+        AppHeader(title = "Atur ulang Kata Sandi", onBackClick = onBackClick)
+
         Column(
             modifier = Modifier.padding(all= appLayout.defaultPadding),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(appSpacing.xxxs)
-
         ) {
             Image(
-                painter = painterResource(id = R.drawable.asset_atur_id),
+                painter = painterResource(id = R.drawable.asset_pw),
                 contentDescription = null,
                 modifier = Modifier.height(100.dp),
             )
             Text(
-                text = "Atur ulang ID Pengguna untuk akses akun",
+                text = "Atur ulang Kata Sandi untuk akses akun",
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.titleLarge,
             )
             Text(
-                text = "Atur ulang ID Pengguna untuk memulihkan akses, dan kelancaran penggunaan layanan.",
+                text = "Atur ulang Kata Sandi untuk memulihkan akses, dan kelancaran penggunaan layanan.",
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.extendedColors.textSecondary,
@@ -98,7 +97,7 @@ fun FindAccountPageForgetId(
                     viewModel.clearAccountError()
                 },
                 labelText = "Rekening atau ATM",
-                hintText = "Masukkan Nomor Rekening/ ATM",
+                hintText = "Masukkan Nomor Rekening / ATM",
                 icon = Icons.Default.CreditCard,
                 isNumberOnly = true,
                 errorText = uiState.atmCardError,
@@ -121,10 +120,10 @@ fun FindAccountPageForgetId(
                 enableFocusBackground = true,
             )
             AppButton(
-                icon =  Icons.AutoMirrored.Filled.ArrowForward,
-                modifier = Modifier.padding(vertical= appSpacing.xxxs),
                 text = "Lanjutkan",
-                onClick = { viewModel.getIdUser(accountInput, phoneInput) },
+                modifier = Modifier.padding(vertical= appSpacing.xxxs),
+                icon =  Icons.AutoMirrored.Filled.ArrowForward,
+                onClick = { viewModel.getPw(accountInput, phoneInput) },
             )
         }
     }

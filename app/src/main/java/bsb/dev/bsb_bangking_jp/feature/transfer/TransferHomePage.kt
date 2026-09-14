@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import android.net.Uri
+import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
 import bsb.dev.bsb_bangking_jp.core.component.LocalLoadingOverlay
 import bsb.dev.bsb_bangking_jp.feature.transfer.transfer_core.presentation.TransferNavEvent
 import bsb.dev.bsb_bangking_jp.feature.transfer.transfer_core.presentation.TransferUiEvent
@@ -180,7 +181,7 @@ fun TransferHomePage(
                     )
                 }
                 Icon(
-                    imageVector = Icons.Default.ArrowForwardIos,
+                    imageVector =  Icons.AutoMirrored.Filled.ArrowForwardIos,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(18.dp),

@@ -2,13 +2,13 @@ package bsb.dev.bsb_bangking_jp.core.component
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SheetState
@@ -21,6 +21,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import bsb.dev.bsb_bangking_jp.core.theme.appSpacing
 import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -47,6 +48,7 @@ fun AppModalConfirm(
         Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(appSpacing.xxxs)
         ) {
             // Gambar (atas sebelum judul opsional)
             topimage?.let {
@@ -56,7 +58,6 @@ fun AppModalConfirm(
                     contentScale = ContentScale.Fit,
                     modifier = modifier_image
                 )
-                Spacer(modifier = Modifier.height(10.dp))
             }
 
             // Title (opsional)
@@ -66,9 +67,7 @@ fun AppModalConfirm(
                     style = MaterialTheme.typography.titleLarge,
                     textAlign = TextAlign.Center,
                 )
-                Spacer(modifier = Modifier.height(10.dp))
             }
-
             centerimage?.let {
                 Image(
                     painter = painterResource(id = it),
@@ -76,9 +75,7 @@ fun AppModalConfirm(
                     contentScale = ContentScale.Fit,
                     modifier = modifier_image
                 )
-                Spacer(modifier = Modifier.height(10.dp))
             }
-
             // Description (opsional)
             description?.let {
                 Text(
@@ -87,15 +84,13 @@ fun AppModalConfirm(
                     color = MaterialTheme.extendedColors.textSecondary,
                     textAlign = TextAlign.Center,
                 )
-                Spacer(modifier = Modifier.height(10.dp))
             }
-
             // Row tombol -- fleksibel, bisa cuma 1 atau keduanya.
             val showCancel = cancelText != null && onCancel != null
             val showConfirm = confirmText != null && onConfirm != null
 
             if (showCancel || showConfirm) {
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(appSpacing.xxxxs))
                 Row(modifier = Modifier.fillMaxWidth()) {
                     if (showCancel) {
                         AppButton(
@@ -107,7 +102,8 @@ fun AppModalConfirm(
                         )
                     }
                     if (showCancel && showConfirm) {
-                        Spacer(modifier = Modifier.width(10.dp))
+                        Spacer(modifier = Modifier.height(appSpacing.xs))
+
                     }
                     if (showConfirm) {
                         AppButton(

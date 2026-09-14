@@ -55,6 +55,7 @@ class TokenRefreshInterceptor(
         TokenPhase.ACTIVATION -> secureStorage.getActivationAccessToken()
         TokenPhase.LOGIN -> secureStorage.getLoginAccessToken()
         TokenPhase.FORGET_ID_USER -> secureStorage.getForgetIdUserAccessToken()
+        TokenPhase.FORGET_PW_USER -> secureStorage.getForgetPwUserAccessToken()
         TokenPhase.TRANSFER -> secureStorage.getTransferAccessToken()
     }
 
@@ -65,6 +66,7 @@ class TokenRefreshInterceptor(
             TokenPhase.ACTIVATION -> refreshActivationToken()
             TokenPhase.LOGIN -> refreshLoginToken()
             TokenPhase.FORGET_ID_USER -> refreshForgetIdUserToken()
+            TokenPhase.FORGET_PW_USER -> refreshForgetPwUserToken()
             TokenPhase.TRANSFER -> null
         }
     } catch (e: Exception) {
@@ -160,6 +162,23 @@ class TokenRefreshInterceptor(
         data.refreshToken?.let { secureStorage.saveForgetIdUserRefreshToken(it) }
         return newAccess
     }
+
+    private suspend fun refreshForgetPwUserToken(): String? {
+        val refreshToken = secureStorage.getForgetPwUserRefreshToken() ?: return null
+
+        val headers = mapOf("Authorization" to "Bearer $refreshToken")
+
+        val response = refreshApiService().refreshForgetPwUserToken(headers = headers)
+        if (!response.isSuccessful) return null
+
+        val data = response.body()?.data ?: return null
+        val newAccess = data.accessToken ?: return null
+
+        secureStorage.saveForgetPwUserAccessToken(newAccess)
+        data.refreshToken?.let { secureStorage.saveForgetPwUserRefreshToken(it) }
+        return newAccess
+    }
+
 
     private fun peekRespCode(response: Response): String? = try {
         val bodyString = response.peekBody(Long.MAX_VALUE).string()

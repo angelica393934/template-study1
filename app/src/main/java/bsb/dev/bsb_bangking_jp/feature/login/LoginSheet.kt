@@ -237,7 +237,7 @@ fun LoginSheet(
             },
             onSelectPassword = {
                 showForgotAccountSheet = false
-                // TODO: alur "Lupa Kata Sandi" belum dibuat di iterasi ini
+                navController.navigate("forget_pw")
             },
         )
     }

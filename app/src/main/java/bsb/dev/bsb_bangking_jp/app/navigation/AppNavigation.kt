@@ -74,6 +74,11 @@ import bsb.dev.bsb_bangking_jp.feature.forget_iduser.FindAccountPageForgetId
 import bsb.dev.bsb_bangking_jp.feature.forget_iduser.OtpPageForgetId
 import bsb.dev.bsb_bangking_jp.feature.forget_iduser.ResetIdPageForgetId
 import bsb.dev.bsb_bangking_jp.feature.forget_iduser.presentation.ForgetIdUserViewModel
+import bsb.dev.bsb_bangking_jp.feature.forget_pw.FindAccountPageForgetPw
+import bsb.dev.bsb_bangking_jp.feature.forget_pw.OtpPageForgetPw
+import bsb.dev.bsb_bangking_jp.feature.forget_pw.ResetPwPageForgetPw
+import bsb.dev.bsb_bangking_jp.feature.forget_pw.presentation.ForgetPwViewModel
+
 @Composable
 fun AppNavigation(
     darkTheme: Boolean,
@@ -112,7 +117,7 @@ fun AppNavigation(
                 composable("intro4") {
                     IntroPage4(navController)
                 }
-
+                //login existing
                 navigation(startDestination = "login_masuk", route = "login_existing") {
 
                     composable("login_masuk") { backStackEntry ->
@@ -152,7 +157,7 @@ fun AppNavigation(
                         )
                     }
                 }
-//registration page
+                //registration page
                 navigation(startDestination = "registration_akun", route = "registration") {
 
                     composable("registration_akun") { backStackEntry ->
@@ -201,8 +206,6 @@ fun AppNavigation(
                         )
                     }
                 }
-//
-
                 //alur activation
                 navigation(startDestination = "aktivasi_akun", route = "activation") {
 
@@ -302,8 +305,44 @@ fun AppNavigation(
                         )
                     }
                 }
-                //
+                navigation(startDestination = "forget_pw_home", route = "forget_pw") {
 
+                    composable("forget_pw_home") { backStackEntry ->
+                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("forget_pw") }
+                        val viewModel: ForgetPwViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
+
+                        FindAccountPageForgetPw(
+                            viewModel = viewModel,
+                            onBackClick = { navController.popBackStack() },
+                            onNavigateToOtp = { navController.navigate("forget_pw_otp") },
+                        )
+                    }
+                    // forget pw user
+                    composable("forget_pw_otp") { backStackEntry ->
+                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("forget_pw") }
+                        val viewModel: ForgetPwViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
+
+                        OtpPageForgetPw(
+                            viewModel = viewModel,
+                            onBackClick = { navController.popBackStack() },
+                            onVerified = { navController.navigate("forget_pw_reset") },
+                        )
+                    }
+
+                    composable("forget_pw_reset") { backStackEntry ->
+                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("forget_pw") }
+                        val viewModel: ForgetPwViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
+
+                        ResetPwPageForgetPw(
+                            viewModel = viewModel,
+                            onBackClick = { navController.popBackStack() },
+                            onResetSuccessComplete = {
+                                navController.navigate("portal") { popUpTo(0) }
+                            },
+                        )
+                    }
+                }
+                //
                 composable("portal") {
                     LoginPage(navController)
                 }

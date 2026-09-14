@@ -98,6 +98,20 @@ class SecureStorageService(context: Context) {
             remove(KEY_FORGET_IDUSER_REFRESH_TOKEN)
         }
     }
+
+    // token untuk phase "forget_pw" -- dipakai khusus endpoint changepasscode
+    fun getForgetPwUserAccessToken(): String? = prefs.getString(KEY_FORGET_PWUSER_ACCESS_TOKEN, null)
+    fun saveForgetPwUserAccessToken(token: String) = prefs.edit { putString(KEY_FORGET_PWUSER_ACCESS_TOKEN, token) }
+
+    fun getForgetPwUserRefreshToken(): String? = prefs.getString(KEY_FORGET_PWUSER_REFRESH_TOKEN, null)
+    fun saveForgetPwUserRefreshToken(token: String) = prefs.edit { putString(KEY_FORGET_PWUSER_REFRESH_TOKEN, token) }
+
+    fun clearForgetPwTokens() {
+        prefs.edit {
+            remove(KEY_FORGET_PWUSER_ACCESS_TOKEN)
+            remove(KEY_FORGET_PWUSER_REFRESH_TOKEN)
+        }
+    }
     // token phase transfer
     fun getTransferAccessToken(): String? = prefs.getString(KEY_TRANSFER_ACCESS_TOKEN, null)
     fun saveTransferAccessToken(token: String) = prefs.edit { putString(KEY_TRANSFER_ACCESS_TOKEN, token) }
@@ -114,6 +128,8 @@ class SecureStorageService(context: Context) {
         private const val KEY_LOGIN_REFRESH_TOKEN = "login_refresh_token"
         private const val KEY_FORGET_IDUSER_ACCESS_TOKEN = "forget_iduser_access_token"
         private const val KEY_FORGET_IDUSER_REFRESH_TOKEN = "forget_iduser_refresh_token"
+        private const val KEY_FORGET_PWUSER_ACCESS_TOKEN = "forget_pw_access_token"
+        private const val KEY_FORGET_PWUSER_REFRESH_TOKEN = "forget_pw_refresh_token"
         private const val KEY_TRANSFER_ACCESS_TOKEN = "transfer_access_token"
         private const val KEY_ACTIVATION_ACCESS_TOKEN = "activation_access_token"
         private const val KEY_ACTIVATION_REFRESH_TOKEN = "activation_refresh_token"

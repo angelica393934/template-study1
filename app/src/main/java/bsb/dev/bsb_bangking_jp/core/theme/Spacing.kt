@@ -3,7 +3,7 @@ package bsb.dev.bsb_bangking_jp.core.theme
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
-object Spacing {
+object appSpacing {
     val xxxxs: Dp = 4.dp
     val xxxs: Dp = 8.dp
     val xxs: Dp = 12.dp
@@ -17,12 +17,12 @@ object Spacing {
     val xxxxl: Dp = 96.dp
 }
 
-object Radius {
+object appRadius {
     val sheetTop: Dp = 24.dp
     val sheetBottom: Dp = 16.dp
 }
 
-object Layout {
-    val pageHorizontalPadding: Dp = 24.dp
+object appLayout {
+    val defaultPadding: Dp = 24.dp
     val contentMaxWidth: Dp = 600.dp
 }

@@ -27,6 +27,7 @@ import bsb.dev.bsb_bangking_jp.core.component.AppModalConfirm
 import bsb.dev.bsb_bangking_jp.core.component.AppTextField
 import bsb.dev.bsb_bangking_jp.core.component.LocalLoadingOverlay
 import bsb.dev.bsb_bangking_jp.core.component.LocalToastState
+import bsb.dev.bsb_bangking_jp.core.component.RuleBullet
 import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
 import bsb.dev.bsb_bangking_jp.feature.registration.presentation.RegistrationNavEvent
 import bsb.dev.bsb_bangking_jp.feature.registration.presentation.RegistrationUiEvent
