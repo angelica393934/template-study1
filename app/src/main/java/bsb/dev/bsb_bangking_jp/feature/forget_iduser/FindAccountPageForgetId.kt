@@ -73,7 +73,6 @@ fun FindAccountPageForgetId(
             modifier = Modifier.padding(all= appLayout.defaultPadding),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(appSpacing.xxxs)
-
         ) {
             Image(
                 painter = painterResource(id = R.drawable.asset_atur_id),

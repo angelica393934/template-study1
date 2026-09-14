@@ -1,11 +1,13 @@
 package bsb.dev.bsb_bangking_jp.feature.registration
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -28,6 +30,8 @@ import bsb.dev.bsb_bangking_jp.core.component.AppTextField
 import bsb.dev.bsb_bangking_jp.core.component.LocalLoadingOverlay
 import bsb.dev.bsb_bangking_jp.core.component.LocalToastState
 import bsb.dev.bsb_bangking_jp.core.component.RuleBullet
+import bsb.dev.bsb_bangking_jp.core.theme.appLayout
+import bsb.dev.bsb_bangking_jp.core.theme.appSpacing
 import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
 import bsb.dev.bsb_bangking_jp.feature.registration.presentation.RegistrationNavEvent
 import bsb.dev.bsb_bangking_jp.feature.registration.presentation.RegistrationUiEvent
@@ -74,19 +78,16 @@ fun CreateUserPwPageRegistration(
 
         Column(
             modifier = Modifier
-                .padding(horizontal = 24.dp)
-                .padding(top = 20.dp),
-        ) {
+                .padding(appLayout.defaultPadding),
+                 verticalArrangement = Arrangement.spacedBy(appSpacing.xxxs)
+            ) {
             Text(text = "Buat Kata Sandi yang Aman", style = MaterialTheme.typography.titleLarge)
-            Spacer(modifier = Modifier.height(10.dp))
             Text(
                 text = "Kata sandi ini akan digunakan setiap kali kamu masuk ke Bank Sumsel Babel Mobile Banking. " +
                         "Pastikan sulit ditebak dan tidak digunakan di akun lain.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.extendedColors.textSecondary,
             )
-            Spacer(modifier = Modifier.height(15.dp))
-
             AppTextField(
                 value = passcode,
                 onValueChange = {
@@ -101,8 +102,6 @@ fun CreateUserPwPageRegistration(
                 showError = uiState.passcodeError != null,
                 enableFocusBackground = true,
             )
-            Spacer(modifier = Modifier.height(10.dp))
-
             AppTextField(
                 value = confirmPasscode,
                 onValueChange = {
@@ -117,28 +116,21 @@ fun CreateUserPwPageRegistration(
                 showError = confirmError != null,
                 enableFocusBackground = true,
             )
-
-            Spacer(modifier = Modifier.height(10.dp))
             HorizontalDivider(color = MaterialTheme.extendedColors.divider)
-            Spacer(modifier = Modifier.height(10.dp))
-
             Text(
                 text = "Aturan Kata Sandi",
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.extendedColors.textSecondary,
             )
-            Spacer(modifier = Modifier.height(10.dp))
             RuleBullet("Gunakan tepat 8 karakter", passcode.isNotEmpty(), has8Chars)
-            Spacer(modifier = Modifier.height(5.dp))
             RuleBullet("Gunakan kombinasi huruf besar dan kecil", passcode.isNotEmpty(), hasUpperLower)
-            Spacer(modifier = Modifier.height(5.dp))
-            RuleBullet("Gunakan minimal satu angka", passcode.isNotEmpty(), hasNumber)
-
-            Spacer(modifier = Modifier.height(30.dp))
+            RuleBullet("Sertakan angka", passcode.isNotEmpty(), hasNumber)
 
             AppButton(
                 text = "Lanjutkan",
                 enabled = isAllValid,
+                modifier = Modifier.padding(vertical = appSpacing.xxxs),
+                icon =  Icons.AutoMirrored.Filled.ArrowForward,
                 onClick = {
                     if (confirmPasscode != passcode) {
                         confirmError = "Kata sandi baru tidak sama"
@@ -148,7 +140,6 @@ fun CreateUserPwPageRegistration(
                     viewModel.addPasscode(passcode, confirmPasscode)
                 },
             )
-            Spacer(modifier = Modifier.height(30.dp))
         }
     }
 

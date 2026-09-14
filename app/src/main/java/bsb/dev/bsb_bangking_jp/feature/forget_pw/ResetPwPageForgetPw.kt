@@ -1,9 +1,12 @@
 package bsb.dev.bsb_bangking_jp.feature.forget_pw
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -19,7 +22,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bsb.dev.bsb_bangking_jp.R
@@ -78,9 +84,20 @@ fun ResetPwPageForgetPw(
         Column(
             modifier = Modifier
                 .padding(appLayout.defaultPadding),
-                verticalArrangement = Arrangement.spacedBy(appSpacing.xxxs)
+            verticalArrangement = Arrangement.spacedBy(appSpacing.xxxs)
         ) {
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.asset_pw),
+                    contentDescription = null,
+                    modifier = Modifier.height(100.dp),
+                )
+            }
             Text(
+                textAlign = TextAlign.Center,
                 text = "Buat Kata Sandi baru untuk pengalaman masuk lebih nyaman.",
                 style = MaterialTheme.typography.titleLarge,
             )
@@ -112,10 +129,10 @@ fun ResetPwPageForgetPw(
                 showError = confirmError != null,
                 enableFocusBackground = true,
             )
-            HorizontalDivider(color = MaterialTheme.extendedColors.divider)
             Text(
                 text = "Aturan Password Pengguna",
                 style = MaterialTheme.typography.titleSmall,
+                textAlign = TextAlign.Left,
                 color = MaterialTheme.extendedColors.textSecondary,
             )
             RuleBullet("Gunakan maksimal 8 karakter", newPasscode.isNotEmpty(), has8Chars)
@@ -139,7 +156,6 @@ fun ResetPwPageForgetPw(
                     viewModel.changePw(newPasscode, confirmPasscode)
                 },
             )
-            Spacer(modifier = Modifier.height(30.dp))
         }
     }
 

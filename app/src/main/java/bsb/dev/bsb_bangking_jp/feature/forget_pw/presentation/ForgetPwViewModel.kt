@@ -45,8 +45,8 @@ class ForgetPwViewModel(
         val trimmedAccount = atmCardNo.trim()
         val trimmedPhone = mobileNumber.trim()
 
-        val accountError = if (trimmedAccount.isEmpty()) "Account or ATM number cannot be empty" else null
-        val phoneError = if (!isValidPhone(trimmedPhone)) "Enter a valid phone number (10–15 digits)" else null
+        val accountError = if (trimmedAccount.isEmpty()) "Nomor rekening atau ATM tidak boleh kosong" else null
+        val phoneError = if (!isValidPhone(trimmedPhone)) "Masukkan nomor telepon yang valid (10–15 digit)" else null
 
         if (accountError != null || phoneError != null) {
             _uiState.update { it.copy(atmCardError = accountError, phoneError = phoneError) }
@@ -72,7 +72,7 @@ class ForgetPwViewModel(
                 .onFailure { error ->
                     _uiState.update { it.copy(isLoading = false) }
                     val respCode = (error as? ApiException)?.respCode
-                    val message = error.message ?: "Something went wrong, please try again."
+                    val message = error.message ?: "Terjadi kesalahan, silakan coba lagi."
 
                     when (respCode) {
                         ACCOUNT_ERROR_CODE_1, ACCOUNT_ERROR_CODE_2 -> _uiState.update { it.copy(atmCardError = message) }
@@ -95,7 +95,7 @@ class ForgetPwViewModel(
                     _navEvent.send(ForgetPwNavEvent.ToResetPasswordPage)
                 }
                 .onFailure { error ->
-                    val message = error.message ?: "Invalid OTP."
+                    val message = error.message ?: "OTP tidak valid."
                     _uiState.update { it.copy(isLoading = false, otpErrorMessage = message) }
                 }
         }
@@ -135,7 +135,7 @@ class ForgetPwViewModel(
                     _navEvent.send(ForgetPwNavEvent.ToPortalSuccess)
                 }
                 .onFailure { error ->
-                    val message = error.message ?: "Failed to update password."
+                    val message = error.message ?: "Gagal memperbarui kata sandi."
                     _uiState.update { it.copy(isLoading = false, newPasscodeError = message) }
                 }
         }

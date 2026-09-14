@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
 
@@ -29,6 +30,6 @@ internal fun RuleBullet(text: String, hasInput: Boolean, isValid: Boolean) {
             modifier = Modifier.width(12.dp),
         )
         Spacer(modifier = Modifier.width(6.dp))
-        Text(text = text, style = MaterialTheme.typography.bodySmall, color = color)
+        Text(text = text, style = MaterialTheme.typography.bodySmall, color = color,textAlign = TextAlign.Left,)
     }
 }

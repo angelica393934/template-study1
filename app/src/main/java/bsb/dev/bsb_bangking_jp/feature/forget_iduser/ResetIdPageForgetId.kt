@@ -1,9 +1,13 @@
 package bsb.dev.bsb_bangking_jp.feature.forget_iduser
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import bsb.dev.bsb_bangking_jp.R
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
@@ -18,7 +22,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bsb.dev.bsb_bangking_jp.core.component.AppButton
 import bsb.dev.bsb_bangking_jp.core.component.AppHeader
@@ -75,10 +83,21 @@ fun ResetIdPageForgetId(
         Column(
             modifier = Modifier
                 .padding(appLayout.defaultPadding),
-                verticalArrangement = Arrangement.spacedBy(appSpacing.xxxs)
+            verticalArrangement = Arrangement.spacedBy(appSpacing.xxxs)
         ) {
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+            Image(
+                painter = painterResource(id = R.drawable.asset_atur_id),
+                contentDescription = null,
+                modifier = Modifier.height(100.dp),
+            )
+            }
             Text(
                 text = "Buat ID Pengguna baru untuk pengalaman masuk lebih nyaman.",
+                textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.titleLarge,
             )
             AppTextField(
@@ -107,12 +126,13 @@ fun ResetIdPageForgetId(
                 showError = confirmError != null,
                 enableFocusBackground = true,
             )
-            HorizontalDivider(color = MaterialTheme.extendedColors.divider,)
             Text(
                 text = "Aturan ID Pengguna",
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.extendedColors.textSecondary,
-            )
+                textAlign = TextAlign.Left,
+
+                )
             RuleBullet("Gunakan maksimal 8 karakter", newUserId.isNotEmpty(), has8Chars)
 
             RuleBullet("Gunakan huruf besar dan kecil", newUserId.isNotEmpty(), hasUpperLower)

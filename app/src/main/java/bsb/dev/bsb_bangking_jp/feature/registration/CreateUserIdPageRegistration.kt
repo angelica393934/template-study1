@@ -123,7 +123,7 @@ fun CreateUserIdPageRegistration(
             Spacer(modifier = Modifier.height(5.dp))
             RuleBullet("Gunakan kombinasi huruf besar dan kecil", userId.isNotEmpty(), hasUpperLower)
             Spacer(modifier = Modifier.height(5.dp))
-            RuleBullet("Gunakan minimal satu angka", userId.isNotEmpty(), hasNumber)
+            RuleBullet("Sertakan angka", userId.isNotEmpty(), hasNumber)
 
             Spacer(modifier = Modifier.height(30.dp))
 
