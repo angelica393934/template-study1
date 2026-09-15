@@ -1,4 +1,4 @@
-package bsb.dev.bsb_bangking_jp.feature.ganti_email
+package bsb.dev.bsb_bangking_jp.feature.change_email
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -25,11 +25,11 @@ import bsb.dev.bsb_bangking_jp.core.component.AppTextField
 import bsb.dev.bsb_bangking_jp.core.component.LocalLoadingOverlay
 import bsb.dev.bsb_bangking_jp.core.component.LocalToastState
 import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
-import bsb.dev.bsb_bangking_jp.feature.ganti_email.presentation.GantiEmailNavEvent
-import bsb.dev.bsb_bangking_jp.feature.ganti_email.presentation.GantiEmailUiEvent
-import bsb.dev.bsb_bangking_jp.feature.ganti_email.presentation.GantiEmailViewModel
+import bsb.dev.bsb_bangking_jp.feature.change_email.presentation.ChangeEmailNavEvent
+import bsb.dev.bsb_bangking_jp.feature.change_email.presentation.ChangeEmailUiEvent
+import bsb.dev.bsb_bangking_jp.feature.change_email.presentation.ChangeEmailViewModel
 
-/** Padanan _validateEmail() lokal di GantiEmailPage.dart -- dicek dulu SEBELUM modal konfirmasi dibuka. */
+/** Padanan _validateEmail() lokal di ChangeEmailPage.dart -- dicek dulu SEBELUM modal konfirmasi dibuka. */
 private fun validateEmailLocal(email: String): String? {
     if (email.isBlank()) return "Email tidak boleh kosong"
     if (!Regex("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$").matches(email)) return "Format email tidak valid"
@@ -38,8 +38,8 @@ private fun validateEmailLocal(email: String): String? {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GantiEmailPage(
-    viewModel: GantiEmailViewModel,
+fun ChangeEmailPage(
+    viewModel: ChangeEmailViewModel,
     onBackClick: () -> Unit,
     onNavigateToPin: () -> Unit,
 ) {
@@ -56,12 +56,12 @@ fun GantiEmailPage(
     }
     LaunchedEffect(Unit) {
         viewModel.navEvent.collect { event ->
-            if (event is GantiEmailNavEvent.ToPinPage) onNavigateToPin()
+            if (event is ChangeEmailNavEvent.ToPinPage) onNavigateToPin()
         }
     }
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { event ->
-            if (event is GantiEmailUiEvent.ShowToastError) toastState.showError(event.message)
+            if (event is ChangeEmailUiEvent.ShowToastError) toastState.showError(event.message)
         }
     }
 
@@ -121,7 +121,7 @@ fun GantiEmailPage(
             confirmText = "Lanjutkan",
             onConfirm = {
                 showConfirmModal = false
-                viewModel.gantiEmail(emailInput) // 🔥 HIT ENDPOINT 1
+                viewModel.changeEmail(emailInput) // 🔥 HIT ENDPOINT 1
             },
         )
     }

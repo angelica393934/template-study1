@@ -1,9 +1,9 @@
-package bsb.dev.bsb_bangking_jp.feature.ganti_email.domain
+package bsb.dev.bsb_bangking_jp.feature.change_email.domain
 
-interface GantiEmailRepository {
-    /** Padanan GantiEmailService.GantiEmail() -- PUT /v1/dashboard/changeemail. */
-    suspend fun gantiEmail(newEmail: String): Result<Unit>
+interface ChangeEmailRepository {
+    /** Padanan ChangeEmailService.ChangeEmail() -- PUT /v1/dashboard/changeemail. */
+    suspend fun changeEmail(newEmail: String): Result<Unit>
 
-    /** Padanan GantiEmailService.confirmGantiEmail() -- POST /v1/dashboard/confirmchangeemail. */
-    suspend fun confirmGantiEmail(pin: String): Result<Unit>
+    /** Padanan ChangeEmailService.confirmChangeEmail() -- POST /v1/dashboard/confirmchangeemail. */
+    suspend fun confirmChangeEmail(pin: String): Result<Unit>
 }

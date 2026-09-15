@@ -1,9 +1,9 @@
-package bsb.dev.bsb_bangking_jp.feature.ganti_email.presentation
+package bsb.dev.bsb_bangking_jp.feature.change_email.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import bsb.dev.bsb_bangking_jp.feature.ganti_email.domain.ConfirmGantiEmailUseCase
-import bsb.dev.bsb_bangking_jp.feature.ganti_email.domain.GantiEmailUseCase
+import bsb.dev.bsb_bangking_jp.feature.change_email.domain.ConfirmChangeEmailUseCase
+import bsb.dev.bsb_bangking_jp.feature.change_email.domain.ChangeEmailUseCase
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -16,22 +16,22 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class GantiEmailViewModel(
-    private val gantiEmailUseCase: GantiEmailUseCase,
-    private val confirmGantiEmailUseCase: ConfirmGantiEmailUseCase,
+class ChangeEmailViewModel(
+    private val changeEmailUseCase: ChangeEmailUseCase,
+    private val confirmChangeEmailUseCase: ConfirmChangeEmailUseCase,
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(GantiEmailUiState())
-    val uiState: StateFlow<GantiEmailUiState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(ChangeEmailUiState())
+    val uiState: StateFlow<ChangeEmailUiState> = _uiState.asStateFlow()
 
-    private val _navEvent = Channel<GantiEmailNavEvent>(Channel.BUFFERED)
-    val navEvent: Flow<GantiEmailNavEvent> = _navEvent.receiveAsFlow()
+    private val _navEvent = Channel<ChangeEmailNavEvent>(Channel.BUFFERED)
+    val navEvent: Flow<ChangeEmailNavEvent> = _navEvent.receiveAsFlow()
 
-    private val _uiEvent = MutableSharedFlow<GantiEmailUiEvent>(replay = 0)
-    val uiEvent: SharedFlow<GantiEmailUiEvent> = _uiEvent.asSharedFlow()
+    private val _uiEvent = MutableSharedFlow<ChangeEmailUiEvent>(replay = 0)
+    val uiEvent: SharedFlow<ChangeEmailUiEvent> = _uiEvent.asSharedFlow()
 
-    /** 1) GANTI EMAIL -- padanan GantiEmailEvent.gantiEmail() di GantiEmailPage.dart. */
-    fun gantiEmail(newEmail: String) {
+    /** 1) GANTI EMAIL */
+    fun changeEmail(newEmail: String) {
         val trimmed = newEmail.trim()
         val error = validateEmail(trimmed)
         if (error != null) {
@@ -42,15 +42,15 @@ class GantiEmailViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, emailInlineError = null, newEmail = trimmed) }
 
-            gantiEmailUseCase(trimmed)
+            changeEmailUseCase(trimmed)
                 .onSuccess {
                     _uiState.update { it.copy(isLoading = false) }
-                    _navEvent.send(GantiEmailNavEvent.ToPinPage)
+                    _navEvent.send(ChangeEmailNavEvent.ToPinPage)
                 }
                 .onFailure { error ->
                     _uiState.update { it.copy(isLoading = false) }
                     _uiEvent.emit(
-                        GantiEmailUiEvent.ShowToastError(error.message ?: "Gagal mengubah alamat email.")
+                        ChangeEmailUiEvent.ShowToastError(error.message ?: "Gagal mengubah alamat email.")
                     )
                 }
         }
@@ -58,13 +58,13 @@ class GantiEmailViewModel(
 
     /**
      * 2) CONFIRM EMAIL -- dipanggil LANGSUNG dari `validator` InputPinPage, padanan
-     * pola `validator: (pin) async { ... await bloc.stream ... }` di GantiEmailPage.dart:
+     * pola `validator: (pin) async { ... await bloc.stream ... }` di ChangeEmailPage.dart:
      * hasil error dikembalikan sebagai String supaya tampil inline di halaman PIN,
      * dan `onPinComplete` HANYA terpanggil kalau ini me-return null (sukses).
      */
     suspend fun confirmEmail(pin: String): String? {
         _uiState.update { it.copy(isLoading = true) }
-        val result = confirmGantiEmailUseCase(pin)
+        val result = confirmChangeEmailUseCase(pin)
         _uiState.update { it.copy(isLoading = false) }
 
         return result.fold(

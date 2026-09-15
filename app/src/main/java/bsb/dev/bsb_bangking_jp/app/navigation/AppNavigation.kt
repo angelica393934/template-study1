@@ -21,7 +21,7 @@ import bsb.dev.bsb_bangking_jp.core.component.ToastHost
 import bsb.dev.bsb_bangking_jp.core.component.rememberToastState
 import bsb.dev.bsb_bangking_jp.feature.transfer.transfer_core.domain.ConfirmTransferResultItem
 import bsb.dev.bsb_bangking_jp.feature.lokasi_atm.LokasiAtmPage
-import bsb.dev.bsb_bangking_jp.feature.Navbar.Navbar
+import bsb.dev.bsb_bangking_jp.feature.navbar.Navbar
 import bsb.dev.bsb_bangking_jp.feature.bsb_cash.BsbCashHomePage
 import bsb.dev.bsb_bangking_jp.feature.top_up.TopUpPage
 import bsb.dev.bsb_bangking_jp.feature.va.VaPage
@@ -78,9 +78,12 @@ import bsb.dev.bsb_bangking_jp.feature.forget_pw.FindAccountPageForgetPw
 import bsb.dev.bsb_bangking_jp.feature.forget_pw.OtpPageForgetPw
 import bsb.dev.bsb_bangking_jp.feature.forget_pw.ResetPwPageForgetPw
 import bsb.dev.bsb_bangking_jp.feature.forget_pw.presentation.ForgetPwViewModel
-import bsb.dev.bsb_bangking_jp.feature.ganti_email.GantiEmailPage
-import bsb.dev.bsb_bangking_jp.feature.ganti_email.GantiEmailPinPage
-import bsb.dev.bsb_bangking_jp.feature.ganti_email.presentation.GantiEmailViewModel
+import bsb.dev.bsb_bangking_jp.feature.change_email.ChangeEmailPage
+import bsb.dev.bsb_bangking_jp.feature.change_email.ChangeEmailPinPage
+import bsb.dev.bsb_bangking_jp.feature.change_email.presentation.ChangeEmailViewModel
+import bsb.dev.bsb_bangking_jp.feature.manage_scheduled_transfer.ManageScheduledTransferPage
+import bsb.dev.bsb_bangking_jp.feature.manage_scheduled_transfer.ScheduledTransferDetailPage
+import bsb.dev.bsb_bangking_jp.feature.manage_scheduled_transfer.presentation.ScheduledTransferViewModel
 
 @Composable
 fun AppNavigation(
@@ -102,7 +105,7 @@ fun AppNavigation(
         Box(modifier = Modifier.fillMaxSize()) {
             NavHost(
                 navController = navController,
-                startDestination = "splash",
+                startDestination = "navbar",
             ) {
 
                 composable("splash") {
@@ -137,7 +140,6 @@ fun AppNavigation(
                     composable("login_otp") { backStackEntry ->
                         val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("login_existing") }
                         val viewModel: LoginExistingViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
-
                         OtpMasukAkunPage(
                             viewModel = viewModel,
                             onBackClick = { navController.popBackStack() },
@@ -493,12 +495,44 @@ fun AppNavigation(
                     )
                 }
 
+
                 composable("transfer_home") {
                     TransferHomePage(
                         navController = navController,
                         onBackClick = { navController.popBackStack() },
                         onTransferSekarang = { navController.navigate("transfer_baru") },
+                        onAturTerjadwalClick = { navController.navigate("manage_scheduled_transfer") }, // 🔹 tambahkan
                     )
+                }
+
+                    // nav graph baru untuk alur transfer terjadwal
+                navigation(startDestination = "manage_scheduled_transfer_list", route = "manage_scheduled_transfer") {
+
+                    composable("manage_scheduled_transfer_list") { backStackEntry ->
+                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("manage_scheduled_transfer") }
+                        val viewModel: ScheduledTransferViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
+
+                        ManageScheduledTransferPage(
+                            viewModel = viewModel,
+                            onBackClick = { navController.popBackStack() },
+                            onItemClick = { id -> navController.navigate("manage_scheduled_transfer_detail/$id") },
+                        )
+                    }
+
+                    composable(
+                        route = "manage_scheduled_transfer_detail/{id}",
+                        arguments = listOf(navArgument("id") { type = NavType.IntType }),
+                    ) { backStackEntry ->
+                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("manage_scheduled_transfer") }
+                        val viewModel: ScheduledTransferViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
+                        val id = backStackEntry.arguments?.getInt("id") ?: return@composable
+
+                        ScheduledTransferDetailPage(
+                            id = id,
+                            viewModel = viewModel,
+                            onBackClick = { navController.popBackStack() },
+                        )
+                    }
                 }
 
                 composable("transfer_baru") {
@@ -621,30 +655,30 @@ fun AppNavigation(
                     }
                 }
             // ganti email
-                navigation(startDestination = "ganti_email_input", route = "ganti_email") {
+                navigation(startDestination = "change_email_input", route = "change_email") {
 
-                    composable("ganti_email_input") { backStackEntry ->
-                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("ganti_email") }
-                        val viewModel: GantiEmailViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
+                    composable("change_email_input") { backStackEntry ->
+                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("change_email") }
+                        val viewModel: ChangeEmailViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
 
-                        GantiEmailPage(
+                        ChangeEmailPage(
                             viewModel = viewModel,
                             onBackClick = { navController.popBackStack() },
-                            onNavigateToPin = { navController.navigate("ganti_email_pin") },
+                            onNavigateToPin = { navController.navigate("change_email_pin") },
                         )
                     }
 
-                    composable("ganti_email_pin") { backStackEntry ->
-                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("ganti_email") }
-                        val viewModel: GantiEmailViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
+                    composable("change_email_pin") { backStackEntry ->
+                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("change_email") }
+                        val viewModel: ChangeEmailViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
 
-                        GantiEmailPinPage(
+                        ChangeEmailPinPage(
                             viewModel = viewModel,
                             onBackClick = { navController.popBackStack() },
                             onCompleted = {
-                                // padanan 3x Navigator.pop() di GantiEmailPage.dart -- buang seluruh
-                                // stack alur ganti_email (input + pin), balik ke PengaturanPage.
-                                navController.popBackStack("ganti_email", inclusive = true)
+                                // padanan 3x Navigator.pop() di ChangeEmailPage.dart -- buang seluruh
+                                // stack alur change_email (input + pin), balik ke PengaturanPage.
+                                navController.popBackStack("change_email", inclusive = true)
                             },
                         )
                     }

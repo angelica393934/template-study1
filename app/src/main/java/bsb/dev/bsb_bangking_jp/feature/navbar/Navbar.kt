@@ -1,4 +1,4 @@
-package bsb.dev.bsb_bangking_jp.feature.Navbar
+package bsb.dev.bsb_bangking_jp.feature.navbar
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image

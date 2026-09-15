@@ -146,7 +146,7 @@ private fun SuccessToastContent(message: String) {
     Row(
         modifier = Modifier
             .background(
-                color = MaterialTheme.extendedColors.success.copy(alpha = 0.12f),
+                color = MaterialTheme.extendedColors.success,
                 shape = RoundedCornerShape(10.dp),
             )
             .padding(horizontal = 12.dp, vertical = 10.dp),

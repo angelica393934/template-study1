@@ -13,7 +13,7 @@ import bsb.dev.bsb_bangking_jp.feature.activity.activityModule
 import bsb.dev.bsb_bangking_jp.feature.beranda.BerandaModule
 import bsb.dev.bsb_bangking_jp.feature.forget_iduser.forgetIdUserModule
 import bsb.dev.bsb_bangking_jp.feature.forget_pw.forgetPwUserModule
-import bsb.dev.bsb_bangking_jp.feature.ganti_email.gantiEmailModule
+import bsb.dev.bsb_bangking_jp.feature.change_email.changeEmailModule
 import bsb.dev.bsb_bangking_jp.feature.init.initModule
 import bsb.dev.bsb_bangking_jp.feature.login.loginModule
 import bsb.dev.bsb_bangking_jp.feature.login_existing.loginExistingModule
@@ -21,6 +21,7 @@ import bsb.dev.bsb_bangking_jp.feature.message.messageModule
 import bsb.dev.bsb_bangking_jp.feature.news.newsModule
 import bsb.dev.bsb_bangking_jp.feature.registration.registrationModule
 import bsb.dev.bsb_bangking_jp.feature.splash.splashModule
+import bsb.dev.bsb_bangking_jp.feature.manage_scheduled_transfer.manageScheduledTransferModule
 import bsb.dev.bsb_bangking_jp.feature.transfer.transferModule
 import bsb.dev.bsb_bangking_jp.shared.logout.logoutModule
 import bsb.dev.bsb_bangking_jp.shared.profile.profileModule
@@ -49,6 +50,7 @@ class BsbApplication : Application() {
                 BerandaModule,
                 activityModule,
                 transferModule,
+                manageScheduledTransferModule,
                 imageModule,
                 newsModule,
                 sessionModule,
@@ -56,7 +58,7 @@ class BsbApplication : Application() {
                 rekeningLainnyaModule,
                 logoutModule,
                 messageModule,
-                gantiEmailModule,
+                changeEmailModule,
                 // tambahkan module fitur lain di sini
             )
         }

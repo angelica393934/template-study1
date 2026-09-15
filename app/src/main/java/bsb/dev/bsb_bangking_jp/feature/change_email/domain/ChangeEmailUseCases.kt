@@ -1,9 +1,9 @@
-package bsb.dev.bsb_bangking_jp.feature.ganti_email.domain
+package bsb.dev.bsb_bangking_jp.feature.change_email.domain
 
-class GantiEmailUseCase(private val repository: GantiEmailRepository) {
-    suspend operator fun invoke(newEmail: String): Result<Unit> = repository.gantiEmail(newEmail)
+class ChangeEmailUseCase(private val repository: ChangeEmailRepository) {
+    suspend operator fun invoke(newEmail: String): Result<Unit> = repository.changeEmail(newEmail)
 }
 
-class ConfirmGantiEmailUseCase(private val repository: GantiEmailRepository) {
-    suspend operator fun invoke(pin: String): Result<Unit> = repository.confirmGantiEmail(pin)
+class ConfirmChangeEmailUseCase(private val repository: ChangeEmailRepository) {
+    suspend operator fun invoke(pin: String): Result<Unit> = repository.confirmChangeEmail(pin)
 }

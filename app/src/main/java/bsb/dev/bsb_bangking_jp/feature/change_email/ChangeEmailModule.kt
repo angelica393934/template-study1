@@ -1,24 +1,24 @@
-package bsb.dev.bsb_bangking_jp.feature.ganti_email
+package bsb.dev.bsb_bangking_jp.feature.change_email
 
-import bsb.dev.bsb_bangking_jp.feature.ganti_email.data.GantiEmailApiService
-import bsb.dev.bsb_bangking_jp.feature.ganti_email.data.GantiEmailRepositoryImpl
-import bsb.dev.bsb_bangking_jp.feature.ganti_email.domain.ConfirmGantiEmailUseCase
-import bsb.dev.bsb_bangking_jp.feature.ganti_email.domain.GantiEmailRepository
-import bsb.dev.bsb_bangking_jp.feature.ganti_email.domain.GantiEmailUseCase
-import bsb.dev.bsb_bangking_jp.feature.ganti_email.presentation.GantiEmailViewModel
+import bsb.dev.bsb_bangking_jp.feature.change_email.data.ChangeEmailApiService
+import bsb.dev.bsb_bangking_jp.feature.change_email.data.ChangeEmailRepositoryImpl
+import bsb.dev.bsb_bangking_jp.feature.change_email.domain.ConfirmChangeEmailUseCase
+import bsb.dev.bsb_bangking_jp.feature.change_email.domain.ChangeEmailRepository
+import bsb.dev.bsb_bangking_jp.feature.change_email.domain.ChangeEmailUseCase
+import bsb.dev.bsb_bangking_jp.feature.change_email.presentation.ChangeEmailViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
 
-val gantiEmailModule = module {
-    single { get<Retrofit>().create(GantiEmailApiService::class.java) }
-    single<GantiEmailRepository> { GantiEmailRepositoryImpl(get(), get()) }
+val changeEmailModule = module {
+    single { get<Retrofit>().create(ChangeEmailApiService::class.java) }
+    single<ChangeEmailRepository> { ChangeEmailRepositoryImpl(get(), get()) }
 
-    factory { GantiEmailUseCase(get()) }
-    factory { ConfirmGantiEmailUseCase(get()) }
+    factory { ChangeEmailUseCase(get()) }
+    factory { ConfirmChangeEmailUseCase(get()) }
 
-    // viewModel biasa, tapi di-scope ke nav graph "ganti_email" (bukan single/koinInject)
-    // supaya state tetap sama antara GantiEmailPage <-> GantiEmailPinPage,
+    // viewModel biasa, tapi di-scope ke nav graph "change_email" (bukan single/koinInject)
+    // supaya state tetap sama antara ChangeEmailPage <-> ChangeEmailPinPage,
     // sama seperti pola LoginExistingViewModel.
-    viewModel { GantiEmailViewModel(get(), get()) }
+    viewModel { ChangeEmailViewModel(get(), get()) }
 }
