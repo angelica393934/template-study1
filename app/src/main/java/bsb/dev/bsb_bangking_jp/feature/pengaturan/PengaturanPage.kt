@@ -128,14 +128,18 @@ fun PengaturanPage(
                                 stringResource(R.string.menu_email),
                                 onClick = { navController.navigate("change_email") },
                             ),
-                            SettingItemData(Icons.Default.AccountBalance, stringResource(R.string.menu_kelola_rekening)),
+                            //SettingItemData(Icons.Default.AccountBalance, stringResource(R.string.menu_kelola_rekening)),
                             SettingItemData(Icons.Default.Language, stringResource(R.string.menu_bahasa)),
                         )
                     )
                     SettingSection(
                         title = stringResource(R.string.section_keamanan),
                         items = listOf(
-                            SettingItemData(Icons.Default.VpnKey, stringResource(R.string.menu_ganti_kata_sandi)),
+                            SettingItemData(
+                                Icons.Default.VpnKey,
+                                stringResource(R.string.menu_ganti_kata_sandi),
+                                onClick = { navController.navigate("change_pw") },
+                            ),
                             SettingItemData(Icons.Default.VpnKey, stringResource(R.string.menu_ganti_mpin)),
                         )
                     )

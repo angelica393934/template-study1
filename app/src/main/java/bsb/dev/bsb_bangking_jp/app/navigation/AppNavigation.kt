@@ -98,6 +98,7 @@ fun AppNavigation(
     var pendingConfirmResult by remember { mutableStateOf<ConfirmTransferResultItem?>(null) }
     var pendingSumberKlasifikasi by remember { mutableStateOf("Tabungan Sekarang") }
     var pendingSumberSaldoInt by remember { mutableStateOf(0) }
+    var showChangePwSuccessSheet by remember { mutableStateOf(false) }
 
     CompositionLocalProvider(LocalToastState provides toastState,
         LocalLoadingOverlay provides loadingOverlayState,
@@ -654,35 +655,7 @@ fun AppNavigation(
                         )
                     }
                 }
-            // ganti email
-                navigation(startDestination = "change_email_input", route = "change_email") {
 
-                    composable("change_email_input") { backStackEntry ->
-                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("change_email") }
-                        val viewModel: ChangeEmailViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
-
-                        ChangeEmailPage(
-                            viewModel = viewModel,
-                            onBackClick = { navController.popBackStack() },
-                            onNavigateToPin = { navController.navigate("change_email_pin") },
-                        )
-                    }
-
-                    composable("change_email_pin") { backStackEntry ->
-                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("change_email") }
-                        val viewModel: ChangeEmailViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
-
-                        ChangeEmailPinPage(
-                            viewModel = viewModel,
-                            onBackClick = { navController.popBackStack() },
-                            onCompleted = {
-                                // padanan 3x Navigator.pop() di ChangeEmailPage.dart -- buang seluruh
-                                // stack alur change_email (input + pin), balik ke PengaturanPage.
-                                navController.popBackStack("change_email", inclusive = true)
-                            },
-                        )
-                    }
-                }
                 composable("transfer_berhasil") {
                     val confirmResult = pendingConfirmResult
                     if (confirmResult == null) {
@@ -715,7 +688,35 @@ fun AppNavigation(
                             },
                         )
                     }
+                }
+                // ganti email
+                navigation(startDestination = "change_email_input", route = "change_email") {
 
+                    composable("change_email_input") { backStackEntry ->
+                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("change_email") }
+                        val viewModel: ChangeEmailViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
+
+                        ChangeEmailPage(
+                            viewModel = viewModel,
+                            onBackClick = { navController.popBackStack() },
+                            onNavigateToPin = { navController.navigate("change_email_pin") },
+                        )
+                    }
+
+                    composable("change_email_pin") { backStackEntry ->
+                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("change_email") }
+                        val viewModel: ChangeEmailViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
+
+                        ChangeEmailPinPage(
+                            viewModel = viewModel,
+                            onBackClick = { navController.popBackStack() },
+                            onCompleted = {
+                                // padanan 3x Navigator.pop() di ChangeEmailPage.dart -- buang seluruh
+                                // stack alur change_email (input + pin), balik ke PengaturanPage.
+                                navController.popBackStack("change_email", inclusive = true)
+                            },
+                        )
+                    }
                 }
             }
             ToastHost(state = toastState, modifier = Modifier.align(Alignment.TopCenter))

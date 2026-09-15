@@ -14,6 +14,7 @@ import bsb.dev.bsb_bangking_jp.feature.beranda.BerandaModule
 import bsb.dev.bsb_bangking_jp.feature.forget_iduser.forgetIdUserModule
 import bsb.dev.bsb_bangking_jp.feature.forget_pw.forgetPwUserModule
 import bsb.dev.bsb_bangking_jp.feature.change_email.changeEmailModule
+import bsb.dev.bsb_bangking_jp.feature.change_pw.changePwModule
 import bsb.dev.bsb_bangking_jp.feature.init.initModule
 import bsb.dev.bsb_bangking_jp.feature.login.loginModule
 import bsb.dev.bsb_bangking_jp.feature.login_existing.loginExistingModule
@@ -59,6 +60,7 @@ class BsbApplication : Application() {
                 logoutModule,
                 messageModule,
                 changeEmailModule,
+                changePwModule,
                 // tambahkan module fitur lain di sini
             )
         }
