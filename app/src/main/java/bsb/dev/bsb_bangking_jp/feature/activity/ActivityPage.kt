@@ -66,6 +66,7 @@ import bsb.dev.bsb_bangking_jp.feature.activity.data.HistoryItem
 import bsb.dev.bsb_bangking_jp.feature.activity.presentation.ActivityHistoryViewModel
 import bsb.dev.bsb_bangking_jp.feature.activity.section.SaldoCardSelector
 import bsb.dev.bsb_bangking_jp.shared.rekening_lainnya.presentation.RekeningLainnyaViewModel
+import kotlinx.coroutines.delay
 import org.koin.compose.koinInject
 import kotlin.math.roundToInt
 private val PULL_REFRESH_MAX_PUSH = 30.dp
@@ -89,6 +90,7 @@ fun ActivityPage(
     // melakukannya di halamannya sendiri, tapi kalau user buka app dan langsung ke tab
     // lain, ini jaga-jaga supaya tetap ke-trigger.
     LaunchedEffect(Unit) {
+        delay(150)
         if (rekeningUiState.rekeningList == null) rekeningViewModel.load()
     }
 
@@ -113,6 +115,7 @@ fun ActivityPage(
     }
     LaunchedEffect(shouldLoadMore, activityState.hasMore, activityState.isLoadMore, activityState.isLoading) {
         if (shouldLoadMore && activityState.hasMore && !activityState.isLoadMore && !activityState.isLoading) {
+            delay(1000)
             activityViewModel.loadMore()
         }
     }

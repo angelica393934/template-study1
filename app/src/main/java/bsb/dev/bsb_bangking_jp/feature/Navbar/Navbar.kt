@@ -49,11 +49,9 @@ import bsb.dev.bsb_bangking_jp.feature.pengaturan.PengaturanPage
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
-import bsb.dev.bsb_bangking_jp.feature.activity.presentation.ActivityHistoryViewModel
 import bsb.dev.bsb_bangking_jp.feature.activity.ActivityPage
 import bsb.dev.bsb_bangking_jp.feature.beranda.BerandaPage
 import bsb.dev.bsb_bangking_jp.feature.message.MessagePage
-import org.koin.compose.koinInject
 import kotlin.Unit
 
 val NAVBAR_HEIGHT = 70.dp
@@ -85,7 +83,6 @@ fun Navbar(
     onPajakPendidikanClick: () -> Unit = {},
     onTagihanClick : () -> Unit = {},
     onCardlessClick : () -> Unit = {},
-    activityHistoryViewModel: ActivityHistoryViewModel = koinInject(),
 ) {
     var currentIndex by rememberSaveable { mutableIntStateOf(initialIndex) }
 

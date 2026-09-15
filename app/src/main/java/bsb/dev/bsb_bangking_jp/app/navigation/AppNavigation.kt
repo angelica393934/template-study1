@@ -78,6 +78,9 @@ import bsb.dev.bsb_bangking_jp.feature.forget_pw.FindAccountPageForgetPw
 import bsb.dev.bsb_bangking_jp.feature.forget_pw.OtpPageForgetPw
 import bsb.dev.bsb_bangking_jp.feature.forget_pw.ResetPwPageForgetPw
 import bsb.dev.bsb_bangking_jp.feature.forget_pw.presentation.ForgetPwViewModel
+import bsb.dev.bsb_bangking_jp.feature.ganti_email.GantiEmailPage
+import bsb.dev.bsb_bangking_jp.feature.ganti_email.GantiEmailPinPage
+import bsb.dev.bsb_bangking_jp.feature.ganti_email.presentation.GantiEmailViewModel
 
 @Composable
 fun AppNavigation(
@@ -617,7 +620,35 @@ fun AppNavigation(
                         )
                     }
                 }
+            // ganti email
+                navigation(startDestination = "ganti_email_input", route = "ganti_email") {
 
+                    composable("ganti_email_input") { backStackEntry ->
+                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("ganti_email") }
+                        val viewModel: GantiEmailViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
+
+                        GantiEmailPage(
+                            viewModel = viewModel,
+                            onBackClick = { navController.popBackStack() },
+                            onNavigateToPin = { navController.navigate("ganti_email_pin") },
+                        )
+                    }
+
+                    composable("ganti_email_pin") { backStackEntry ->
+                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("ganti_email") }
+                        val viewModel: GantiEmailViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
+
+                        GantiEmailPinPage(
+                            viewModel = viewModel,
+                            onBackClick = { navController.popBackStack() },
+                            onCompleted = {
+                                // padanan 3x Navigator.pop() di GantiEmailPage.dart -- buang seluruh
+                                // stack alur ganti_email (input + pin), balik ke PengaturanPage.
+                                navController.popBackStack("ganti_email", inclusive = true)
+                            },
+                        )
+                    }
+                }
                 composable("transfer_berhasil") {
                     val confirmResult = pendingConfirmResult
                     if (confirmResult == null) {
@@ -650,6 +681,7 @@ fun AppNavigation(
                             },
                         )
                     }
+
                 }
             }
             ToastHost(state = toastState, modifier = Modifier.align(Alignment.TopCenter))

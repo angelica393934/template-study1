@@ -41,7 +41,7 @@ fun OtpPageActivation(
         }
     }
 
-    // 🔹 Padanan maskPhoneNumber() -- OTP page Flutter menampilkan nomor tersamar.
+    // 🔹 Padanan maskPhoneNumber() -- OTP page  menampilkan nomor tersamar.
     OtpForm(
         title = "Masukkan OTP",
         phoneNumber = maskPhoneNumber(uiState.mobileNumber),

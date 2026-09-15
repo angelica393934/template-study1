@@ -79,7 +79,6 @@ fun LoginSheet(
     LaunchedEffect(Unit) {
         viewModel.navEvent.collect { event ->
             if (event is LoginNavEvent.ToNavbar) {
-                profileViewModel.loadProfile()
                 navController.navigate("navbar") { popUpTo(0) }
             }
         }

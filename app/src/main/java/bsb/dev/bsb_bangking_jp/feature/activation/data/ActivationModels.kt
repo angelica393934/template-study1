@@ -23,9 +23,8 @@ data class ValidateUserIdResponse(
     @SerializedName("data") val data: ValidateUserIdData? = null,
 )
 
-// TODO: verifikasi ke backend -- key "mobileNumber" (camelCase) BERBEDA dari
 // endpoint lain di project ini yang umumnya pakai "mobilenumber", tapi ini
-// persis mengikuti source Flutter aslinya (data["data"]?["mobileNumber"]).
+// persis mengikuti source aslinya (data["data"]?["mobileNumber"]).
 data class ValidateUserIdData(
     @SerializedName("mobileNumber") val mobileNumber: String? = null,
 )

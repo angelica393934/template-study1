@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-// 🔹 Padanan Flutter: 3 halaman awal (Rekening/ATM, ID Pengguna, Kata Sandi) SAMA-SAMA
+// 🔹 Padanan : 3 halaman awal (Rekening/ATM, ID Pengguna, Kata Sandi) SAMA-SAMA
 // memeriksa respCode "0612" untuk error inline field masing-masing.
 private const val INLINE_ERROR_CODE = "0612"
 

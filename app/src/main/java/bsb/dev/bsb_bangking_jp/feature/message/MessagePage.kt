@@ -89,6 +89,7 @@ fun MessagePage(
     val grouped = remember(state.items) { groupMessagesByDate(state.items) }
     val loadingOverlay = LocalLoadingOverlay.current
     val toastState = LocalToastState.current
+
     LaunchedEffect(detailState) {
         when (val ds = detailState) {
             is MessageDetailUiState.Loading -> loadingOverlay.show()

@@ -50,6 +50,7 @@ import bsb.dev.bsb_bangking_jp.shared.profile.presentation.ProfileViewModel
 import bsb.dev.bsb_bangking_jp.shared.rekening_lainnya.presentation.RekeningLainnyaViewModel
 import org.koin.compose.koinInject
 import androidx.compose.runtime.setValue
+import kotlinx.coroutines.delay
 
 private val PULL_REFRESH_MAX_PUSH = 60.dp // 🔹 seberapa jauh konten terdorong turun saat full refresh
 

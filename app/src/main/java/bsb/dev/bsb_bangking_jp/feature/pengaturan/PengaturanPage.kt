@@ -123,7 +123,11 @@ fun PengaturanPage(
                     SettingSection(
                         title = stringResource(R.string.section_akun),
                         items = listOf(
-                            SettingItemData(Icons.Default.Email, stringResource(R.string.menu_email)),
+                            SettingItemData(
+                                Icons.Default.Email,
+                                stringResource(R.string.menu_email),
+                                onClick = { navController.navigate("ganti_email") },
+                            ),
                             SettingItemData(Icons.Default.AccountBalance, stringResource(R.string.menu_kelola_rekening)),
                             SettingItemData(Icons.Default.Language, stringResource(R.string.menu_bahasa)),
                         )
