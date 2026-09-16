@@ -84,6 +84,13 @@ import bsb.dev.bsb_bangking_jp.feature.change_email.presentation.ChangeEmailView
 import bsb.dev.bsb_bangking_jp.feature.manage_scheduled_transfer.ManageScheduledTransferPage
 import bsb.dev.bsb_bangking_jp.feature.manage_scheduled_transfer.ScheduledTransferDetailPage
 import bsb.dev.bsb_bangking_jp.feature.manage_scheduled_transfer.presentation.ScheduledTransferViewModel
+import bsb.dev.bsb_bangking_jp.feature.change_mpin.ChangeMpinFlow
+import bsb.dev.bsb_bangking_jp.feature.change_mpin.OtpChangeMpinPage
+import bsb.dev.bsb_bangking_jp.feature.change_mpin.presentation.ChangeMpinViewModel
+import bsb.dev.bsb_bangking_jp.feature.change_pw.NewPasswordPage
+import bsb.dev.bsb_bangking_jp.feature.change_pw.OldPasswordPage
+import bsb.dev.bsb_bangking_jp.feature.change_pw.OtpChangePwPage
+import bsb.dev.bsb_bangking_jp.feature.change_pw.presentation.ChangePwViewModel
 
 @Composable
 fun AppNavigation(
@@ -106,7 +113,7 @@ fun AppNavigation(
         Box(modifier = Modifier.fillMaxSize()) {
             NavHost(
                 navController = navController,
-                startDestination = "navbar",
+                startDestination = "change_pw",
             ) {
 
                 composable("splash") {
@@ -691,7 +698,6 @@ fun AppNavigation(
                 }
                 // ganti email
                 navigation(startDestination = "change_email_input", route = "change_email") {
-
                     composable("change_email_input") { backStackEntry ->
                         val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("change_email") }
                         val viewModel: ChangeEmailViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
@@ -702,7 +708,6 @@ fun AppNavigation(
                             onNavigateToPin = { navController.navigate("change_email_pin") },
                         )
                     }
-
                     composable("change_email_pin") { backStackEntry ->
                         val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("change_email") }
                         val viewModel: ChangeEmailViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
@@ -718,6 +723,73 @@ fun AppNavigation(
                         )
                     }
                 }
+                //ganti pw
+                navigation(startDestination = "change_pw_old", route = "change_pw") {
+
+                    composable("change_pw_old") { backStackEntry ->
+                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("change_pw") }
+                        val viewModel: ChangePwViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
+
+                        OldPasswordPage(
+                            viewModel = viewModel,
+                            onBackClick = { navController.popBackStack() },
+                            onNavigateToNewPassword = { navController.navigate("change_pw_new") },
+                        )
+                    }
+
+                    composable("change_pw_new") { backStackEntry ->
+                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("change_pw") }
+                        val viewModel: ChangePwViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
+
+                        NewPasswordPage(
+                            viewModel = viewModel,
+                            onBackClick = { navController.popBackStack() },
+                            onNavigateToOtp = { navController.navigate("change_pw_otp") },
+                        )
+                    }
+
+                    composable("change_pw_otp") { backStackEntry ->
+                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("change_pw") }
+                        val viewModel: ChangePwViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
+
+                        OtpChangePwPage(
+                            viewModel = viewModel,
+                            onBackClick = { navController.popBackStack() },
+                            onCompleted = {
+                                // 🔹 AppNavigation cuma tahu SATU hal: ke mana harus pindah setelah selesai.
+                                navController.popBackStack("navbar", inclusive = false)
+                            },
+                        )
+                    }
+                }
+                // ganti m-pin
+                navigation(startDestination = "change_mpin_flow", route = "change_mpin") {
+                    composable("change_mpin_flow") { backStackEntry ->
+                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("change_mpin") }
+                        val viewModel: ChangeMpinViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
+
+                        ChangeMpinFlow(
+                            viewModel = viewModel,
+                            onBackClick = { navController.popBackStack() },
+                            onNavigateToOtp = { navController.navigate("change_mpin_otp") },
+                        )
+                    }
+                    composable("change_mpin_otp") { backStackEntry ->
+                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("change_mpin") }
+                        val viewModel: ChangeMpinViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
+
+                        OtpChangeMpinPage(
+                            viewModel = viewModel,
+                            onBackClick = { navController.popBackStack() },
+                            onCompleted = {
+                                // 🔹 AppNavigation cuma tahu SATU hal: ke mana harus pindah setelah selesai.
+                                navController.popBackStack("navbar", inclusive = false)
+                            },
+                        )
+                    }
+                }
+
+
             }
             ToastHost(state = toastState, modifier = Modifier.align(Alignment.TopCenter))
             LoadingOverlayHost(state = loadingOverlayState)

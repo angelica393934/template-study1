@@ -140,7 +140,11 @@ fun PengaturanPage(
                                 stringResource(R.string.menu_ganti_kata_sandi),
                                 onClick = { navController.navigate("change_pw") },
                             ),
-                            SettingItemData(Icons.Default.VpnKey, stringResource(R.string.menu_ganti_mpin)),
+                            SettingItemData(
+                                Icons.Default.VpnKey,
+                                stringResource(R.string.menu_ganti_mpin),
+                                onClick = { navController.navigate("change_mpin") },
+                            ),
                         )
                     )
                     SettingSection(

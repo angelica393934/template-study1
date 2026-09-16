@@ -1,4 +1,4 @@
-package bsb.dev.bsb_bangking_jp.feature.change_pw
+package bsb.dev.bsb_bangking_jp.feature.change_mpin
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -15,37 +15,32 @@ import bsb.dev.bsb_bangking_jp.core.component.AppModalConfirm
 import bsb.dev.bsb_bangking_jp.core.component.LocalLoadingOverlay
 import bsb.dev.bsb_bangking_jp.core.component.LocalToastState
 import bsb.dev.bsb_bangking_jp.core.component.OtpForm
-import bsb.dev.bsb_bangking_jp.feature.change_pw.presentation.ChangePwNavEvent
-import bsb.dev.bsb_bangking_jp.feature.change_pw.presentation.ChangePwUiEvent
-import bsb.dev.bsb_bangking_jp.feature.change_pw.presentation.ChangePwViewModel
+import bsb.dev.bsb_bangking_jp.feature.change_mpin.presentation.ChangeMpinNavEvent
+import bsb.dev.bsb_bangking_jp.feature.change_mpin.presentation.ChangeMpinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OtpChangePwPage(
-    viewModel: ChangePwViewModel,
+fun OtpChangeMpinPage(
+    viewModel: ChangeMpinViewModel,
     onBackClick: () -> Unit,
-    onCompleted: () -> Unit,
+    onCompleted: () -> Unit, // 🔹 rename dari onVerified -- lebih jelas maknanya "seluruh alur selesai"
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val toastState = LocalToastState.current
     val loadingOverlay = LocalLoadingOverlay.current
-    var showChangePwSuccessSheet by remember { mutableStateOf(false) } // 🔹 state LOKAL, bukan di AppNavigation
+
+    var showSuccessSheet by remember { mutableStateOf(false) } // 🔹 state LOKAL, bukan di AppNavigation
 
     LaunchedEffect(uiState.isLoading) {
         if (uiState.isLoading) loadingOverlay.show() else loadingOverlay.hide()
     }
     LaunchedEffect(Unit) {
         viewModel.navEvent.collect { event ->
-            if (event is ChangePwNavEvent.ToPortalSuccess) showChangePwSuccessSheet = true
+            if (event is ChangeMpinNavEvent.ToPortalSuccess) showSuccessSheet = true
         }
     }
-    LaunchedEffect(Unit) {
-        viewModel.uiEvent.collect { event ->
-            when (event) {
-                is ChangePwUiEvent.ShowToastError -> toastState.showError(event.message)
-                ChangePwUiEvent.ShowOtpResentToast -> toastState.showSuccess("Kode OTP baru berhasil dikirim")
-            }
-        }
+    LaunchedEffect(uiState.otpErrorMessage) {
+        uiState.otpErrorMessage?.let { toastState.showError(it) }
     }
 
     OtpForm(
@@ -54,26 +49,28 @@ fun OtpChangePwPage(
         isProcessing = uiState.isLoading,
         errorMessage = uiState.otpErrorMessage,
         onVerify = { otp -> viewModel.verifyOtp(otp) },
-        onResend = { viewModel.resendOtp() },
+        onResend = {
+            toastState.showSuccess("Kode OTP baru berhasil dikirim")
+            true
+        },
         onBackClick = onBackClick,
         modifier = Modifier.fillMaxSize(),
     )
 
-
-    if (showChangePwSuccessSheet) {
+    if (showSuccessSheet) {
         AppModalConfirm(
             onDismissRequest = {
-                showChangePwSuccessSheet = false
+                showSuccessSheet = false
                 onCompleted()
             },
-            title = "Kata sandi Anda sudah diperbarui.",
+            title = "M-PIN Anda sudah diperbarui.",
             centerimage = R.drawable.asset_centang,
-            description = "Silahkan gunakan kata sandi baru untuk menggunakan layanan kami.",
+            description = "Silakan gunakan M-PIN baru untuk menggunakan layanan kami.",
             confirmText = "Kembali",
             onConfirm = {
-                showChangePwSuccessSheet = false
+                showSuccessSheet = false
                 onCompleted()
-             },
+            },
         )
     }
 }
