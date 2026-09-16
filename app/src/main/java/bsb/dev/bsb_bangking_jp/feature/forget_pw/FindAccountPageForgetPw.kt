@@ -70,7 +70,7 @@ fun FindAccountPageForgetPw(
         AppHeader(title = "Atur ulang Kata Sandi", onBackClick = onBackClick)
 
         Column(
-            modifier = Modifier.padding(all= appLayout.defaultPadding),
+            modifier = Modifier.padding(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(appSpacing.xxxs)
         ) {

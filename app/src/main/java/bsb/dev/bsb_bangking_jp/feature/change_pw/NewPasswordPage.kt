@@ -1,5 +1,6 @@
 package bsb.dev.bsb_bangking_jp.feature.change_pw
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,6 +25,8 @@ import bsb.dev.bsb_bangking_jp.core.component.AppHeader
 import bsb.dev.bsb_bangking_jp.core.component.AppTextField
 import bsb.dev.bsb_bangking_jp.core.component.LocalLoadingOverlay
 import bsb.dev.bsb_bangking_jp.core.component.RuleBullet
+import bsb.dev.bsb_bangking_jp.core.theme.appLayout
+import bsb.dev.bsb_bangking_jp.core.theme.appSpacing
 import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
 import bsb.dev.bsb_bangking_jp.feature.change_pw.presentation.ChangePwNavEvent
 import bsb.dev.bsb_bangking_jp.feature.change_pw.presentation.ChangePwViewModel
@@ -58,10 +61,11 @@ fun NewPasswordPage(
     Column(modifier = Modifier.fillMaxSize()) {
         AppHeader(title = "Ganti Kata Sandi", onBackClick = onBackClick)
 
-        Column(modifier = Modifier.padding(24.dp)) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(appSpacing.xxxs),
+            modifier = Modifier.padding(appLayout.defaultPadding)
+        ) {
             Text(text = "Masukkan Kata Sandi Baru", style = MaterialTheme.typography.titleLarge)
-            Spacer(modifier = Modifier.height(25.dp))
-
             AppTextField(
                 value = newPasscode,
                 onValueChange = {
@@ -76,9 +80,6 @@ fun NewPasswordPage(
                 showError = uiState.newPasscodeError != null,
                 enableFocusBackground = true,
             )
-
-            Spacer(modifier = Modifier.height(20.dp))
-
             AppTextField(
                 value = confirmPasscode,
                 onValueChange = {
@@ -93,20 +94,12 @@ fun NewPasswordPage(
                 showError = confirmError != null,
                 enableFocusBackground = true,
             )
-
-            Spacer(modifier = Modifier.height(20.dp))
-            HorizontalDivider(color = MaterialTheme.extendedColors.divider)
-            Spacer(modifier = Modifier.height(20.dp))
-
             Text(text = "Aturan Kata Sandi", style = MaterialTheme.typography.titleSmall)
-            Spacer(modifier = Modifier.height(10.dp))
             RuleBullet("Gunakan tepat 8 karakter", newPasscode.isNotEmpty(), has8Chars)
-            Spacer(modifier = Modifier.height(5.dp))
             RuleBullet("Gunakan huruf besar dan kecil", newPasscode.isNotEmpty(), hasUpperLower)
-            Spacer(modifier = Modifier.height(5.dp))
-            RuleBullet("Gunakan minimal 1 angka", newPasscode.isNotEmpty(), hasNumber)
+            RuleBullet("Sertakan angka", newPasscode.isNotEmpty(), hasNumber)
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(appSpacing.xxxs))
 
             AppButton(
                 text = "Simpan",

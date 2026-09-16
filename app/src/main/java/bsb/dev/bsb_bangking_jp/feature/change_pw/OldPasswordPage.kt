@@ -1,5 +1,6 @@
 package bsb.dev.bsb_bangking_jp.feature.change_pw
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,6 +23,8 @@ import bsb.dev.bsb_bangking_jp.core.component.AppButton
 import bsb.dev.bsb_bangking_jp.core.component.AppHeader
 import bsb.dev.bsb_bangking_jp.core.component.AppTextField
 import bsb.dev.bsb_bangking_jp.core.component.LocalLoadingOverlay
+import bsb.dev.bsb_bangking_jp.core.theme.appLayout
+import bsb.dev.bsb_bangking_jp.core.theme.appSpacing
 import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
 import bsb.dev.bsb_bangking_jp.feature.change_pw.presentation.ChangePwNavEvent
 import bsb.dev.bsb_bangking_jp.feature.change_pw.presentation.ChangePwViewModel
@@ -46,18 +49,19 @@ fun OldPasswordPage(
         }
     }
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier.fillMaxSize()
+    ) {
         AppHeader(title = "Ganti Kata Sandi", onBackClick = onBackClick)
-
-        Column(modifier = Modifier.padding(horizontal = 24.dp, vertical = 24.dp)) {
+        Column(modifier = Modifier.padding(all= appLayout.defaultPadding),
+                verticalArrangement = Arrangement.spacedBy(appSpacing.xxxs)
+        ) {
             Text(text = "Masukkan Kata Sandi Lama", style = MaterialTheme.typography.titleLarge)
-            Spacer(modifier = Modifier.height(4.dp))
+
             Text(
                 text = "Sebelum mengubah kata sandi, masukkan kata sandi lama Anda.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.extendedColors.textSecondary,
             )
-            Spacer(modifier = Modifier.height(25.dp))
 
             AppTextField(
                 value = oldPasswordInput,
@@ -70,8 +74,7 @@ fun OldPasswordPage(
                 onClearError = { viewModel.clearOldPasscodeError() },
                 enableFocusBackground = true,
             )
-
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(appSpacing.xxxs))
 
             AppButton(
                 text = "Lanjutkan",
