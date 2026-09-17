@@ -38,6 +38,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import bsb.dev.bsb_bangking_jp.R
+import bsb.dev.bsb_bangking_jp.core.component.LocalToastState
 
 @Composable
 fun SaldoCardBase(
@@ -49,7 +50,8 @@ fun SaldoCardBase(
 ) {
     var isVisible by rememberSaveable { mutableStateOf(false) }
     val clipboardManager = LocalClipboardManager.current
-    val context = LocalContext.current
+    val toastState = LocalToastState.current
+
 
     fun maskRekening(rek: String): String =
         if (isVisible) rek else rek.take(3) + "•••••••"
@@ -83,11 +85,7 @@ fun SaldoCardBase(
                         clipboardManager.setText(
                             AnnotatedString("Bank Sumsel Babel\n$rekening\n$nama"),
                         )
-                        Toast.makeText(
-                            context,
-                            context.getString(R.string.msg_rekening_disalin),
-                            Toast.LENGTH_SHORT,
-                        ).show()
+                        toastState.showSuccess( "Rekening berhasil disalin")
                     },
                     verticalAlignment = Alignment.CenterVertically,
                 ) {

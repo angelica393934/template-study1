@@ -2,9 +2,7 @@ package bsb.dev.bsb_bangking_jp.feature.change_pw
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
@@ -17,7 +15,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bsb.dev.bsb_bangking_jp.core.component.AppButton
 import bsb.dev.bsb_bangking_jp.core.component.AppHeader
@@ -52,30 +49,33 @@ fun OldPasswordPage(
     Column(modifier = Modifier.fillMaxSize()
     ) {
         AppHeader(title = "Ganti Kata Sandi", onBackClick = onBackClick)
-        Column(modifier = Modifier.padding(all= appLayout.defaultPadding),
-                verticalArrangement = Arrangement.spacedBy(appSpacing.xxxs)
-        ) {
-            Text(text = "Masukkan Kata Sandi Lama", style = MaterialTheme.typography.titleLarge)
+        Column(
+            verticalArrangement = Arrangement.spacedBy(appSpacing.xs),
+            modifier = Modifier.padding(appLayout.defaultPadding)
+        ){
+            Column(
+                verticalArrangement = Arrangement.spacedBy(appSpacing.xxxs),
+            ) {
+                Text(text = "Masukkan Kata Sandi Lama", style = MaterialTheme.typography.titleLarge)
 
-            Text(
-                text = "Sebelum mengubah kata sandi, masukkan kata sandi lama Anda.",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.extendedColors.textSecondary,
-            )
+                Text(
+                    text = "Sebelum mengubah kata sandi, masukkan kata sandi lama Anda.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.extendedColors.textSecondary,
+                )
 
-            AppTextField(
-                value = oldPasswordInput,
-                onValueChange = { oldPasswordInput = it },
-                hintText = "Masukkan Kata Sandi",
-                icon = Icons.Default.Lock,
-                obscureText = true,
-                errorText = uiState.oldPasscodeError,
-                showError = uiState.oldPasscodeError != null,
-                onClearError = { viewModel.clearOldPasscodeError() },
-                enableFocusBackground = true,
-            )
-            Spacer(modifier = Modifier.height(appSpacing.xxxs))
-
+                AppTextField(
+                    value = oldPasswordInput,
+                    onValueChange = { oldPasswordInput = it },
+                    hintText = "Masukkan Kata Sandi",
+                    icon = Icons.Default.Lock,
+                    obscureText = true,
+                    errorText = uiState.oldPasscodeError,
+                    showError = uiState.oldPasscodeError != null,
+                    onClearError = { viewModel.clearOldPasscodeError() },
+                    enableFocusBackground = true,
+                )
+            }
             AppButton(
                 text = "Lanjutkan",
                 onClick = { viewModel.validateOldPw(oldPasswordInput) },

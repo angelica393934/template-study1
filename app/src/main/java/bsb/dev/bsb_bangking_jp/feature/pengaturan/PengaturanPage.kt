@@ -153,7 +153,11 @@ fun PengaturanPage(
                             SettingItemData(Icons.Default.Help, stringResource(R.string.menu_faq)),
                             SettingItemData(Icons.Default.PermDeviceInformation, stringResource(R.string.menu_syarat_ketentuan)),
                             SettingItemData(Icons.Default.PermDeviceInformation, stringResource(R.string.menu_tentang_app)),
-                            SettingItemData(Icons.Default.LocationOn, stringResource(R.string.menu_lokasi_atm)),
+                            SettingItemData(
+                                Icons.Default.LocationOn,
+                                stringResource(R.string.menu_lokasi_atm),
+                                onClick = { navController.navigate("lokasiatm") },
+                            ),
                             SettingItemData(Icons.Default.HeadsetMic, stringResource(R.string.menu_pusat_bantuan)),
                         )
                     )

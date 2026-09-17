@@ -56,6 +56,30 @@ class RekeningLainnyaViewModel(
         }
     }
 
+    fun reloadFresh() {
+        scope.launch {
+            _uiState.update {
+                it.copy(isLoading = true, isRefreshing = false, rekeningList = null, error = null)
+            }
+            try {
+                val result = repository.getRekeningLainnya(forceRefresh = true)
+                _uiState.update {
+                    it.copy(isLoading = false, rekeningList = result, error = null)
+                }
+            } catch (e: Exception) {
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        rekeningList = null,
+                        error = (e as? ApiException)?.respMessage
+                            ?: e.message
+                            ?: "Gagal memuat data Rekening.",
+                    )
+                }
+            }
+        }
+    }
+
     fun setPrimaryAccount(accountNumber: String) {
         scope.launch {
             _uiState.update { it.copy(isSettingPrimaryAccount = true) }

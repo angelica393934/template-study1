@@ -60,8 +60,13 @@ data class ScheduledTransferDetail(
         get() = endDate?.takeIf { it.isNotEmpty() }?.let { MonthTranslator.toIndonesian(it) } ?: "-"
 
     val scheduledLabel: String
-        get() = when (scheduled) {
-            "Tanggal Akhir Bulan" -> "Setiap Akhir Bulan"
-            else -> scheduled ?: "-"
+        get() = when {
+            scheduled == "Tanggal Akhir Bulan" -> "Setiap Akhir Bulan"
+
+            !scheduled.isNullOrBlank() -> scheduled
+
+            else -> nextRunDate?.let {
+                SimpleDateFormat("dd", Locale("id", "ID")).format(it)
+            } ?: "-"
         }
 }

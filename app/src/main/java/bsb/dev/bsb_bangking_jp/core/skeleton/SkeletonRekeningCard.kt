@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
 
 /** Setara `SkeletonRekeningCard` di : judul + card rekening dengan border. */
 @Composable
@@ -32,7 +33,7 @@ fun SkeletonRekeningCard(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(25.dp))
-                .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(25.dp))
+                .border(1.dp, MaterialTheme.extendedColors.divider, RoundedCornerShape(25.dp))
                 .background(MaterialTheme.colorScheme.surface),
         ) {
             // Background dekoratif (pengganti SVG asli), sangat tipis
@@ -40,7 +41,7 @@ fun SkeletonRekeningCard(modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .fillMaxSize()
                     .alpha(0.05f)
-                    .background(MaterialTheme.colorScheme.outlineVariant),
+                    .background(MaterialTheme.extendedColors.divider),
             )
 
             // Isi konten utama

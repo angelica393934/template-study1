@@ -1,8 +1,8 @@
-// core/network/header/ApiHeaders.kt
 package bsb.dev.bsb_bangking_jp.core.network.header
 
 import bsb.dev.bsb_bangking_jp.core.device.DeviceContext
-import java.time.LocalDateTime
+import java.time.Instant
+import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
 object ApiHeaders {
@@ -18,10 +18,16 @@ object ApiHeaders {
         const val SIGNATURE = "X-Signature"
     }
 
-    private val timestampFormatter: DateTimeFormatter =
-        DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'+07:00'")
+    // 🔹 Offset WIB eksplisit, BUKAN literal string di pattern -- supaya timestamp
+    // selalu WIB yang benar walau timezone device di-set beda (atau salah).
+    private val WIB_OFFSET = ZoneOffset.of("+07:00")
 
-    fun currentTimestamp(): String = LocalDateTime.now().format(timestampFormatter)
+    private val timestampFormatter: DateTimeFormatter =
+        DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX")
+
+    // 🔹 Instant.now() = waktu absolut (UTC epoch), TIDAK bergantung timezone device sama sekali.
+    // atOffset(WIB_OFFSET) baru mengkonversinya jadi representasi jam WIB.
+    fun currentTimestamp(): String = Instant.now().atOffset(WIB_OFFSET).format(timestampFormatter)
 
     fun full(timestamp: String = currentTimestamp()): Map<String, String> = linkedMapOf(
         Keys.TIMESTAMP to timestamp,

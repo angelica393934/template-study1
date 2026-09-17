@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
+import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
 
 /**
  * Setara `SkeletonDetailTransferTerjadwal` di : header penerima,
@@ -48,7 +49,7 @@ fun SkeletonDetailTransferTerjadwal(modifier: Modifier = Modifier) {
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+        HorizontalDivider(color = MaterialTheme.extendedColors.divider)
 
         Spacer(modifier = Modifier.height(12.dp))
         // === TITLE ===
@@ -60,14 +61,14 @@ fun SkeletonDetailTransferTerjadwal(modifier: Modifier = Modifier) {
         repeat(5) { DetailRowSkeleton() }
 
         Spacer(modifier = Modifier.height(12.dp))
-        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+        HorizontalDivider(color = MaterialTheme.extendedColors.divider)
 
         Spacer(modifier = Modifier.height(4.dp))
         // === KETERANGAN ===
         DetailRowSkeleton(longValue = true)
 
         Spacer(modifier = Modifier.height(12.dp))
-        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+        HorizontalDivider(color = MaterialTheme.extendedColors.divider)
         Spacer(modifier = Modifier.height(16.dp))
 
         // === REKENING SUMBER ===

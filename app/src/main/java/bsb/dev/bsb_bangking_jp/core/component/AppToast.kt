@@ -155,12 +155,12 @@ private fun SuccessToastContent(message: String) {
         Icon(
             imageVector = Icons.Filled.CheckCircle,
             contentDescription = null,
-            tint = MaterialTheme.extendedColors.success,
+            tint = MaterialTheme.colorScheme.surface,
         )
         Spacer(Modifier.width(8.dp))
         Text(
             text = message,
-            color = MaterialTheme.extendedColors.success,
+            color = MaterialTheme.colorScheme.surface,
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier.weight(1f),
         )
@@ -181,12 +181,12 @@ private fun ErrorToastContent(message: String) {
         Icon(
             imageVector = Icons.Filled.Error,
             contentDescription = null,
-            tint = Color(0xFFFFBBBB),
+            tint =  MaterialTheme.colorScheme.surface,
         )
         Spacer(Modifier.width(8.dp))
         Text(
             text = message,
-            color = MaterialTheme.extendedColors.onDanger,
+            color = MaterialTheme.colorScheme.surface,
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier.weight(1f),
         )

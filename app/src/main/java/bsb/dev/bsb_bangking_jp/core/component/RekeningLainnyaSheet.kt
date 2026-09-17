@@ -49,14 +49,12 @@ fun RekeningLainnyaSheet(
     mode: RekeningSheetMode,
     onDismiss: () -> Unit,
     onSelected: (RekeningItem) -> Unit,
-    modifier: Modifier = Modifier,
     rekeningAktif: String? = null,
     title: String? = null,
     buttonText: String? = null,
     showCopy: Boolean = true,
 ) {
     var selectedRekening by remember { mutableStateOf<RekeningItem?>(null) }
-
     val useButton = mode == RekeningSheetMode.PILIH_REKENING_UTAMA
     val isButtonEnabled = selectedRekening != null
 
@@ -135,12 +133,14 @@ private fun RekeningItemCard(
     showCopy: Boolean,
     onTap: () -> Unit,
     modifier: Modifier = Modifier,
+
 ) {
     val context = LocalContext.current
     val clipboardManager = LocalClipboardManager.current
 
     val borderColor = if (isActive) MaterialTheme.colorScheme.primary else MaterialTheme.extendedColors.textDisabled
     val backgroundColor = if (isActive) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.background
+    val toastState = LocalToastState.current
 
     val saldoFormatted = RupiahFormat(rekening.cashBalanceValue().toInt())
 
@@ -213,7 +213,7 @@ private fun RekeningItemCard(
                                     "Bank Sumsel Babel\n${rekening.number}\n${rekening.name}"
                                 )
                             )
-                            Toast.makeText(context, "Rekening berhasil disalin", Toast.LENGTH_SHORT).show()
+                            toastState.showSuccess( "Rekening berhasil disalin")
                         }
                     ) {
                         Icon(

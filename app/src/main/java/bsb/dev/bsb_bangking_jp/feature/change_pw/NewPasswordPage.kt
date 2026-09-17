@@ -60,46 +60,47 @@ fun NewPasswordPage(
 
     Column(modifier = Modifier.fillMaxSize()) {
         AppHeader(title = "Ganti Kata Sandi", onBackClick = onBackClick)
-
         Column(
-            verticalArrangement = Arrangement.spacedBy(appSpacing.xxxs),
+            verticalArrangement = Arrangement.spacedBy(appSpacing.xs),
             modifier = Modifier.padding(appLayout.defaultPadding)
-        ) {
-            Text(text = "Masukkan Kata Sandi Baru", style = MaterialTheme.typography.titleLarge)
-            AppTextField(
-                value = newPasscode,
-                onValueChange = {
-                    newPasscode = it
-                    viewModel.clearNewPasscodeError()
-                },
-                labelText = "Kata Sandi Baru",
-                hintText = "Masukkan Kata Sandi Baru",
-                icon = Icons.Default.Lock,
-                obscureText = true,
-                errorText = uiState.newPasscodeError,
-                showError = uiState.newPasscodeError != null,
-                enableFocusBackground = true,
-            )
-            AppTextField(
-                value = confirmPasscode,
-                onValueChange = {
-                    confirmPasscode = it
-                    confirmError = null
-                },
-                labelText = "Ulangi Kata Sandi Baru",
-                hintText = "Ulangi Kata Sandi Baru",
-                icon = Icons.Default.Lock,
-                obscureText = true,
-                errorText = confirmError,
-                showError = confirmError != null,
-                enableFocusBackground = true,
-            )
-            Text(text = "Aturan Kata Sandi", style = MaterialTheme.typography.titleSmall)
-            RuleBullet("Gunakan tepat 8 karakter", newPasscode.isNotEmpty(), has8Chars)
-            RuleBullet("Gunakan huruf besar dan kecil", newPasscode.isNotEmpty(), hasUpperLower)
-            RuleBullet("Sertakan angka", newPasscode.isNotEmpty(), hasNumber)
-
-            Spacer(modifier = Modifier.height(appSpacing.xxxs))
+        ){
+            Column(
+                verticalArrangement = Arrangement.spacedBy(appSpacing.xxxs),
+            ) {
+                Text(text = "Masukkan Kata Sandi Baru", style = MaterialTheme.typography.titleLarge)
+                AppTextField(
+                    value = newPasscode,
+                    onValueChange = {
+                        newPasscode = it
+                        viewModel.clearNewPasscodeError()
+                    },
+                    labelText = "Kata Sandi Baru",
+                    hintText = "Masukkan Kata Sandi Baru",
+                    icon = Icons.Default.Lock,
+                    obscureText = true,
+                    errorText = uiState.newPasscodeError,
+                    showError = uiState.newPasscodeError != null,
+                    enableFocusBackground = true,
+                )
+                AppTextField(
+                    value = confirmPasscode,
+                    onValueChange = {
+                        confirmPasscode = it
+                        confirmError = null
+                    },
+                    labelText = "Ulangi Kata Sandi Baru",
+                    hintText = "Ulangi Kata Sandi Baru",
+                    icon = Icons.Default.Lock,
+                    obscureText = true,
+                    errorText = confirmError,
+                    showError = confirmError != null,
+                    enableFocusBackground = true,
+                )
+                Text(text = "Aturan Kata Sandi", style = MaterialTheme.typography.titleSmall)
+                RuleBullet("Gunakan tepat 8 karakter", newPasscode.isNotEmpty(), has8Chars)
+                RuleBullet("Gunakan huruf besar dan kecil", newPasscode.isNotEmpty(), hasUpperLower)
+                RuleBullet("Sertakan angka", newPasscode.isNotEmpty(), hasNumber)
+            }
 
             AppButton(
                 text = "Simpan",

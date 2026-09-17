@@ -3,6 +3,8 @@ package bsb.dev.bsb_bangking_jp.feature.transfer.transfer_core.presentation
 
 import bsb.dev.bsb_bangking_jp.core.network.ApiException
 import bsb.dev.bsb_bangking_jp.feature.activity.presentation.ActivityHistoryViewModel
+import bsb.dev.bsb_bangking_jp.core.session.ClearableRepository
+import bsb.dev.bsb_bangking_jp.feature.manage_scheduled_transfer.domain.ScheduledTransferRepository
 import bsb.dev.bsb_bangking_jp.feature.message.presentation.MessageHistoryViewModel
 import bsb.dev.bsb_bangking_jp.feature.transfer.last_transfer.presentation.LastTransferViewModel
 import bsb.dev.bsb_bangking_jp.feature.transfer.transfer_core.domain.TransferRepository
@@ -42,6 +44,7 @@ class TransferViewModel(
     private val activityViewModel: ActivityHistoryViewModel,
     private val lastTransferViewModel: LastTransferViewModel,
     private val repository: TransferRepository,
+    private val scheduledTransferRepository : ScheduledTransferRepository,
 ) {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
@@ -62,6 +65,8 @@ class TransferViewModel(
             repository.getAccountDest(code, accountNumber)
                 .onSuccess { inquiry ->
                     _uiState.update { it.copy(isInquiryLoading = false) }
+                    // 🔹 Trigger reload rekening TANPA menampilkan data lama -- kalau gagal.
+                    rekeningViewModel.reloadFresh()
                     _navEvent.send(TransferNavEvent.ToDetailRekening(inquiry))
                 }
                 .onFailure { error ->
@@ -164,6 +169,12 @@ class TransferViewModel(
                         activityViewModel.refresh()
                         messageViewModel.refresh()
                         lastTransferViewModel.load(forceRefresh = true)
+                    }else{
+
+                        // ManageScheduledTransferPage dibuka (LaunchedEffect(Unit) -> getList()),
+                        // dia otomatis hit API lagi karena cache-nya sudah kosong,
+                        // walaupun halaman itu sebelumnya sudah pernah dibuka.
+                        (scheduledTransferRepository as? ClearableRepository)?.clear()
                     }
                     _navEvent.send(TransferNavEvent.ConfirmSuccess(result))
                 }

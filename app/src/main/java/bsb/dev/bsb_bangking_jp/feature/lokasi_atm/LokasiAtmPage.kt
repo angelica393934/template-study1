@@ -15,7 +15,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
-import androidx.compose.material.icons.filled.ArrowForwardIos
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -43,6 +42,7 @@ import bsb.dev.bsb_bangking_jp.core.component.SearchTextField
 import bsb.dev.bsb_bangking_jp.core.theme.Gray400
 import bsb.dev.bsb_bangking_jp.core.theme.Primary2
 import bsb.dev.bsb_bangking_jp.core.theme.Primary8
+import bsb.dev.bsb_bangking_jp.core.theme.appLayout
 import kotlinx.coroutines.launch
 
 // Data model ATM
@@ -148,24 +148,28 @@ fun LokasiAtmPage(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-                SearchTextField(
-                    value = query,
-                    onValueChange = { query = it },
-                )
-
-                // 🔹 Tampilkan EmptyState jika hasil pencarian kosong
-                if (filteredList.isEmpty()) {
-                    EmptyState(modifier = Modifier.fillMaxSize())
-                } else {
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize(),
-                        contentPadding = PaddingValues(0.dp)
-                    ) {
-                        items(filteredList) { atm ->
-                            AtmListItem(
-                                atm = atm,
-                                onClick = { launchMaps(atm.mapsUrl) }
-                            )
+            Column (
+            modifier = Modifier
+                .padding(all = appLayout.defaultPadding))
+            {
+                    SearchTextField(
+                        value = query,
+                        onValueChange = { query = it },
+                    )
+                    // 🔹 Tampilkan EmptyState jika hasil pencarian kosong
+                    if (filteredList.isEmpty()) {
+                        EmptyState(modifier = Modifier.fillMaxSize())
+                    } else {
+                        LazyColumn(
+                            modifier = Modifier.fillMaxSize(),
+                            contentPadding = PaddingValues(0.dp)
+                        ) {
+                            items(filteredList) { atm ->
+                                AtmListItem(
+                                    atm = atm,
+                                    onClick = { launchMaps(atm.mapsUrl) }
+                                )
+                            }
                         }
                     }
                 }
@@ -183,8 +187,9 @@ private fun AtmListItem(
         shape = RoundedCornerShape(20.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 9.dp)
             .clickable { onClick() }
+        .padding( vertical = 6.dp)
+
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,

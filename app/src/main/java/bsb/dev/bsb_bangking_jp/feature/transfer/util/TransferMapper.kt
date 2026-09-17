@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter
 /**
  * Padanan utils/transfer_mapper.dart. Kode `service` dan format tanggal DI BAWAH
  * masih ASUMSI (tidak terlihat di source Dart yang dikirim) -- WAJIB dicek ulang
- * ke tim backend sebelum production. Beri tanda TODO di tiap titik yang perlu dikonfirmasi.
+ * ke tim backend sebelum production.
  */
 object TransferMapper {
 
@@ -24,7 +24,7 @@ object TransferMapper {
     fun mapFrequency(frekuensi: String): String =
         if (frekuensi.equals("Sekali", ignoreCase = true)) "ONCE" else "MONTHLY"
 
-    // TODO: konfirmasi kode service asli ke backend -- ini masih tebakan berdasar
+
     // 3 label yang ada di TransferFormPage (Transfer Online / Transfer BI-FAST / Transfer Sesama).
     fun mapService(layananTransfer: String): String = when {
         layananTransfer.equals("Transfer Online", ignoreCase = true) -> "TRANSFER_ONLINE"
@@ -49,19 +49,6 @@ object TransferMapper {
         val parsedDate = parseIndonesianDate(tanggal) ?: return tanggal to null
         return parsedDate.format(isoDateFormatter) to false
     }
-
-    /** Padanan formatMonthYearToEnglish() -- "Agustus 2026" -> ISO tgl 1 bulan itu, "2026-08-01". */
-    // TODO: konfirmasi ke backend apakah startDate/endDate memang berupa tanggal penuh
-    // atau cukup "yyyy-MM".
-    fun formatMonthYearToEnglish(bulanTahun: String): String? {
-        val parts = bulanTahun.trim().split(" ")
-        if (parts.size != 2) return null
-        val monthIndex = bulanIndonesia.indexOfFirst { it.equals(parts[0], ignoreCase = true) }
-        val year = parts[1].toIntOrNull()
-        if (monthIndex == -1 || year == null) return null
-        return LocalDate.of(year, monthIndex + 1, 1).format(isoDateFormatter)
-    }
-
     private fun parseIndonesianDate(value: String): LocalDate? {
         val parts = value.trim().split(" ")
         if (parts.size != 3) return null
@@ -71,4 +58,39 @@ object TransferMapper {
         if (monthIndex == -1) return null
         return runCatching { LocalDate.of(year, monthIndex + 1, day) }.getOrNull()
     }
+
+    /**
+     * Padanan formatMonthYearToEnglish() di Dart -- "Agustus 2026" -> "August 2026"
+     * (terjemahkan nama bulan Indonesia ke Inggris; TAHUN & format tetap "Bulan tahun",
+     * BUKAN dikonversi ke ISO date seperti versi lama).
+     */
+    private val bulanIndonesiaKeInggris = mapOf(
+        "januari" to "January",
+        "februari" to "February",
+        "maret" to "March",
+        "april" to "April",
+        "mei" to "May",
+        "juni" to "June",
+        "juli" to "July",
+        "agustus" to "August",
+        "september" to "September",
+        "oktober" to "October",
+        "november" to "November",
+        "desember" to "December",
+    )
+
+    fun formatMonthYearToEnglish(bulanTahun: String): String? {
+        if (bulanTahun.isEmpty()) return null
+
+        val parts = bulanTahun.trim().lowercase().split(" ")
+        if (parts.size != 2) return bulanTahun
+
+        val month = bulanIndonesiaKeInggris[parts[0]]
+        val year = parts[1]
+
+        if (month == null) return bulanTahun
+
+        return "$month $year"
+    }
+
 }

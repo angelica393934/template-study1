@@ -8,7 +8,6 @@ import retrofit2.http.POST
 import retrofit2.http.Tag
 
 interface LoginApiService {
-
     @POST("v1/login/init")
     suspend fun loginInit(
         @HeaderMap headers: Map<String, String>,
