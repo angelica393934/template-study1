@@ -10,7 +10,11 @@ object SignatureUtils {
     private val gson = Gson()
 
     /** Signature normal: minify(body) + timestamp, di-sign pakai private key. */
-    fun sign(body: Any, timestamp: String, privateKeyBase64: String): String {
+    fun sign(
+        body: Any,
+        timestamp: String,
+        privateKeyBase64: String
+    ): String {
         val minifiedBody = gson.toJson(body)
         return signRaw("$minifiedBody$timestamp", privateKeyBase64)
     }

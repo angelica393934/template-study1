@@ -150,15 +150,31 @@ fun PengaturanPage(
                     SettingSection(
                         title = stringResource(R.string.section_info_bantuan),
                         items = listOf(
-                            SettingItemData(Icons.Default.Help, stringResource(R.string.menu_faq)),
-                            SettingItemData(Icons.Default.PermDeviceInformation, stringResource(R.string.menu_syarat_ketentuan)),
-                            SettingItemData(Icons.Default.PermDeviceInformation, stringResource(R.string.menu_tentang_app)),
+                            SettingItemData(
+                                Icons.Default.Help,
+                                stringResource(R.string.menu_faq),
+                                onClick = { navController.navigate("faq") },
+                            ),
+                            SettingItemData(
+                                Icons.Default.PermDeviceInformation,
+                                stringResource(R.string.menu_syarat_ketentuan),
+                                onClick = { navController.navigate("syarat_ketentuan") },
+                            ),
+                            SettingItemData(
+                                Icons.Default.PermDeviceInformation,
+                                stringResource(R.string.menu_tentang_app),
+                                onClick = { navController.navigate("tentang_aplikasi") },
+                            ),
                             SettingItemData(
                                 Icons.Default.LocationOn,
                                 stringResource(R.string.menu_lokasi_atm),
                                 onClick = { navController.navigate("lokasiatm") },
                             ),
-                            SettingItemData(Icons.Default.HeadsetMic, stringResource(R.string.menu_pusat_bantuan)),
+                            SettingItemData(
+                                Icons.Default.HeadsetMic,
+                                stringResource(R.string.menu_pusat_bantuan),
+                                onClick = { navController.navigate("pusat_bantuan") },
+                            ),
                         )
                     )
                     SettingSection(

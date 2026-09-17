@@ -91,6 +91,10 @@ import bsb.dev.bsb_bangking_jp.feature.change_pw.NewPasswordPage
 import bsb.dev.bsb_bangking_jp.feature.change_pw.OldPasswordPage
 import bsb.dev.bsb_bangking_jp.feature.change_pw.OtpChangePwPage
 import bsb.dev.bsb_bangking_jp.feature.change_pw.presentation.ChangePwViewModel
+import bsb.dev.bsb_bangking_jp.feature.pengaturan.FaqPage
+import bsb.dev.bsb_bangking_jp.feature.pengaturan.SyaratKetentuanPage
+import bsb.dev.bsb_bangking_jp.feature.pengaturan.TentangAplikasiPage
+import bsb.dev.bsb_bangking_jp.feature.pengaturan.PusatBantuanPage
 
 @Composable
 fun AppNavigation(
@@ -105,15 +109,13 @@ fun AppNavigation(
     var pendingConfirmResult by remember { mutableStateOf<ConfirmTransferResultItem?>(null) }
     var pendingSumberKlasifikasi by remember { mutableStateOf("Tabungan Sekarang") }
     var pendingSumberSaldoInt by remember { mutableStateOf(0) }
-    var showChangePwSuccessSheet by remember { mutableStateOf(false) }
-
     CompositionLocalProvider(LocalToastState provides toastState,
         LocalLoadingOverlay provides loadingOverlayState,
         ) {
         Box(modifier = Modifier.fillMaxSize()) {
             NavHost(
                 navController = navController,
-                startDestination = "navbar",
+                startDestination = "splash",
             ) {
 
                 composable("splash") {
@@ -788,8 +790,18 @@ fun AppNavigation(
                         )
                     }
                 }
-
-
+                composable("faq") {
+                    FaqPage(onBackClick = { navController.popBackStack() })
+                }
+                composable("syarat_ketentuan") {
+                    SyaratKetentuanPage(onBackClick = { navController.popBackStack() })
+                }
+                composable("tentang_aplikasi") {
+                    TentangAplikasiPage(onBackClick = { navController.popBackStack() })
+                }
+                composable("pusat_bantuan") {
+                    PusatBantuanPage(onBackClick = { navController.popBackStack() })
+                }
             }
             ToastHost(state = toastState, modifier = Modifier.align(Alignment.TopCenter))
             LoadingOverlayHost(state = loadingOverlayState)
