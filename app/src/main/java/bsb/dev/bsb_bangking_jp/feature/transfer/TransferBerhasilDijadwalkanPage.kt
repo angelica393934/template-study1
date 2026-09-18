@@ -91,7 +91,7 @@ fun TransferBerhasilDijadwalkanPage(
                     painter = painterResource(R.drawable.logo_bsb),
                     contentDescription = "Logo BSB",
                     modifier = Modifier
-                        .width(140.dp)
+                        .width(180.dp)
                         .aspectRatio(143f / 40f),
                     contentScale = ContentScale.Fit
                 )

@@ -19,14 +19,14 @@ object SignatureUtils {
         return signRaw("$minifiedBody$timestamp", privateKeyBase64)
     }
 
-    fun signJson(
-        jsonBody: String,
-        timestamp: String,
-        privateKeyBase64: String
-    ): String {
-        val payload = jsonBody + timestamp
-        return signRaw(payload, privateKeyBase64)
-    }
+//    fun signJson(
+//        jsonBody: String,
+//        timestamp: String,
+//        privateKeyBase64: String
+//    ): String {
+//        val payload = jsonBody + timestamp
+//        return signRaw(payload, privateKeyBase64)
+//    }
 
     /** Signature khusus verify-device: sign challenge langsung (bukan body+timestamp). */
     fun signChallenge(challenge: String, privateKeyBase64: String): String =

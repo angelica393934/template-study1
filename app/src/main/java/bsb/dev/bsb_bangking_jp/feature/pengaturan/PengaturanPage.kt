@@ -30,6 +30,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,6 +44,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import bsb.dev.bsb_bangking_jp.R
 import bsb.dev.bsb_bangking_jp.core.component.AppHeader
@@ -53,8 +55,10 @@ import bsb.dev.bsb_bangking_jp.feature.pengaturan.component.SettingItemData
 import bsb.dev.bsb_bangking_jp.feature.pengaturan.component.SettingSection
 import org.koin.compose.koinInject
 import bsb.dev.bsb_bangking_jp.core.skeleton.ProfileSettingSkeleton
+import bsb.dev.bsb_bangking_jp.feature.pengaturan.component.BahasaSheet
 import bsb.dev.bsb_bangking_jp.shared.logout.LogoutConfirmSheet
 import bsb.dev.bsb_bangking_jp.shared.profile.presentation.ProfileViewModel
+import bsb.dev.bsb_bangking_jp.viewmodel.SettingsViewModel
 
 private val HeaderHeight = 100.dp
 private val ProfileCardHalfHeight = 44.dp
@@ -65,6 +69,7 @@ fun PengaturanPage(
     darkTheme: Boolean,
     onThemeChange: (Boolean) -> Unit,
     profileViewModel: ProfileViewModel = koinInject(), // 🔹 sumber data profile yang sama dengan Beranda
+    settingsViewModel: SettingsViewModel = viewModel(),
 ) {
     val context = LocalContext.current
     val appVersion = remember { getAppVersion(context) }
@@ -74,9 +79,10 @@ fun PengaturanPage(
     val namaUser = uiState.profile?.user?.customerName?.takeIf { it.isNotBlank() }
         ?: uiState.profile?.external?.data?.name?.takeIf { it.isNotBlank() }
         ?: "-"
-
+    val settings by settingsViewModel.settings.collectAsState()
     val phoneNumber = uiState.profile?.user?.maskPhone ?: "-"
     var showLogoutSheet by remember { mutableStateOf(false) }
+    var showBahasaSheet by remember { mutableStateOf(false) }
 
     Scaffold(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
@@ -129,7 +135,11 @@ fun PengaturanPage(
                                 onClick = { navController.navigate("change_email") },
                             ),
                             //SettingItemData(Icons.Default.AccountBalance, stringResource(R.string.menu_kelola_rekening)),
-                            SettingItemData(Icons.Default.Language, stringResource(R.string.menu_bahasa)),
+                            SettingItemData(
+                                Icons.Default.Language,
+                                stringResource(R.string.menu_bahasa),
+                                onClick = { showBahasaSheet = true },
+                            ),
                         )
                     )
                     SettingSection(
@@ -227,6 +237,13 @@ fun PengaturanPage(
                     popUpTo(0)
                 }
             },
+        )
+    }
+    if (showBahasaSheet) {
+        BahasaSheet(
+            currentLanguage = settings.language,
+            onDismiss = { showBahasaSheet = false },
+            onLanguageSelected = { lang -> settingsViewModel.saveLanguage(lang) },
         )
     }
 }

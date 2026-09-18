@@ -29,6 +29,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import bsb.dev.bsb_bangking_jp.core.component.AppHeader
+import bsb.dev.bsb_bangking_jp.core.theme.appLayout
+import bsb.dev.bsb_bangking_jp.core.theme.appSpacing
 import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
 import bsb.dev.bsb_bangking_jp.feature.pengaturan.dummy.DummyFaqAnswer
 import bsb.dev.bsb_bangking_jp.feature.pengaturan.dummy.DummyFaqBullet
@@ -45,10 +47,10 @@ fun FaqPage(
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier.padding(innerPadding).fillMaxSize(),
-            contentPadding = PaddingValues(vertical = 12.dp),
+            contentPadding = PaddingValues(vertical = appLayout.defaultPadding),
         ) {
             items(faqList) { item ->
-                FaqCard(item = item, modifier = Modifier.padding(horizontal = 24.dp, vertical = 6.dp))
+                FaqCard(item = item, modifier = Modifier.padding(horizontal = appLayout.defaultPadding, vertical = appSpacing.xxxs))
             }
         }
     }
@@ -62,14 +64,15 @@ private fun FaqCard(item: DummyFaqItem, modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
-            .border(1.dp, MaterialTheme.extendedColors.divider, RoundedCornerShape(12.dp))
+            .border(0.5.dp, MaterialTheme.extendedColors.textDisabled,
+                RoundedCornerShape(12.dp))
             .background(MaterialTheme.colorScheme.background),
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable { expanded = !expanded }
-                .padding(horizontal = 16.dp, vertical = 14.dp),
+                .padding(all= appSpacing.xxxs),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
@@ -87,8 +90,8 @@ private fun FaqCard(item: DummyFaqItem, modifier: Modifier = Modifier) {
 
         AnimatedVisibility(visible = expanded) {
             Column {
-                HorizontalDivider(color = MaterialTheme.extendedColors.divider)
-                Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)) {
+                HorizontalDivider(thickness = 0.5.dp ,color = MaterialTheme.extendedColors.textDisabled)
+                Column(modifier = Modifier.padding( appSpacing.xxxs)) {
                     FaqAnswerContent(answer = item.answer)
                 }
             }
@@ -119,7 +122,7 @@ private fun FaqBulletList(bullets: List<DummyFaqBullet>, indent: Dp = 0.dp) {
                 Icon(
                     imageVector = Icons.Default.Circle,
                     contentDescription = null,
-                    tint = MaterialTheme.extendedColors.textDisabled,
+                    tint = MaterialTheme.extendedColors.textSecondary,
                     modifier = Modifier.padding(top = 6.dp).size(if (indent == 0.dp) 6.dp else 5.dp),
                 )
                 Spacer(modifier = Modifier.width(6.dp))

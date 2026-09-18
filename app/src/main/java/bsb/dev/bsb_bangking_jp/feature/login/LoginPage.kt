@@ -87,7 +87,8 @@ fun LoginPage(
                     painter = painterResource(R.drawable.logo_bsb),
                     contentDescription = null,
                     modifier = Modifier
-                    .size(130.dp)
+                    .size(130.dp),
+                    contentScale = ContentScale.Fit
                 )
 
                 Spacer(modifier = Modifier.height(25.dp))
