@@ -1,4 +1,4 @@
-package bsb.dev.bsb_bangking_jp.feature.splash
+package bsb.dev.bsb_bangking_jp.feature.init.presentation
 
 sealed class SplashUiState {
     object Loading : SplashUiState()

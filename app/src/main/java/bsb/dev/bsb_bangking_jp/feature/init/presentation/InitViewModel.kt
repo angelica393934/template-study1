@@ -1,5 +1,4 @@
-// feature/splash/SplashViewModel.kt
-package bsb.dev.bsb_bangking_jp.feature.splash
+package bsb.dev.bsb_bangking_jp.feature.init.presentation
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -16,7 +15,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
-class SplashViewModel(
+class InitViewModel(
     application: Application,
     private val initDeviceUseCase: InitDeviceUseCase,
     private val appPreferences: AppPreferences,

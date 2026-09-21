@@ -36,7 +36,7 @@ import bsb.dev.bsb_bangking_jp.feature.registration.CreateUserIdPageRegistration
 import bsb.dev.bsb_bangking_jp.feature.registration.CreateUserPwPageRegistration
 import bsb.dev.bsb_bangking_jp.feature.registration.OtpPageRegistration
 import bsb.dev.bsb_bangking_jp.feature.registration.FindAccountPageRegistration
-import bsb.dev.bsb_bangking_jp.feature.splash.SplashScreen
+import bsb.dev.bsb_bangking_jp.feature.init.SplashScreen
 import bsb.dev.bsb_bangking_jp.feature.tagihan.TagihanPage
 import bsb.dev.bsb_bangking_jp.feature.transfer.PinTfPage
 import bsb.dev.bsb_bangking_jp.feature.transfer.TransferBSBPage

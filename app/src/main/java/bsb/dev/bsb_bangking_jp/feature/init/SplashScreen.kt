@@ -1,4 +1,4 @@
-package bsb.dev.bsb_bangking_jp.feature.splash
+package bsb.dev.bsb_bangking_jp.feature.init
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -16,12 +16,15 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import bsb.dev.bsb_bangking_jp.R
 import bsb.dev.bsb_bangking_jp.core.component.LocalToastState
+import bsb.dev.bsb_bangking_jp.feature.init.presentation.SplashNavigationEvent
+import bsb.dev.bsb_bangking_jp.feature.init.presentation.SplashUiState
+import bsb.dev.bsb_bangking_jp.feature.init.presentation.InitViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SplashScreen(
     navController: NavController,
-    viewModel: SplashViewModel = koinViewModel(),
+    viewModel: InitViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val toastState = LocalToastState.current

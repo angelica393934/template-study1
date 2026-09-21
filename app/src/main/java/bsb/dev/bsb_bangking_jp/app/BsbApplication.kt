@@ -22,7 +22,6 @@ import bsb.dev.bsb_bangking_jp.feature.login_existing.loginExistingModule
 import bsb.dev.bsb_bangking_jp.feature.message.messageModule
 import bsb.dev.bsb_bangking_jp.feature.news.newsModule
 import bsb.dev.bsb_bangking_jp.feature.registration.registrationModule
-import bsb.dev.bsb_bangking_jp.feature.splash.splashModule
 import bsb.dev.bsb_bangking_jp.feature.manage_scheduled_transfer.manageScheduledTransferModule
 import bsb.dev.bsb_bangking_jp.feature.transfer.transferModule
 import bsb.dev.bsb_bangking_jp.shared.logout.logoutModule
@@ -42,7 +41,6 @@ class BsbApplication : Application() {
                 deviceModule,
                 networkModule,
                 initModule,
-                splashModule,
                 loginExistingModule,
                 registrationModule,
                 activationModule,
