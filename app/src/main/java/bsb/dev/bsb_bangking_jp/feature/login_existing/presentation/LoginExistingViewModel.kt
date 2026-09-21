@@ -129,6 +129,9 @@ class LoginExistingViewModel(
         _uiState.update { it.copy(phoneInlineError = null) }
     }
 
+    fun clearOtpError() {
+        _uiState.update { it.copy(otpErrorMessage = null) }
+    }
     private suspend fun handleFailure(error: Throwable, context: FailureContext) {
         val message = error.message ?: "Terjadi kesalahan, silakan coba lagi."
         val respCode = (error as? ApiException)?.respCode

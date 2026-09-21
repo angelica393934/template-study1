@@ -143,7 +143,6 @@ class LoginRepositoryImpl(
             }
 
             secureStorage.clearInitTokens()
-            appPreferences.saveLoginExistingStatus(true)
             appPreferences.saveLoginAllowed(true)
 
             Result.success(Unit)

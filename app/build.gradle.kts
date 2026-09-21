@@ -4,6 +4,7 @@ import java.io.FileInputStream
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.google.services)
     alias(libs.plugins.kotlin.compose)
 }
 val localProperties = Properties().apply {
@@ -65,6 +66,8 @@ android {
 }
 
 dependencies {
+    implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
+    implementation("com.google.firebase:firebase-messaging-ktx")
     implementation(libs.bouncycastle)
     implementation(libs.security.crypto)
     implementation(libs.glide)

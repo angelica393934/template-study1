@@ -15,9 +15,6 @@ class AppPreferences(context: Context) {
     fun isInitSuccess(): Boolean = prefs.getBoolean(KEY_INIT_SUCCESS, false)
     fun saveInitSuccess(value: Boolean) = prefs.edit { putBoolean(KEY_INIT_SUCCESS, value) }
 
-    fun getLoginExistingStatus(): Boolean = prefs.getBoolean(KEY_CONFIRM_MPIN, false)
-    fun saveLoginExistingStatus(value: Boolean) = prefs.edit { putBoolean(KEY_CONFIRM_MPIN, value) }
-
     fun getRegistStatus(): Boolean = prefs.getBoolean(KEY_REGIST, false)
     fun saveRegistStatus(value: Boolean) = prefs.edit { putBoolean(KEY_REGIST, value) }
 
@@ -64,7 +61,6 @@ class AppPreferences(context: Context) {
     companion object {
         private const val PREFS_NAME = "app_prefs"
         private const val KEY_INIT_SUCCESS = "init_success"
-        private const val KEY_CONFIRM_MPIN = "confirm_mpin_status"
         private const val KEY_REGIST = "regist_status"
         private const val KEY_LOGIN_ALLOWED = "login_allowed"
         private const val KEY_REMEMBER_ME = "remember_me"

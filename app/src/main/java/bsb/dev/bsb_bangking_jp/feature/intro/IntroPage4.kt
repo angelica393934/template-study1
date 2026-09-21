@@ -112,7 +112,7 @@ fun IntroPage4(
                         textColor = MaterialTheme.colorScheme.primary,
                         backgroundColor = MaterialTheme.colorScheme.primaryContainer,
                         onClick = {
-                            navController.navigate("registration")
+                            navController.navigate("login_existing")
                         }
                     )
 
@@ -121,7 +121,7 @@ fun IntroPage4(
                     AppButton(
                         text = "Daftar Sekarang",
                         onClick = {
-                            navController.navigate("login_existing")
+                            navController.navigate("registration")
                         }
                     )
                 }

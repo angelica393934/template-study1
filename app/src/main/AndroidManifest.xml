@@ -26,6 +26,23 @@
             </intent-filter>
         </activity>
 
+        <!-- Service FCM -->
+        <service
+            android:name=".core.notification.AppFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <!-- Default notification channel & icon/color kalau app di background -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="channel_transaksi" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/logosplash" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

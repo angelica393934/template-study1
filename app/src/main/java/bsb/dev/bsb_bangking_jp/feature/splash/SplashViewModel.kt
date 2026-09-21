@@ -62,10 +62,10 @@ class SplashViewModel(
 
     private suspend fun checkStatus() {
         try {
-            val isConfirmMpinDone = appPreferences.getLoginExistingStatus()
+            val isLoginAllowed = appPreferences.isLoginAllowed()
             val isRegistDone = appPreferences.getRegistStatus()
 
-            if (isConfirmMpinDone || isRegistDone) {
+            if (isLoginAllowed || isRegistDone) {
                 delay(500)
                 navigateToPortal()
             } else {
@@ -89,3 +89,5 @@ class SplashViewModel(
         _navigationEvent.send(SplashNavigationEvent.ToPortal)
     }
 }
+
+

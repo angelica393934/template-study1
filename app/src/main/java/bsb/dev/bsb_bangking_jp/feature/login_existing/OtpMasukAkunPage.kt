@@ -23,7 +23,9 @@ fun OtpMasukAkunPage(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val toastState = LocalToastState.current
     val loadingOverlay = LocalLoadingOverlay.current
-
+    LaunchedEffect(Unit) {
+        viewModel.clearOtpError()
+    }
     LaunchedEffect(uiState.isLoading) {
         if (uiState.isLoading) loadingOverlay.show() else loadingOverlay.hide()
     }

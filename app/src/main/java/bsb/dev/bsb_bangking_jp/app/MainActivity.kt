@@ -27,6 +27,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import bsb.dev.bsb_bangking_jp.app.navigation.AppNavigation
+import bsb.dev.bsb_bangking_jp.core.notification.FcmTokenHelper
 import bsb.dev.bsb_bangking_jp.core.theme.BSBBangkingJPTheme
 import bsb.dev.bsb_bangking_jp.viewmodel.SettingsViewModel
 
@@ -56,6 +57,9 @@ class MainActivity : ComponentActivity() {
                         notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
                     }
                 }
+
+                // fore ntoken firebase
+                FcmTokenHelper.fetchToken()
             }
 
             val insetsController = WindowCompat.getInsetsController(window, window.decorView)

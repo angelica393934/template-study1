@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "181768340135",
+    "project_id": "bsb-bangking-jp",
+    "storage_bucket": "bsb-bangking-jp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:181768340135:android:241a03b6216bbc440ad182",
+        "android_client_info": {
+          "package_name": "bsb.dev.bsb_bangking_jp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZ03_mpHe7wZCQDzETEiP45joOwmaB7Tk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

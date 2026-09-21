@@ -20,7 +20,7 @@ interface LoginApiService {
         @Body body: VerifyOtpRequest,
     ): Response<VerifyOtpResponse>
 
-    @POST("v1/resend-otp")
+    @POST("v1/resend-otp/existingakun")
     suspend fun resendOtp(
         @HeaderMap headers: Map<String, String>,
         @Body body: ResendOtpRequest,

@@ -53,10 +53,6 @@ import bsb.dev.bsb_bangking_jp.core.component.LocalLoadingOverlay
 import bsb.dev.bsb_bangking_jp.core.component.rememberLoadingOverlayState
 import bsb.dev.bsb_bangking_jp.shared.rekening_lainnya.data.cashBalanceValue
 import org.koin.androidx.compose.koinViewModel
-import bsb.dev.bsb_bangking_jp.feature.login_existing.MasukPage
-import bsb.dev.bsb_bangking_jp.feature.login_existing.MasukPinFlow
-import bsb.dev.bsb_bangking_jp.feature.login_existing.OtpMasukAkunPage
-import bsb.dev.bsb_bangking_jp.feature.login_existing.presentation.LoginExistingViewModel
 import androidx.compose.ui.platform.LocalContext
 import bsb.dev.bsb_bangking_jp.core.notification.NotificationHelper
 import bsb.dev.bsb_bangking_jp.core.util.RupiahFormat
@@ -91,6 +87,7 @@ import bsb.dev.bsb_bangking_jp.feature.change_pw.NewPasswordPage
 import bsb.dev.bsb_bangking_jp.feature.change_pw.OldPasswordPage
 import bsb.dev.bsb_bangking_jp.feature.change_pw.OtpChangePwPage
 import bsb.dev.bsb_bangking_jp.feature.change_pw.presentation.ChangePwViewModel
+import bsb.dev.bsb_bangking_jp.feature.login_existing.loginExistingNavGraph
 import bsb.dev.bsb_bangking_jp.feature.pengaturan.FaqPage
 import bsb.dev.bsb_bangking_jp.feature.pengaturan.SyaratKetentuanPage
 import bsb.dev.bsb_bangking_jp.feature.pengaturan.TentangAplikasiPage
@@ -115,7 +112,7 @@ fun AppNavigation(
         Box(modifier = Modifier.fillMaxSize()) {
             NavHost(
                 navController = navController,
-                startDestination = "navbar",
+                startDestination = "splash",
             ) {
                 composable("splash") {
                     SplashScreen(navController)
@@ -133,44 +130,7 @@ fun AppNavigation(
                     IntroPage4(navController)
                 }
                 //login existing
-                navigation(startDestination = "login_masuk", route = "login_existing") {
-
-                    composable("login_masuk") { backStackEntry ->
-                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("login_existing") }
-                        val viewModel: LoginExistingViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
-
-                        MasukPage(
-                            viewModel = viewModel,
-                            onBackClick = { navController.popBackStack() },
-                            onNavigateToOtp = { navController.navigate("login_otp") },
-                        )
-                    }
-
-                    composable("login_otp") { backStackEntry ->
-                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("login_existing") }
-                        val viewModel: LoginExistingViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
-                        OtpMasukAkunPage(
-                            viewModel = viewModel,
-                            onBackClick = { navController.popBackStack() },
-                            onVerified = { navController.navigate("login_pin") },
-                        )
-                    }
-
-                    composable("login_pin") { backStackEntry ->
-                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("login_existing") }
-                        val viewModel: LoginExistingViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
-
-                        MasukPinFlow(
-                            viewModel = viewModel,
-                            onBackClick = { navController.popBackStack() },
-                            onCompleted = {
-                                navController.navigate("navbar") {
-                                    popUpTo("login_existing") { inclusive = true }
-                                }
-                            },
-                        )
-                    }
-                }
+                loginExistingNavGraph(navController)
                 //registration page
                 navigation(startDestination = "registration_akun", route = "registration") {
 
@@ -633,7 +593,7 @@ fun AppNavigation(
                             onBerhasilSegera = { confirmResult ->
                                 pendingConfirmResult = confirmResult
 
-                                // 🔹 Trigger notifikasi + suara custom, padanan bank sungguhan.
+//                                 🔹 Trigger notifikasi + suara custom, padanan bank sungguhan.
                                 NotificationHelper.showTransaksiBerhasil(
                                     context = context,
                                     title = "Transfer Berhasil",
