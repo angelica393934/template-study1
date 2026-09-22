@@ -49,17 +49,17 @@ import androidx.compose.ui.unit.dp
 import androidx.annotation.DrawableRes
 import bsb.dev.bsb_bangking_jp.R
 import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
-import bsb.dev.bsb_bangking_jp.core.component.EmptyState
+import bsb.dev.bsb_bangking_jp.core.components.EmptyState
 import bsb.dev.bsb_bangking_jp.core.components.AppMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.navigation.NavController
-import bsb.dev.bsb_bangking_jp.core.component.AppHeader
-import bsb.dev.bsb_bangking_jp.core.component.SearchTextField
+import bsb.dev.bsb_bangking_jp.core.components.AppHeader
+import bsb.dev.bsb_bangking_jp.core.components.SearchTextField
 
 data class LainnyaMenuItem(
     val labelRes: Int,
     val icon: ImageVector? = null,
-    @DrawableRes val iconResId: Int? = null,
+    @DrawableRes val iconImg: Int? = null,
     val route: String? = null,
     val scale: Float? = null,
 )
@@ -80,13 +80,13 @@ fun LainnyaPage(
         listOf(
             LainnyaMenuItem(
                 labelRes = R.string.menu_transfer,
-                iconResId = R.drawable.ic_transfer,
+                iconImg = R.drawable.ic_transfer,
                 route = "transfer",
                 scale = 0.45f,
             ),
             LainnyaMenuItem(
                 labelRes = R.string.menu_virtual_account,
-                iconResId = R.drawable.ic_va,
+                iconImg = R.drawable.ic_va,
                 scale = 0.5f,
 
                 ),
@@ -96,7 +96,7 @@ fun LainnyaPage(
             ),
             LainnyaMenuItem(
                 labelRes = R.string.menu_cardless,
-                iconResId = R.drawable.ic_cardless,
+                iconImg = R.drawable.ic_cardless,
                 scale = 0.5f,
             ),
         )
@@ -107,61 +107,61 @@ fun LainnyaPage(
         listOf(
             LainnyaMenuItem(R.string.menu_pulsa, icon = Icons.Default.SignalCellularAlt),
             LainnyaMenuItem(R.string.menu_paket_data, icon = Icons.Default.Language),
-            LainnyaMenuItem(R.string.menu_gopay, iconResId = R.drawable.ic_gopay, scale = 0.6f),
-            LainnyaMenuItem(R.string.menu_bsb_cash, iconResId = R.drawable.ic_bsb_cash, scale = 0.6f),
-            LainnyaMenuItem(R.string.menu_ovo, iconResId = R.drawable.ic_ovo, scale = 0.6f),
-            LainnyaMenuItem(R.string.menu_shopee_pay, iconResId = R.drawable.ic_s_pay, scale = 0.6f),
+            LainnyaMenuItem(R.string.menu_gopay, iconImg = R.drawable.ic_gopay, scale = 0.6f),
+            LainnyaMenuItem(R.string.menu_bsb_cash, iconImg = R.drawable.ic_bsb_cash, scale = 0.6f),
+            LainnyaMenuItem(R.string.menu_ovo, iconImg = R.drawable.ic_ovo, scale = 0.6f),
+            LainnyaMenuItem(R.string.menu_shopee_pay, iconImg = R.drawable.ic_s_pay, scale = 0.6f),
         )
     }
 
     // ---- Tagihan ----
     val tagihan = remember {
         listOf(
-            LainnyaMenuItem(R.string.menu_pdam, iconResId = R.drawable.ic_pdam, scale = 0.65f),
-            LainnyaMenuItem(R.string.menu_bpjs, iconResId = R.drawable.ic_bpjs, scale = 0.8f),
-            LainnyaMenuItem(R.string.menu_telkom, iconResId = R.drawable.ic_telkom, scale = 0.8f),
-            LainnyaMenuItem(R.string.menu_mnc, iconResId = R.drawable.ic_mnc, scale = 0.6f),
-            LainnyaMenuItem(R.string.menu_tokopedia, iconResId = R.drawable.ic_tokopedia, scale = 0.6f),
-            LainnyaMenuItem(R.string.menu_musi, iconResId = R.drawable.ic_musi, scale = 0.6f),
-            LainnyaMenuItem(R.string.menu_gas_petro, iconResId = R.drawable.ic_gas, scale = 0.75f),
-            LainnyaMenuItem(R.string.menu_pusri, iconResId = R.drawable.ic_pusri, scale = 0.7f),
+            LainnyaMenuItem(R.string.menu_pdam, iconImg = R.drawable.ic_pdam, scale = 0.65f),
+            LainnyaMenuItem(R.string.menu_bpjs, iconImg = R.drawable.ic_bpjs, scale = 0.8f),
+            LainnyaMenuItem(R.string.menu_telkom, iconImg = R.drawable.ic_telkom, scale = 0.8f),
+            LainnyaMenuItem(R.string.menu_mnc, iconImg = R.drawable.ic_mnc, scale = 0.6f),
+            LainnyaMenuItem(R.string.menu_tokopedia, iconImg = R.drawable.ic_tokopedia, scale = 0.6f),
+            LainnyaMenuItem(R.string.menu_musi, iconImg = R.drawable.ic_musi, scale = 0.6f),
+            LainnyaMenuItem(R.string.menu_gas_petro, iconImg = R.drawable.ic_gas, scale = 0.75f),
+            LainnyaMenuItem(R.string.menu_pusri, iconImg = R.drawable.ic_pusri, scale = 0.7f),
         )
     }
 
     // ---- Travel dan Tiket ----
     val travel = remember {
         listOf(
-            LainnyaMenuItem(R.string.menu_kai, iconResId = R.drawable.ic_kai, scale = 0.35f),
-            LainnyaMenuItem(R.string.menu_garuda, iconResId = R.drawable.ic_garuda, scale = 0.9f),
-            LainnyaMenuItem(R.string.menu_lion_air, iconResId = R.drawable.ic_lion, scale = 0.8f),
+            LainnyaMenuItem(R.string.menu_kai, iconImg = R.drawable.ic_kai, scale = 0.35f),
+            LainnyaMenuItem(R.string.menu_garuda, iconImg = R.drawable.ic_garuda, scale = 0.9f),
+            LainnyaMenuItem(R.string.menu_lion_air, iconImg = R.drawable.ic_lion, scale = 0.8f),
         )
     }
 
     // ---- Pajak dan Pendidikan ----
     val pajakPendidikan = remember {
         listOf(
-            LainnyaMenuItem(R.string.menu_samsat, iconResId = R.drawable.ic_samsat, scale = 0.7f),
-            LainnyaMenuItem(R.string.menu_pbb, iconResId = R.drawable.ic_pbb, scale = 0.75f),
-            LainnyaMenuItem(R.string.menu_unsri, iconResId = R.drawable.ic_unsri, scale = 0.7f),
-            LainnyaMenuItem(R.string.menu_ump, iconResId = R.drawable.ic_ump, scale = 0.7f),
-            LainnyaMenuItem(R.string.menu_tridinanti, iconResId = R.drawable.ic_tridinanti, scale = 0.7f),
-            LainnyaMenuItem(R.string.menu_uin, iconResId = R.drawable.ic_uin, scale = 0.65f),
-            LainnyaMenuItem(R.string.menu_pgri, iconResId = R.drawable.ic_pgri, scale = 0.7f),
-            LainnyaMenuItem(R.string.menu_stikp, iconResId = R.drawable.ic_stikp, scale = 0.7f),
-            LainnyaMenuItem(R.string.menu_stik, iconResId = R.drawable.ic_stik, scale = 0.7f),
-            LainnyaMenuItem(R.string.menu_iain, iconResId = R.drawable.ic_iain, scale = 0.7f),
-            LainnyaMenuItem(R.string.menu_ub, iconResId = R.drawable.ic_ub, scale = 0.7f),
-            LainnyaMenuItem(R.string.menu_ubd, iconResId = R.drawable.ic_ubd, scale = 0.4f),
-            LainnyaMenuItem(R.string.menu_ikest, iconResId = R.drawable.ic_ikest, scale = 0.7f),
+            LainnyaMenuItem(R.string.menu_samsat, iconImg = R.drawable.ic_samsat, scale = 0.7f),
+            LainnyaMenuItem(R.string.menu_pbb, iconImg = R.drawable.ic_pbb, scale = 0.75f),
+            LainnyaMenuItem(R.string.menu_unsri, iconImg = R.drawable.ic_unsri, scale = 0.7f),
+            LainnyaMenuItem(R.string.menu_ump, iconImg = R.drawable.ic_ump, scale = 0.7f),
+            LainnyaMenuItem(R.string.menu_tridinanti, iconImg = R.drawable.ic_tridinanti, scale = 0.7f),
+            LainnyaMenuItem(R.string.menu_uin, iconImg = R.drawable.ic_uin, scale = 0.65f),
+            LainnyaMenuItem(R.string.menu_pgri, iconImg = R.drawable.ic_pgri, scale = 0.7f),
+            LainnyaMenuItem(R.string.menu_stikp, iconImg = R.drawable.ic_stikp, scale = 0.7f),
+            LainnyaMenuItem(R.string.menu_stik, iconImg = R.drawable.ic_stik, scale = 0.7f),
+            LainnyaMenuItem(R.string.menu_iain, iconImg = R.drawable.ic_iain, scale = 0.7f),
+            LainnyaMenuItem(R.string.menu_ub, iconImg = R.drawable.ic_ub, scale = 0.7f),
+            LainnyaMenuItem(R.string.menu_ubd, iconImg = R.drawable.ic_ubd, scale = 0.4f),
+            LainnyaMenuItem(R.string.menu_ikest, iconImg = R.drawable.ic_ikest, scale = 0.7f),
         )
     }
 
     // ---- Ziswaf ----
     val ziswaf = remember {
         listOf(
-            LainnyaMenuItem(R.string.menu_infaq, iconResId = R.drawable.ic_infaq, scale = 0.8f),
-            LainnyaMenuItem(R.string.menu_wakaf, iconResId = R.drawable.ic_wakaf, scale = 0.8f),
-            LainnyaMenuItem(R.string.menu_zakat, iconResId = R.drawable.ic_zakat, scale = 0.8f),
+            LainnyaMenuItem(R.string.menu_infaq, iconImg = R.drawable.ic_infaq, scale = 0.8f),
+            LainnyaMenuItem(R.string.menu_wakaf, iconImg = R.drawable.ic_wakaf, scale = 0.8f),
+            LainnyaMenuItem(R.string.menu_zakat, iconImg = R.drawable.ic_zakat, scale = 0.8f),
         )
     }
 
@@ -289,10 +289,10 @@ private fun toggleSection(expanded: androidx.compose.runtime.snapshots.SnapshotS
 
 @Composable
 private fun MenuGrid(
+    modifier: Modifier = Modifier,
     items: List<LainnyaMenuItem>,
     useThemeStyle: Boolean = false,
     onItemTap: (LainnyaMenuItem) -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     val columns = 4
     val spacing = 16.dp
@@ -311,9 +311,9 @@ private fun MenuGrid(
                     AppMenu(
                         label = stringResource(item.labelRes),
                         icon = item.icon,
-                        iconResId = item.iconResId,
-                        scale = item.scale,
+                        iconImg = item.iconImg,
                         useThemeStyle = useThemeStyle,
+                        scale = item.scale,
                         onTap = { onItemTap(item) },
                     )
                 }

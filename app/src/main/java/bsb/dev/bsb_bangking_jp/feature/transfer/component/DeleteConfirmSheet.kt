@@ -2,7 +2,7 @@ package bsb.dev.bsb_bangking_jp.feature.transfer.component
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import bsb.dev.bsb_bangking_jp.core.component.AppModalConfirm
+import bsb.dev.bsb_bangking_jp.core.components.AppModalConfirm
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

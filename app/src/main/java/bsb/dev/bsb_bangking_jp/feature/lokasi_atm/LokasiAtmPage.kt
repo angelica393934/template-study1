@@ -36,9 +36,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import bsb.dev.bsb_bangking_jp.core.component.AppHeader
-import bsb.dev.bsb_bangking_jp.core.component.EmptyState
-import bsb.dev.bsb_bangking_jp.core.component.SearchTextField
+import bsb.dev.bsb_bangking_jp.core.components.AppHeader
+import bsb.dev.bsb_bangking_jp.core.components.EmptyState
+import bsb.dev.bsb_bangking_jp.core.components.SearchTextField
 import bsb.dev.bsb_bangking_jp.core.theme.Gray400
 import bsb.dev.bsb_bangking_jp.core.theme.Primary2
 import bsb.dev.bsb_bangking_jp.core.theme.Primary8

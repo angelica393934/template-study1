@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
-import bsb.dev.bsb_bangking_jp.core.component.InitialAvatar
+import bsb.dev.bsb_bangking_jp.core.components.InitialAvatar
 
 @Composable
 fun AccountProfileCard(

@@ -16,10 +16,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import bsb.dev.bsb_bangking_jp.core.component.AppButton
-import bsb.dev.bsb_bangking_jp.core.component.AppHeader
-import bsb.dev.bsb_bangking_jp.core.component.AppTextField
-import bsb.dev.bsb_bangking_jp.core.component.LocalLoadingOverlay
+import bsb.dev.bsb_bangking_jp.core.components.AppButton
+import bsb.dev.bsb_bangking_jp.core.components.AppHeader
+import bsb.dev.bsb_bangking_jp.core.components.AppTextField
+import bsb.dev.bsb_bangking_jp.core.components.LocalLoadingOverlay
 import bsb.dev.bsb_bangking_jp.core.theme.appLayout
 import bsb.dev.bsb_bangking_jp.core.theme.appSpacing
 import bsb.dev.bsb_bangking_jp.core.theme.extendedColors

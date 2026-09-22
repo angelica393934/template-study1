@@ -1,6 +1,6 @@
 package bsb.dev.bsb_bangking_jp.core.util
 
-import bsb.dev.bsb_bangking_jp.core.component.FilterChipItem
+import bsb.dev.bsb_bangking_jp.core.components.FilterChipItem
 import bsb.dev.bsb_bangking_jp.core.filter.TransactionFilterPayload
 
 /**

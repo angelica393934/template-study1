@@ -7,9 +7,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import bsb.dev.bsb_bangking_jp.core.component.AppHeader
-import bsb.dev.bsb_bangking_jp.core.component.InputPinPage
-import bsb.dev.bsb_bangking_jp.core.component.LocalLoadingOverlay
+import bsb.dev.bsb_bangking_jp.core.components.AppHeader
+import bsb.dev.bsb_bangking_jp.core.components.InputPinPage
+import bsb.dev.bsb_bangking_jp.core.components.LocalLoadingOverlay
 import bsb.dev.bsb_bangking_jp.core.util.PinValidator
 import bsb.dev.bsb_bangking_jp.feature.change_mpin.presentation.ChangeMpinNavEvent
 import bsb.dev.bsb_bangking_jp.feature.change_mpin.presentation.ChangeMpinViewModel

@@ -61,7 +61,7 @@ fun MenuUtama(
             ) {
                 AppMenu(
                     label = stringResource(R.string.menu_transfer),
-                    iconResId = R.drawable.ic_transfer,
+                    iconImg = R.drawable.ic_transfer,
                     width = itemWidth,
                     scale = 0.42f,
                     useThemeStyle = true,
@@ -77,7 +77,7 @@ fun MenuUtama(
                 )
                 AppMenu(
                     label = stringResource(R.string.menu_virtual_account),
-                    iconResId = R.drawable.ic_va,
+                    iconImg = R.drawable.ic_va,
                     scale = 0.54f,
                     width = itemWidth,
                     useThemeStyle = true,
@@ -106,7 +106,7 @@ fun MenuUtama(
                 )
                 AppMenu(
                     label = stringResource(R.string.menu_cardless),
-                    iconResId = R.drawable.ic_cardless,
+                    iconImg = R.drawable.ic_cardless,
                     width = itemWidth,
                     scale = 0.50f,
                     useThemeStyle = true,
@@ -114,7 +114,7 @@ fun MenuUtama(
                 )
                 AppMenu(
                     label = stringResource(R.string.menu_lainnya),
-                    iconResId = R.drawable.ic_lainnya,
+                    iconImg = R.drawable.ic_lainnya,
                     width = itemWidth,
                     scale = 0.45f,
                     useThemeStyle = true,

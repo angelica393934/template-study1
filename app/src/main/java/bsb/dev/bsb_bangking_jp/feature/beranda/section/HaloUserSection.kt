@@ -21,7 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import bsb.dev.bsb_bangking_jp.R
-import bsb.dev.bsb_bangking_jp.core.component.InitialAvatar
+import bsb.dev.bsb_bangking_jp.core.components.InitialAvatar
 
 @Composable
 fun HaloUserSection(

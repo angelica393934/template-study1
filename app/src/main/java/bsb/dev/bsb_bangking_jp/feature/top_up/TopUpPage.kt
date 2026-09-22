@@ -1,6 +1,5 @@
 package bsb.dev.bsb_bangking_jp.feature.top_up
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,9 +33,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import bsb.dev.bsb_bangking_jp.R
-import bsb.dev.bsb_bangking_jp.core.component.AppHeader
-import bsb.dev.bsb_bangking_jp.core.component.CardHistory
-import bsb.dev.bsb_bangking_jp.core.component.SearchTextField
+import bsb.dev.bsb_bangking_jp.core.components.AppHeader
+import bsb.dev.bsb_bangking_jp.core.components.CardHistory
+import bsb.dev.bsb_bangking_jp.core.components.SearchTextField
 import bsb.dev.bsb_bangking_jp.core.components.AppMenu
 import bsb.dev.bsb_bangking_jp.core.dummy.DummyData
 import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
@@ -44,7 +43,7 @@ import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
 
 private data class TopUpMenuItem(
     val icon: ImageVector? = null,
-    val iconResId: Int? = null,
+    val iconImg: Int? = null,
     val scale: Float? = null,
     val label: String,
     val route: String? = null,
@@ -53,10 +52,10 @@ private data class TopUpMenuItem(
 private val topUpMenuItems = listOf(
     TopUpMenuItem(icon = Icons.Default.SignalCellularAlt, scale = 0.7f, label = "Pulsa"),
     TopUpMenuItem(icon = Icons.Default.Language, scale = 0.7f, label = "Paket Data"),
-    TopUpMenuItem(iconResId = R.drawable.ic_gopay, scale = 0.6f, label = "Gopay"),
-    TopUpMenuItem(iconResId = R.drawable.ic_bsb_cash, scale = 0.8f, label = "BSB Cash"),
-    TopUpMenuItem(iconResId = R.drawable.ic_ovo, scale = 0.6f, label = "OVO"),
-    TopUpMenuItem(iconResId = R.drawable.ic_s_pay, scale = 0.7f, label = "Shopee Pay"),
+    TopUpMenuItem(iconImg = R.drawable.ic_gopay, scale = 0.6f, label = "Gopay"),
+    TopUpMenuItem(iconImg = R.drawable.ic_bsb_cash, scale = 0.8f, label = "BSB Cash"),
+    TopUpMenuItem(iconImg = R.drawable.ic_ovo, scale = 0.6f, label = "OVO"),
+    TopUpMenuItem(iconImg = R.drawable.ic_s_pay, scale = 0.7f, label = "Shopee Pay"),
 )
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -109,7 +108,7 @@ fun TopUpPage(
                             AppMenu(
                                 label = m.label,
                                 icon = m.icon,
-                                iconResId = m.iconResId,
+                                iconImg = m.iconImg,
                                 scale = m.scale,
                                 width = itemWidth,
                                 onTap = {

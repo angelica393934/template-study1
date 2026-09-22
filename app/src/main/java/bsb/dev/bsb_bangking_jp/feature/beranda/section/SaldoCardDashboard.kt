@@ -24,12 +24,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import bsb.dev.bsb_bangking_jp.R
-import bsb.dev.bsb_bangking_jp.core.component.RekeningLainnyaSheet
-import bsb.dev.bsb_bangking_jp.core.component.RekeningSheetMode
+import bsb.dev.bsb_bangking_jp.core.components.RekeningLainnyaSheet
+import bsb.dev.bsb_bangking_jp.core.components.RekeningSheetMode
 import bsb.dev.bsb_bangking_jp.core.util.RupiahFormat
 import bsb.dev.bsb_bangking_jp.shared.rekening_lainnya.data.RekeningItem
 import bsb.dev.bsb_bangking_jp.shared.rekening_lainnya.data.cashBalanceValue
-import bsb.dev.bsb_bangking_jp.feature.beranda.section.SaldoCardBase
 
 @Composable
 fun SaldoCardDashboard(

@@ -28,10 +28,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import bsb.dev.bsb_bangking_jp.R
-import bsb.dev.bsb_bangking_jp.core.component.AppButton
-import bsb.dev.bsb_bangking_jp.core.component.RekeningLainnyaSheet
-import bsb.dev.bsb_bangking_jp.core.component.RekeningSheetMode
-import bsb.dev.bsb_bangking_jp.core.component.SaldoCardEmpty
+import bsb.dev.bsb_bangking_jp.core.components.AppButton
+import bsb.dev.bsb_bangking_jp.core.components.RekeningLainnyaSheet
+import bsb.dev.bsb_bangking_jp.core.components.RekeningSheetMode
+import bsb.dev.bsb_bangking_jp.core.components.SaldoCardEmpty
 import bsb.dev.bsb_bangking_jp.core.skeleton.SkeletonRekeningCard
 import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
 import bsb.dev.bsb_bangking_jp.core.util.RupiahFormat

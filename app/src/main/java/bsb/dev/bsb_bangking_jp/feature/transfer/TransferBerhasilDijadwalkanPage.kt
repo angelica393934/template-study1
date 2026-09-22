@@ -37,11 +37,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bsb.dev.bsb_bangking_jp.R
-import bsb.dev.bsb_bangking_jp.core.component.AppButton
-import bsb.dev.bsb_bangking_jp.core.component.TransactionDetailRow
+import bsb.dev.bsb_bangking_jp.core.components.AppButton
+import bsb.dev.bsb_bangking_jp.core.components.TransactionDetailRow
 import bsb.dev.bsb_bangking_jp.feature.transfer.transfer_core.domain.ConfirmTransferResultItem
 import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
-import bsb.dev.bsb_bangking_jp.core.component.InitialAvatar
+import bsb.dev.bsb_bangking_jp.core.components.InitialAvatar
 import bsb.dev.bsb_bangking_jp.core.util.RupiahFormat
 import bsb.dev.bsb_bangking_jp.core.util.maskAccountNumber
 import java.text.SimpleDateFormat

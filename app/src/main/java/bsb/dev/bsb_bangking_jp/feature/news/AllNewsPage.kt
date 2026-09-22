@@ -32,8 +32,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import bsb.dev.bsb_bangking_jp.R
-import bsb.dev.bsb_bangking_jp.core.component.AppHeader
-import bsb.dev.bsb_bangking_jp.core.component.EmptyState
+import bsb.dev.bsb_bangking_jp.core.components.AppHeader
+import bsb.dev.bsb_bangking_jp.core.components.EmptyState
 import bsb.dev.bsb_bangking_jp.shared.get_image.NetworkImage
 import bsb.dev.bsb_bangking_jp.shared.get_image.domain.ImageCategory
 import bsb.dev.bsb_bangking_jp.core.theme.extendedColors

@@ -27,7 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import bsb.dev.bsb_bangking_jp.core.component.AppHeader
+import bsb.dev.bsb_bangking_jp.core.components.AppHeader
 import bsb.dev.bsb_bangking_jp.core.components.AppMenu
 import bsb.dev.bsb_bangking_jp.core.dummy.DummyCardlessHistory
 import bsb.dev.bsb_bangking_jp.core.dummy.DummyData
@@ -64,7 +64,7 @@ fun CardlessPage(
                     Box(modifier = Modifier.width(itemWidth)) {
                         AppMenu(
                             label = m.label,
-                            iconResId = m.iconRes,
+                            iconImg = m.iconRes,
                             scale = m.scale,
                             width = itemWidth,
                             useThemeStyle = true,

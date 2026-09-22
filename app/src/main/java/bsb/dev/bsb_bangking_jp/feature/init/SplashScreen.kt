@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import bsb.dev.bsb_bangking_jp.R
-import bsb.dev.bsb_bangking_jp.core.component.LocalToastState
+import bsb.dev.bsb_bangking_jp.core.components.LocalToastState
 import bsb.dev.bsb_bangking_jp.feature.init.presentation.SplashNavigationEvent
 import bsb.dev.bsb_bangking_jp.feature.init.presentation.SplashUiState
 import bsb.dev.bsb_bangking_jp.feature.init.presentation.InitViewModel

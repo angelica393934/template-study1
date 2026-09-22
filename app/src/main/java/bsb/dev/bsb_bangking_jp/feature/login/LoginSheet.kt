@@ -5,8 +5,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.PersonAdd
+import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.PersonAdd
 import androidx.compose.material.icons.outlined.Security
@@ -29,10 +32,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import bsb.dev.bsb_bangking_jp.R
-import bsb.dev.bsb_bangking_jp.core.component.AppButton
-import bsb.dev.bsb_bangking_jp.core.component.AppTextField
-import bsb.dev.bsb_bangking_jp.core.component.LocalLoadingOverlay
-import bsb.dev.bsb_bangking_jp.core.component.LocalToastState
+import bsb.dev.bsb_bangking_jp.core.components.AppButton
+import bsb.dev.bsb_bangking_jp.core.components.AppTextField
+import bsb.dev.bsb_bangking_jp.core.components.LocalLoadingOverlay
+import bsb.dev.bsb_bangking_jp.core.components.LocalToastState
 import bsb.dev.bsb_bangking_jp.core.components.AppCheckBox
 import bsb.dev.bsb_bangking_jp.core.components.AppMenu
 import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
@@ -195,28 +198,37 @@ fun LoginSheet(
         Spacer(modifier = Modifier.height(20.dp))
 
         Row(
-            horizontalArrangement = Arrangement.SpaceEvenly,
+            horizontalArrangement = Arrangement.spacedBy(32.dp, Alignment.CenterHorizontally) ,
             modifier = Modifier.fillMaxWidth(),
         ) {
             AppMenu(
-                icon = Icons.Outlined.Security,
+                iconImg = R.drawable.ic_regis,
                 label = activation,
+                useThemeStyle = true,
+                circleSize = 60.dp,
+                scale = 0.5f,
                 onTap = {
                     navController.navigate("activation")
                 },
             )
 
             AppMenu(
-                icon = Icons.Outlined.PersonAdd,
+                iconImg = R.drawable.ic_activation,
                 label = registration,
+                circleSize = 60.dp,
+                useThemeStyle = true,
+                scale = 0.5f,
                 onTap = {
-                    // TODO: navigasi ke halaman Registration Akun -- belum ada rute di project ini
-                },
+                    navController.navigate("registration")
+                        },
             )
 
             AppMenu(
-                icon = Icons.Outlined.LocationOn,
+                icon = Icons.Filled.LocationOn,
                 label = atmLocation,
+                circleSize = 60.dp,
+                useThemeStyle = true,
+                scale = 0.5f,
                 onTap = {
                     navController.navigate("lokasiatm")
                 },

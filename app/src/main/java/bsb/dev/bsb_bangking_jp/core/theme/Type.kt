@@ -59,5 +59,11 @@ val Typography = Typography(
         fontFamily = PlusJakartaSans,
         fontWeight = FontWeight.Bold,
         fontSize = 12.sp,
-    )
+    ),
+
+    labelSmall = TextStyle(
+        fontFamily = PlusJakartaSans,
+        fontWeight = FontWeight.Normal,
+        fontSize = 10.sp,
+),
 )

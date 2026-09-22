@@ -26,9 +26,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import bsb.dev.bsb_bangking_jp.core.component.EmptyState
-import bsb.dev.bsb_bangking_jp.core.component.InitialAvatar
-import bsb.dev.bsb_bangking_jp.core.component.SearchTextField
+import bsb.dev.bsb_bangking_jp.core.components.EmptyState
+import bsb.dev.bsb_bangking_jp.core.components.InitialAvatar
+import bsb.dev.bsb_bangking_jp.core.components.SearchTextField
 import bsb.dev.bsb_bangking_jp.feature.transfer.daftar_bank.domain.BankItem
 import bsb.dev.bsb_bangking_jp.feature.transfer.daftar_bank.presentation.DaftarBankUiState
 import bsb.dev.bsb_bangking_jp.feature.transfer.daftar_bank.presentation.DaftarBankViewModel

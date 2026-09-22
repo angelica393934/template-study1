@@ -45,7 +45,7 @@ fun OptionListSheet(
     selectedLabel: String? = null,
 ) {
     val scope = rememberCoroutineScope()
-    _root_ide_package_.bsb.dev.bsb_bangking_jp.core.component.AppModalBottomSheet(
+    _root_ide_package_.bsb.dev.bsb_bangking_jp.core.components.AppModalBottomSheet(
         onDismissRequest = onDismiss,
     ) {
         Column(

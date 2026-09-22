@@ -21,9 +21,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import bsb.dev.bsb_bangking_jp.R
-import bsb.dev.bsb_bangking_jp.core.component.AppButton
-import bsb.dev.bsb_bangking_jp.core.component.AppModalConfirm
-import bsb.dev.bsb_bangking_jp.core.component.AppSwitch
+import bsb.dev.bsb_bangking_jp.core.components.AppButton
+import bsb.dev.bsb_bangking_jp.core.components.AppSwitch
 import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
 import kotlinx.coroutines.launch
 

@@ -36,8 +36,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import bsb.dev.bsb_bangking_jp.core.component.AppHeader
-import bsb.dev.bsb_bangking_jp.core.component.EmptyState
+import bsb.dev.bsb_bangking_jp.core.components.AppHeader
+import bsb.dev.bsb_bangking_jp.core.components.EmptyState
 import bsb.dev.bsb_bangking_jp.shared.get_image.NetworkImage
 import bsb.dev.bsb_bangking_jp.shared.get_image.domain.ImageCategory
 import bsb.dev.bsb_bangking_jp.feature.news.domain.NewsDetail

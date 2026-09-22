@@ -20,8 +20,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import bsb.dev.bsb_bangking_jp.core.component.RekeningLainnyaSheet
-import bsb.dev.bsb_bangking_jp.core.component.RekeningSheetMode
+import bsb.dev.bsb_bangking_jp.core.components.RekeningLainnyaSheet
+import bsb.dev.bsb_bangking_jp.core.components.RekeningSheetMode
 import bsb.dev.bsb_bangking_jp.core.util.RupiahFormat
 import bsb.dev.bsb_bangking_jp.shared.rekening_lainnya.data.RekeningItem
 import bsb.dev.bsb_bangking_jp.shared.rekening_lainnya.data.cashBalanceValue

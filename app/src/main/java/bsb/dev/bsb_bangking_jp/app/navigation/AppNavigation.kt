@@ -16,9 +16,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import bsb.dev.bsb_bangking_jp.core.component.LocalToastState
-import bsb.dev.bsb_bangking_jp.core.component.ToastHost
-import bsb.dev.bsb_bangking_jp.core.component.rememberToastState
+import bsb.dev.bsb_bangking_jp.core.components.LocalToastState
+import bsb.dev.bsb_bangking_jp.core.components.ToastHost
+import bsb.dev.bsb_bangking_jp.core.components.rememberToastState
 import bsb.dev.bsb_bangking_jp.feature.transfer.transfer_core.domain.ConfirmTransferResultItem
 import bsb.dev.bsb_bangking_jp.feature.lokasi_atm.LokasiAtmPage
 import bsb.dev.bsb_bangking_jp.feature.navbar.Navbar
@@ -48,9 +48,9 @@ import bsb.dev.bsb_bangking_jp.feature.transfer.component.PeriksaKembaliData
 import bsb.dev.bsb_bangking_jp.feature.news.AllNewsPage
 import androidx.navigation.compose.navigation
 import androidx.compose.ui.Alignment
-import bsb.dev.bsb_bangking_jp.core.component.LoadingOverlayHost
-import bsb.dev.bsb_bangking_jp.core.component.LocalLoadingOverlay
-import bsb.dev.bsb_bangking_jp.core.component.rememberLoadingOverlayState
+import bsb.dev.bsb_bangking_jp.core.components.LoadingOverlayHost
+import bsb.dev.bsb_bangking_jp.core.components.LocalLoadingOverlay
+import bsb.dev.bsb_bangking_jp.core.components.rememberLoadingOverlayState
 import bsb.dev.bsb_bangking_jp.shared.rekening_lainnya.data.cashBalanceValue
 import org.koin.androidx.compose.koinViewModel
 import androidx.compose.ui.platform.LocalContext

@@ -6,9 +6,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import bsb.dev.bsb_bangking_jp.core.component.LocalLoadingOverlay
-import bsb.dev.bsb_bangking_jp.core.component.LocalToastState
-import bsb.dev.bsb_bangking_jp.core.component.OtpForm
+import bsb.dev.bsb_bangking_jp.core.components.LocalLoadingOverlay
+import bsb.dev.bsb_bangking_jp.core.components.LocalToastState
+import bsb.dev.bsb_bangking_jp.core.components.OtpForm
 import bsb.dev.bsb_bangking_jp.feature.registration.presentation.RegistrationNavEvent
 import bsb.dev.bsb_bangking_jp.feature.registration.presentation.RegistrationUiEvent
 import bsb.dev.bsb_bangking_jp.feature.registration.presentation.RegistrationViewModel

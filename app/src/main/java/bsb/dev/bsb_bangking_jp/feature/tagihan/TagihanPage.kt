@@ -29,9 +29,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import bsb.dev.bsb_bangking_jp.core.component.AppHeader
-import bsb.dev.bsb_bangking_jp.core.component.CardHistory
-import bsb.dev.bsb_bangking_jp.core.component.SearchTextField
+import bsb.dev.bsb_bangking_jp.core.components.AppHeader
+import bsb.dev.bsb_bangking_jp.core.components.CardHistory
+import bsb.dev.bsb_bangking_jp.core.components.SearchTextField
 import bsb.dev.bsb_bangking_jp.core.components.AppMenu
 import bsb.dev.bsb_bangking_jp.core.dummy.DummyData
 import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
@@ -90,7 +90,7 @@ fun TagihanPage(
                                 Box(modifier = Modifier.width(itemWidth)) {
                                     AppMenu(
                                         label = m.label,
-                                        iconResId = m.iconRes,
+                                        iconImg = m.iconRes,
                                         scale = m.scale,
                                         width = itemWidth,
                                         onTap = {

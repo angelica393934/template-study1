@@ -20,9 +20,10 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import bsb.dev.bsb_bangking_jp.R
-import bsb.dev.bsb_bangking_jp.core.component.AppButton
+import bsb.dev.bsb_bangking_jp.core.components.AppButton
 import androidx.compose.ui.res.stringResource
-import bsb.dev.bsb_bangking_jp.core.component.AppModalBottomSheet
+import bsb.dev.bsb_bangking_jp.core.components.AppModalBottomSheet
+import bsb.dev.bsb_bangking_jp.core.theme.appLayout
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -72,26 +73,22 @@ fun LoginPage(
                 .fillMaxSize()
                 .padding(top = 10.dp)
         ) {
-
-            // Konten utama
             Column(
                 modifier = Modifier
                     .weight(1f)
                     .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.weight(0.5f))
 
                 Image(
                     painter = painterResource(R.drawable.logo_bsb),
                     contentDescription = null,
-                    modifier = Modifier
-                    .size(130.dp),
+                    modifier = Modifier.size(130.dp),
                     contentScale = ContentScale.Fit
                 )
 
-                Spacer(modifier = Modifier.height(25.dp))
+                Spacer(modifier = Modifier.weight(1.2f))
 
                 Image(
                     painter = painterResource(R.drawable.portal),
@@ -101,18 +98,19 @@ fun LoginPage(
                         .fillMaxWidth()
                 )
 
-                Spacer(modifier = Modifier.height(25.dp))
+                Spacer(modifier = Modifier.weight(0.5f))
 
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.30f))
+                        .background(
+                            MaterialTheme.colorScheme.surface.copy(alpha = 0.30f)
+                        )
                         .padding(
                             horizontal = 24.dp,
                             vertical = 16.dp
                         )
                 ) {
-
                     Text(
                         text = buildAnnotatedString {
                             withStyle(
@@ -134,12 +132,12 @@ fun LoginPage(
                         style = MaterialTheme.typography.displayLarge
                     )
                 }
+                Spacer(modifier = Modifier.weight(1.5f))
+
             }
             // Tombol bawah
             Column(
-                modifier = Modifier.padding(
-                    horizontal = 24.dp,
-                    vertical = 20.dp
+                modifier = Modifier.padding(all= appLayout.defaultPadding
                 )
             ) {
                 AppButton(

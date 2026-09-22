@@ -18,11 +18,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import bsb.dev.bsb_bangking_jp.core.component.AppButton
-import bsb.dev.bsb_bangking_jp.core.component.AppHeader
-import bsb.dev.bsb_bangking_jp.core.component.AppMenuHorizontal
-import bsb.dev.bsb_bangking_jp.core.component.EmptyState
-import bsb.dev.bsb_bangking_jp.core.component.SearchTextField
+import bsb.dev.bsb_bangking_jp.core.components.AppHeader
+import bsb.dev.bsb_bangking_jp.core.components.AppMenuHorizontal
+import bsb.dev.bsb_bangking_jp.core.components.EmptyState
+import bsb.dev.bsb_bangking_jp.core.components.SearchTextField
 import bsb.dev.bsb_bangking_jp.core.dummy.DummyData
 
 @Composable
@@ -76,7 +75,7 @@ fun LainnyaPajakPage(
                     itemsIndexed(filteredItems) { index, item ->
                         AppMenuHorizontal(
                             label = item.label,
-                            iconResId = item.iconRes,
+                            iconImg = item.iconRes,
                             scale = item.scale,
                             showDivider = index != filteredItems.lastIndex,
                             onTap = { onItemClick(item.label) },

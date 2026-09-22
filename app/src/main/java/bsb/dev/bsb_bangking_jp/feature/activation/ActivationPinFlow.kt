@@ -9,11 +9,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bsb.dev.bsb_bangking_jp.R
-import bsb.dev.bsb_bangking_jp.core.component.AppHeader
-import bsb.dev.bsb_bangking_jp.core.component.AppModalConfirm
-import bsb.dev.bsb_bangking_jp.core.component.InputPinPage
-import bsb.dev.bsb_bangking_jp.core.component.LocalLoadingOverlay
-import bsb.dev.bsb_bangking_jp.core.component.LocalToastState
+import bsb.dev.bsb_bangking_jp.core.components.AppHeader
+import bsb.dev.bsb_bangking_jp.core.components.AppModalConfirm
+import bsb.dev.bsb_bangking_jp.core.components.InputPinPage
+import bsb.dev.bsb_bangking_jp.core.components.LocalLoadingOverlay
+import bsb.dev.bsb_bangking_jp.core.components.LocalToastState
 import bsb.dev.bsb_bangking_jp.core.util.PinValidator
 import bsb.dev.bsb_bangking_jp.feature.activation.presentation.ActivationNavEvent
 import bsb.dev.bsb_bangking_jp.feature.activation.presentation.ActivationUiEvent
