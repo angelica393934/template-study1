@@ -2,5 +2,7 @@
 <paths xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="NamespaceTypo">
     <!-- Meng-cover context.cacheDir/images/ tempat shareBitmap() menulis file -->
-    <cache-path name="images" path="images/" />
+    <cache-path
+        name="camera_cache"
+        path="." />
 </paths>

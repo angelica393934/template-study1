@@ -28,8 +28,8 @@ import bsb.dev.bsb_bangking_jp.core.components.AppModalBottomSheet
 import bsb.dev.bsb_bangking_jp.core.components.AppTextField
 import bsb.dev.bsb_bangking_jp.core.components.LocalLoadingOverlay
 import bsb.dev.bsb_bangking_jp.core.components.LocalToastState
-import bsb.dev.bsb_bangking_jp.feature.transfer.component.DetailRekeningBaruModal
-import bsb.dev.bsb_bangking_jp.feature.transfer.component.PilihBankSheet
+import bsb.dev.bsb_bangking_jp.feature.transfer.components.DetailRekeningBaruModal
+import bsb.dev.bsb_bangking_jp.feature.transfer.components.PilihBankSheet
 import bsb.dev.bsb_bangking_jp.feature.transfer.transfer_core.domain.TransferInquiry
 import bsb.dev.bsb_bangking_jp.feature.transfer.transfer_core.presentation.TransferNavEvent
 import bsb.dev.bsb_bangking_jp.feature.transfer.transfer_core.presentation.TransferUiEvent

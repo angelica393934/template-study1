@@ -1,6 +1,7 @@
 package bsb.dev.bsb_bangking_jp.shared.profile.presentation
 
 import bsb.dev.bsb_bangking_jp.core.network.ApiException
+import bsb.dev.bsb_bangking_jp.shared.profile.domain.ProfilePhotoRepository
 import bsb.dev.bsb_bangking_jp.shared.profile.domain.ProfileRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,6 +18,7 @@ import kotlinx.coroutines.launch
  */
 class ProfileViewModel(
     private val repository: ProfileRepository,
+    private val photoRepository: ProfilePhotoRepository,
 ) {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
@@ -45,6 +47,19 @@ class ProfileViewModel(
                     )
                 }
             }
+        }
+    }
+
+    /** Padanan `GetProfilePhotoEvent.fetch(photoPath: ...)`. */
+    private fun loadPhoto(photoPath: String?) {
+        scope.launch {
+            _uiState.update { it.copy(isPhotoLoading = true) }
+            val bytes = try {
+                photoRepository.getProfilePhoto(photoPath)
+            } catch (e: Exception) {
+                null
+            }
+            _uiState.update { it.copy(isPhotoLoading = false, photoBytes = bytes) }
         }
     }
 

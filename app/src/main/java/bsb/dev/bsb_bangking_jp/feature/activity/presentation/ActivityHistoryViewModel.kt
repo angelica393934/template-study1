@@ -15,18 +15,6 @@ import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-
-/**
- * Koin `single` (BUKAN `viewModel`), sama seperti BerandaViewModel -- supaya 1 instance
- * dipakai di seluruh app dan proses fetch histori TIDAK tergantung apakah ActivityPage
- * sedang di-compose atau tidak (Navbar cuma compose page yang aktif via `when(currentIndex)`,
- * jadi trigger tidak boleh diletakkan di LaunchedEffect milik ActivityPage).
- *
- * Begitu class ini pertama kali di-resolve Koin, dia langsung "mengamati" state rekening
- * dari BerandaViewModel lewat coroutine sendiri. Saat rekeningList berhasil terisi untuk
- * PERTAMA KALI, otomatis pilih rekening utama & fetch histori -- tanpa perlu UI mana pun
- * memicunya secara eksplisit.
- */
     class ActivityHistoryViewModel(
     private val repository: ActivityHistoryRepository,
     private val rekeningViewModel: RekeningLainnyaViewModel,
@@ -40,13 +28,6 @@ import kotlinx.coroutines.launch
         android.util.Log.d("ActivityHistory", "ViewModel CREATED (Koin resolve)")
         observeRekeningUntukAutoLoad()
     }
-
-    /**
-     * Padanan `BlocListener<RekeningLainnyaBloc>` di ActivityPage.dart lama --
-     * tunggu rekening lainnya berhasil dulu, baru jalankan fetch histori pertama kali.
-     * Hanya trigger SEKALI (selama accountNumber belum pernah di-set) supaya tidak
-     * menimpa pilihan rekening manual user setiap kali BerandaViewModel refresh.
-     */
     private fun observeRekeningUntukAutoLoad() {
         scope.launch {
             rekeningViewModel.uiState
@@ -68,6 +49,7 @@ import kotlinx.coroutines.launch
         android.util.Log.d("ActivityHistory", "getInitial() CALLED account=$accountNumber")
         load(accountNumber, TransactionFilterPayload.initial())
     }
+
 
     /** Dipanggil saat user pilih rekening lain lewat SaldoCardSelector. */
     fun switchAccount(accountNumber: String) {
@@ -110,6 +92,9 @@ import kotlinx.coroutines.launch
         android.util.Log.d("ActivityHistory", "load() launching coroutine, account=$accountNumber")
         scope.launch {
             android.util.Log.d("ActivityHistory", "load() coroutine STARTED")
+            val isSwitchingAccount = _uiState.value.accountNumber != null &&
+                    _uiState.value.accountNumber != accountNumber
+
             _uiState.update {
                 it.copy(
                     accountNumber = accountNumber,
@@ -117,6 +102,7 @@ import kotlinx.coroutines.launch
                     isLoadMore = false,
                     activeFilter = filter,
                     error = null,
+                    items = if (isSwitchingAccount) emptyList() else it.items,
                 )
             }
             try {

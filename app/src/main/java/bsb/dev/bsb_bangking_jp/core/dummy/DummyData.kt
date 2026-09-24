@@ -203,7 +203,7 @@ object DummyData {
     )
 
     val paymentMethodList = listOf(
-    DummyPaymentMethod("BSB Cash", "1234560", R.drawable.ic_bsb_cash),
+    DummyPaymentMethod("BSB Cash", "1234560", R.drawable.ic_bsb_cash1),
     DummyPaymentMethod("OVO", "1738742343", R.drawable.ic_ovo),
     DummyPaymentMethod("Gopay", "1234567890", R.drawable.ic_gopay),
     DummyPaymentMethod("Shopee Pay", "1843725862", R.drawable.ic_s_pay),
@@ -218,7 +218,7 @@ object DummyData {
     DummyMenuIcon("Universitas Tridinanti", R.drawable.ic_tridinanti, 0.7f),
     DummyMenuIcon("UIN Raden\nFatah", R.drawable.ic_uin, 0.7f),
     DummyMenuIcon("IAIN SAS\nBABEL", R.drawable.ic_iain, 0.7f),
-    DummyMenuIcon("Lainnya", R.drawable.ic_lainnya, 0.6f, route = "lainnya_pajak"),
+    DummyMenuIcon("Lainnya", R.drawable.ic_lainnya1, 0.6f, route = "lainnya_pajak"),
     )
 
     /** Dummy "Daftar Pembayaran Terakhir" di PajakPendidikanPage. */
@@ -274,8 +274,8 @@ object DummyData {
     )
 
     val cardlessMenuItems = listOf(
-    DummyMenuIcon("Setor Tunai", R.drawable.ic_cardless, 0.6f),
-    DummyMenuIcon("Tarik Tunai", R.drawable.ic_cardless, 0.6f),
+    DummyMenuIcon("Setor Tunai", R.drawable.ic_cardless1, 0.6f),
+    DummyMenuIcon("Tarik Tunai", R.drawable.ic_cardless1, 0.6f),
     )
 
     /** Dummy "Daftar Cardless Terakhir" di CardlessPage. */

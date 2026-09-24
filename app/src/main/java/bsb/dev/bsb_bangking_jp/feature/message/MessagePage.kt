@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CircularProgressIndicator
@@ -49,75 +50,138 @@ import bsb.dev.bsb_bangking_jp.R
 import bsb.dev.bsb_bangking_jp.core.components.AppHeader
 import bsb.dev.bsb_bangking_jp.core.components.CustomRefreshIndicator
 import bsb.dev.bsb_bangking_jp.core.components.EmptyState
-import bsb.dev.bsb_bangking_jp.core.filter.TransactionFilterPayload
-import bsb.dev.bsb_bangking_jp.core.skeleton.SkeletonList
-import bsb.dev.bsb_bangking_jp.core.util.TransactionFilterChipMapper
 import bsb.dev.bsb_bangking_jp.core.components.FilterChipBar
 import bsb.dev.bsb_bangking_jp.core.components.LocalLoadingOverlay
 import bsb.dev.bsb_bangking_jp.core.components.LocalToastState
 import bsb.dev.bsb_bangking_jp.core.filter.FilterTransaksiModal
-import bsb.dev.bsb_bangking_jp.feature.message.domain.MessageItem
+import bsb.dev.bsb_bangking_jp.core.filter.TransactionFilterPayload
+import bsb.dev.bsb_bangking_jp.core.skeleton.SkeletonList
+import bsb.dev.bsb_bangking_jp.core.theme.appLayout
+import bsb.dev.bsb_bangking_jp.core.theme.appSpacing
+import bsb.dev.bsb_bangking_jp.core.util.TransactionFilterChipMapper
 import bsb.dev.bsb_bangking_jp.feature.message.domain.toTransactionResultInfo
 import bsb.dev.bsb_bangking_jp.feature.message.presentation.MessageDetailUiState
 import bsb.dev.bsb_bangking_jp.feature.message.presentation.MessageDetailViewModel
 import bsb.dev.bsb_bangking_jp.feature.message.presentation.MessageHistoryViewModel
-import bsb.dev.bsb_bangking_jp.feature.message.section.MessageSectionTanggal
+import bsb.dev.bsb_bangking_jp.feature.message.components.MessageDateSection
+import bsb.dev.bsb_bangking_jp.feature.message.components.groupMessagesByDate
+import bsb.dev.bsb_bangking_jp.shared.rekening_lainnya.presentation.RekeningLainnyaViewModel
 import bsb.dev.bsb_bangking_jp.shared.transaction_result.TransactionResultPage
+import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
-import java.text.SimpleDateFormat
-import java.util.Locale
 import kotlin.math.roundToInt
 
 private val PULL_REFRESH_MAX_PUSH = 50.dp
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MessagePage(
+    rekeningViewModel: RekeningLainnyaViewModel = koinInject(),
     messageViewModel: MessageHistoryViewModel = koinInject(),
     detailViewModel: MessageDetailViewModel = koinViewModel(),
 ) {
-    val state by messageViewModel.uiState.collectAsStateWithLifecycle()
+    val messageState by messageViewModel.uiState.collectAsStateWithLifecycle()
+    val rekeningUiState by rekeningViewModel.uiState.collectAsStateWithLifecycle()
     val detailState by detailViewModel.uiState.collectAsStateWithLifecycle()
+    val accountNo = messageState.accountNumber
+    val pullToRefreshState = rememberPullToRefreshState()
+    val listState = rememberLazyListState()
+    val density = LocalDensity.current
+    val loadingOverlay = LocalLoadingOverlay.current
+    val toastState = LocalToastState.current
+    val isRefreshing = messageState.isLoading
 
     var showFilterModal by remember { mutableStateOf(false) }
     var selectedMessageId by remember { mutableStateOf<Int?>(null) }
 
-    val chips = remember(state.activeFilter) {
-        TransactionFilterChipMapper.fromPayload(state.activeFilter)
+    val chips = remember(messageState.activeFilter) {
+        TransactionFilterChipMapper.fromPayload(messageState.activeFilter)
     }
 
-    val grouped = remember(state.items) { groupMessagesByDate(state.items) }
-    val loadingOverlay = LocalLoadingOverlay.current
-    val toastState = LocalToastState.current
+    val grouped = remember(messageState.items) {
+        groupMessagesByDate(messageState.items)
+    }
 
+    LaunchedEffect(Unit) {
+        delay(3000)
+
+        if (rekeningUiState.rekeningList == null) {
+            rekeningViewModel.load()
+        }
+    }
+    // loadmore
+    val shouldLoadMore by remember {
+        derivedStateOf {
+            val layoutInfo = listState.layoutInfo
+            val lastVisible = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+            val totalItems = layoutInfo.totalItemsCount
+
+            totalItems > 0 && lastVisible >= totalItems - 3
+        }
+    }
+
+    //message
+    LaunchedEffect(
+        shouldLoadMore,
+        messageState.hasMore,
+        messageState.isLoadMore,
+        messageState.isLoading,
+    ) {
+        if (
+            shouldLoadMore &&
+            messageState.hasMore &&
+            !messageState.isLoadMore &&
+            !messageState.isLoading
+        ) {
+            messageViewModel.loadMore()
+        }
+    }
+// detail message
     LaunchedEffect(detailState) {
         when (val ds = detailState) {
-            is MessageDetailUiState.Loading -> loadingOverlay.show()
-            is MessageDetailUiState.Success -> loadingOverlay.hide()
+            is MessageDetailUiState.Loading -> {
+                loadingOverlay.show()
+            }
+            is MessageDetailUiState.Success -> {
+                loadingOverlay.hide()
+            }
             is MessageDetailUiState.Error -> {
                 loadingOverlay.hide()
                 toastState.showError(ds.message)
                 selectedMessageId = null
                 detailViewModel.reset()
             }
-            is MessageDetailUiState.Initial -> loadingOverlay.hide()
+            is MessageDetailUiState.Initial -> {
+                loadingOverlay.hide()
+            }
         }
     }
-    val pullToRefreshState = rememberPullToRefreshState()
-    val density = LocalDensity.current
+    // Jika refresh gagal ketika data lama masih tersedia, UI tetap
+    // menampilkan data tersebut. Error ditampilkan melalui toast.
+    LaunchedEffect(messageState.error) {
+        val error = messageState.error
+
+        if (error != null && messageState.items.isNotEmpty()) {
+            toastState.showError(error)
+        }
+    }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
     ) {
-        AppHeader(title = "message", showBackButton = false)
+        AppHeader(
+            title = "pesan",
+            showBackButton = false,
+        )
 
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.background)
-                .padding(horizontal = 24.dp, vertical = 20.dp),
+                .padding(all = appLayout.defaultPadding),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -125,8 +189,11 @@ fun MessagePage(
                 text = stringResource(R.string.label_semua_message),
                 style = MaterialTheme.typography.titleMedium,
             )
+
             Row(
-                modifier = Modifier.clickable { showFilterModal = true },
+                modifier = Modifier.clickable {
+                    showFilterModal = true
+                },
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Icon(
@@ -135,7 +202,8 @@ fun MessagePage(
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(15.dp),
                 )
-                Spacer(modifier = Modifier.width(4.dp))
+                Spacer(modifier = Modifier.width(appSpacing.xxxxs))
+
                 Text(
                     text = stringResource(R.string.label_cari_message),
                     style = MaterialTheme.typography.titleSmall,
@@ -146,30 +214,64 @@ fun MessagePage(
 
         FilterChipBar(
             items = chips,
-            onClearAll = if (chips.isEmpty()) null else {
-                { state.accountNumber?.let { messageViewModel.getInitial(it) } }
+            onClearAll = if (chips.isEmpty()) {
+                null
+            } else {
+                {
+                    messageState.accountNumber?.let {
+                        messageViewModel.getInitial(it)
+                    }
+                }
             },
             onRemove = { chip ->
-                val current = state.activeFilter ?: return@FilterChipBar
-                val updated = TransactionFilterChipMapper.removeChip(current, chip.key)
+                val current = messageState.activeFilter
+                    ?: return@FilterChipBar
+
+                val updated = TransactionFilterChipMapper.removeChip(
+                    current,
+                    chip.key,
+                )
+
                 messageViewModel.applyFilter(updated)
             },
         )
 
-        Box(modifier = Modifier.weight(1f)) {
+        Box(
+            modifier = Modifier.weight(1f),
+        ) {
             when {
-                state.accountNumber == null -> SkeletonList()
-                state.isLoading && state.items.isEmpty() -> SkeletonList()
-                state.error != null && state.items.isEmpty() -> {
+                accountNo == null && rekeningUiState.error != null -> {
+                    EmptyState(
+                        modifier = Modifier.fillMaxSize(),
+                        message = "Data rekening tidak dapat dimuat.",
+                        subMessage = "Riwayat pesan butuh data rekening terlebih dahulu.\nPeriksa koneksi Anda dan coba lagi.",
+                        actionText = "Coba Lagi",
+                        onAction = {
+                            rekeningViewModel.load(forceRefresh = true)
+                        },
+                    )
+                }
+                messageState.accountNumber == null -> {
+                    SkeletonList()
+                }
+
+                messageState.isLoading && messageState.items.isEmpty() -> {
+                    SkeletonList()
+                }
+
+                messageState.error != null && messageState.items.isEmpty() -> {
                     EmptyState(
                         modifier = Modifier.fillMaxSize(),
                         message = "Data message tidak dapat dimuat.",
                         subMessage = "Terjadi kesalahan saat mengambil data.\nPeriksa koneksi anda dan coba lagi.",
                         actionText = "Coba Lagi",
-                        onAction = { messageViewModel.refresh() },
+                        onAction = {
+                            messageViewModel.refresh()
+                        },
                     )
                 }
-                state.items.isEmpty() -> {
+
+                messageState.items.isEmpty() -> {
                     EmptyState(
                         modifier = Modifier.fillMaxSize(),
                         message = stringResource(R.string.msg_tidak_ada_message),
@@ -177,35 +279,24 @@ fun MessagePage(
                         actionText = null,
                     )
                 }
+
                 else -> {
-                    val listState = androidx.compose.foundation.lazy.rememberLazyListState()
-                    val shouldLoadMore by remember {
-                        derivedStateOf {
-                            val layoutInfo = listState.layoutInfo
-                            val lastVisible = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
-                            val totalItems = layoutInfo.totalItemsCount
-                            totalItems > 0 && lastVisible >= totalItems - 3
-                        }
-                    }
-                    LaunchedEffect(shouldLoadMore, state.hasMore, state.isLoadMore, state.isLoading) {
-                        if (shouldLoadMore && state.hasMore && !state.isLoadMore && !state.isLoading) {
-                            messageViewModel.loadMore()
-                        }
+                    val maxPushPx = with(density) {
+                        PULL_REFRESH_MAX_PUSH.toPx()
                     }
 
-                    // 🔹 Padanan ActivityPage -- reload data TERBARU, tetap pakai filter
-                    // yang sedang aktif (messageViewModel.refresh() sudah baca state.activeFilter).
-                    val isRefreshing = state.isLoading
-                    val maxPushPx = with(density) { PULL_REFRESH_MAX_PUSH.toPx() }
                     val pushOffsetPx = if (isRefreshing) {
                         maxPushPx
                     } else {
-                        (pullToRefreshState.distanceFraction.coerceIn(0f, 1f) * maxPushPx)
+                        pullToRefreshState.distanceFraction
+                            .coerceIn(0f, 1f) * maxPushPx
                     }
 
                     PullToRefreshBox(
                         isRefreshing = isRefreshing,
-                        onRefresh = { messageViewModel.refresh() },
+                        onRefresh = {
+                            messageViewModel.refresh()
+                        },
                         state = pullToRefreshState,
                         indicator = {
                             CustomRefreshIndicator(
@@ -219,12 +310,17 @@ fun MessagePage(
                         LazyColumn(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .offset { IntOffset(x = 0, y = pushOffsetPx.roundToInt()) },
+                                .offset {
+                                    IntOffset(
+                                        x = 0,
+                                        y = pushOffsetPx.roundToInt(),
+                                    )
+                                },
                             state = listState,
                         ) {
                             grouped.forEach { (tanggalLabel, itemsForDate) ->
                                 item(key = "section_$tanggalLabel") {
-                                    MessageSectionTanggal(
+                                    MessageDateSection(
                                         tanggal = tanggalLabel,
                                         items = itemsForDate,
                                         onItemClick = { pesan ->
@@ -234,63 +330,83 @@ fun MessagePage(
                                     )
                                 }
                             }
-                            if (state.isLoadMore) {
+
+                            if (messageState.isLoadMore) {
                                 item(key = "load_more") {
                                     Box(
-                                        modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(vertical = appLayout.defaultPadding),
                                         contentAlignment = Alignment.Center,
                                     ) {
-                                        CircularProgressIndicator(modifier = Modifier.size(28.dp))
+                                        CircularProgressIndicator(
+                                            modifier = Modifier.size(28.dp),
+                                        )
                                     }
                                 }
                             }
-                            item(key = "bottom_spacer") { Spacer(modifier = Modifier.height(40.dp)) }
+
+                            item(key = "bottom_spacer") {
+                                Spacer(modifier = Modifier.height(100.dp))
+                            }
                         }
                     }
                 }
             }
         }
-        Spacer(modifier = Modifier.height(80.dp))
     }
 
     if (showFilterModal) {
         FilterTransaksiModal(
-            currentFilter = state.activeFilter ?: TransactionFilterPayload.initial(),
-            onDismiss = { showFilterModal = false },
-            onApply = { updated -> messageViewModel.applyFilter(updated) },
+            currentFilter = messageState.activeFilter
+                ?: TransactionFilterPayload.initial(),
+            onDismiss = {
+                showFilterModal = false
+            },
+            onApply = { updated ->
+                messageViewModel.applyFilter(updated)
+            },
         )
     }
 
-    // 🔹 Detail message sekarang pakai TransactionResultPage (full-screen dialog)
     if (selectedMessageId != null) {
         val ds = detailState
+
         if (ds is MessageDetailUiState.Success) {
             Dialog(
-                onDismissRequest = { selectedMessageId = null; detailViewModel.reset() },
-                properties = DialogProperties(usePlatformDefaultWidth = false),
+                onDismissRequest = {
+                    selectedMessageId = null
+                    detailViewModel.reset()
+                },
+                properties = DialogProperties(
+                    usePlatformDefaultWidth = false,
+                ),
             ) {
-                val dialogWindow = (LocalView.current.parent as? DialogWindowProvider)?.window
+                val dialogWindow =
+                    (LocalView.current.parent as? DialogWindowProvider)?.window
+
                 SideEffect {
                     dialogWindow?.let { window ->
-                        WindowCompat.setDecorFitsSystemWindows(window, false)
+                        WindowCompat.setDecorFitsSystemWindows(
+                            window,
+                            false,
+                        )
+
                         window.setLayout(
                             WindowManager.LayoutParams.MATCH_PARENT,
                             WindowManager.LayoutParams.MATCH_PARENT,
                         )
                     }
                 }
+
                 TransactionResultPage(
                     data = ds.detail.toTransactionResultInfo(),
-                    onClose = { selectedMessageId = null; detailViewModel.reset() },
+                    onClose = {
+                        selectedMessageId = null
+                        detailViewModel.reset()
+                    },
                 )
             }
         }
     }
-}
-
-/** Padanan groupByDateSortedDesc, tapi berbasis Date lengkap dari createdDate. */
-private fun groupMessagesByDate(items: List<MessageItem>): Map<String, List<MessageItem>> {
-    val formatter = SimpleDateFormat("dd MMMM yyyy", Locale("id", "ID"))
-    val sorted = items.sortedByDescending { it.createdDate }
-    return sorted.groupBy { formatter.format(it.createdDate) }
 }

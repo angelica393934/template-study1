@@ -29,7 +29,7 @@
 
     <string name="nav_home">Beranda</string>
     <string name="nav_activity">Aktivitas</string>
-    <string name="nav_request">message</string>
+    <string name="nav_request">pesan</string>
     <string name="nav_settings">Pengaturan</string>
 
 //beranda

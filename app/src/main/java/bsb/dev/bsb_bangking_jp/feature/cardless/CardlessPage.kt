@@ -124,7 +124,7 @@ private fun CardlessListItem(item: DummyCardlessHistory) {
             contentAlignment = Alignment.Center,
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_va),
+                painter = painterResource(id = R.drawable.ic_va1),
                 contentDescription = null,
                 Modifier.fillMaxSize(),
                 tint = Color.Unspecified,

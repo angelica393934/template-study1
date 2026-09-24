@@ -6,4 +6,6 @@ data class ProfileUiState(
     val isLoading: Boolean = false,
     val profile: ProfileData? = null,
     val error: String? = null,
+    val isPhotoLoading: Boolean = false,
+    val photoBytes: ByteArray? = null,
 )

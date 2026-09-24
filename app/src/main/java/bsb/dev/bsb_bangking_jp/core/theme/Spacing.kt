@@ -24,5 +24,4 @@ object appRadius {
 
 object appLayout {
     val defaultPadding: Dp = 24.dp
-    val contentMaxWidth: Dp = 600.dp
 }

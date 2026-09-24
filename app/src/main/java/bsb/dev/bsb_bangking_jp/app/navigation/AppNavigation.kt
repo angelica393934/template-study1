@@ -44,7 +44,7 @@ import bsb.dev.bsb_bangking_jp.feature.transfer.TransferBaruPage
 import bsb.dev.bsb_bangking_jp.feature.transfer.TransferBerhasilDijadwalkanPage
 import bsb.dev.bsb_bangking_jp.feature.transfer.TransferHomePage
 import bsb.dev.bsb_bangking_jp.feature.transfer.TransferUmumPage
-import bsb.dev.bsb_bangking_jp.feature.transfer.component.PeriksaKembaliData
+import bsb.dev.bsb_bangking_jp.feature.transfer.components.PeriksaKembaliData
 import bsb.dev.bsb_bangking_jp.feature.news.AllNewsPage
 import androidx.navigation.compose.navigation
 import androidx.compose.ui.Alignment
@@ -92,6 +92,7 @@ import bsb.dev.bsb_bangking_jp.feature.pengaturan.FaqPage
 import bsb.dev.bsb_bangking_jp.feature.pengaturan.SyaratKetentuanPage
 import bsb.dev.bsb_bangking_jp.feature.pengaturan.TentangAplikasiPage
 import bsb.dev.bsb_bangking_jp.feature.pengaturan.PusatBantuanPage
+import bsb.dev.bsb_bangking_jp.feature.scan_qris.ScanQrisPage
 
 @Composable
 fun AppNavigation(
@@ -112,7 +113,7 @@ fun AppNavigation(
         Box(modifier = Modifier.fillMaxSize()) {
             NavHost(
                 navController = navController,
-                startDestination = "splash",
+                startDestination = "navbar",
             ) {
                 composable("splash") {
                     SplashScreen(navController)
@@ -442,6 +443,14 @@ fun AppNavigation(
                         }
                     )
                 }
+                composable("scan_qris") {
+                    ScanQrisPage(
+                        onBackClick = { navController.popBackStack() },
+                        onResult = { qrValue ->
+                            navController.popBackStack()
+                        },
+                    )
+                }
 
                 composable("berita_list") {
                     AllNewsPage(
@@ -588,7 +597,6 @@ fun AppNavigation(
                         navController.popBackStack()
                     } else {
                         PinTfPage(
-                            data = transferData,
                             onBack = { navController.popBackStack() },
                             onBerhasilSegera = { confirmResult ->
                                 pendingConfirmResult = confirmResult

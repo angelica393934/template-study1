@@ -231,7 +231,7 @@ private fun MembacaKartuContent() {
 @Composable
 private fun BsbCashLogo(modifier: Modifier = Modifier) {
     Image(
-        painter = painterResource(id = R.drawable.ic_bsb_cash),
+        painter = painterResource(id = R.drawable.ic_bsb_cash1),
         contentDescription = "BSB Cash",
         modifier = modifier.height(60.dp) .
         size(800.dp),

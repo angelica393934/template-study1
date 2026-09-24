@@ -86,7 +86,7 @@ fun LainnyaPage(
             ),
             LainnyaMenuItem(
                 labelRes = R.string.menu_virtual_account,
-                iconImg = R.drawable.ic_va,
+                iconImg = R.drawable.ic_va1,
                 scale = 0.5f,
 
                 ),
@@ -96,7 +96,7 @@ fun LainnyaPage(
             ),
             LainnyaMenuItem(
                 labelRes = R.string.menu_cardless,
-                iconImg = R.drawable.ic_cardless,
+                iconImg = R.drawable.ic_cardless1,
                 scale = 0.5f,
             ),
         )
@@ -108,7 +108,7 @@ fun LainnyaPage(
             LainnyaMenuItem(R.string.menu_pulsa, icon = Icons.Default.SignalCellularAlt),
             LainnyaMenuItem(R.string.menu_paket_data, icon = Icons.Default.Language),
             LainnyaMenuItem(R.string.menu_gopay, iconImg = R.drawable.ic_gopay, scale = 0.6f),
-            LainnyaMenuItem(R.string.menu_bsb_cash, iconImg = R.drawable.ic_bsb_cash, scale = 0.6f),
+            LainnyaMenuItem(R.string.menu_bsb_cash, iconImg = R.drawable.ic_bsb_cash1, scale = 0.6f),
             LainnyaMenuItem(R.string.menu_ovo, iconImg = R.drawable.ic_ovo, scale = 0.6f),
             LainnyaMenuItem(R.string.menu_shopee_pay, iconImg = R.drawable.ic_s_pay, scale = 0.6f),
         )

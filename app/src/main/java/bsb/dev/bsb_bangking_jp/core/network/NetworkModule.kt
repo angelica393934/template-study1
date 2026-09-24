@@ -4,7 +4,6 @@ import bsb.dev.bsb_bangking_jp.BuildConfig
 import bsb.dev.bsb_bangking_jp.core.network.token.RefreshTokenApiService
 import bsb.dev.bsb_bangking_jp.core.network.token.TokenRefreshInterceptor
 import bsb.dev.bsb_bangking_jp.feature.init.data.InitApiService
-import bsb.dev.bsb_bangking_jp.feature.login_existing.data.LoginApiService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.core.qualifier.named
@@ -13,7 +12,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import bsb.dev.bsb_bangking_jp.feature.login.data.LoginApiService as LoginDirectApiService
-import bsb.dev.bsb_bangking_jp.feature.login_existing.data.LoginApiService as LoginExistingApiService
+import bsb.dev.bsb_bangking_jp.feature.login_existing.data.LoginExistingApiService as LoginExistingApiService
 
 val networkModule = module {
     single { GetWithBodyApiHelper(get(), get()) }
@@ -73,7 +72,7 @@ val networkModule = module {
     }
 
     single { get<Retrofit>().create(InitApiService::class.java) }
-    single { get<Retrofit>().create(LoginApiService::class.java) }
+    single { get<Retrofit>().create(LoginExistingApiService::class.java) }
 
 
 }

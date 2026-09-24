@@ -48,12 +48,13 @@ import androidx.navigation.NavController
 import bsb.dev.bsb_bangking_jp.R
 import bsb.dev.bsb_bangking_jp.core.components.AppHeader
 import bsb.dev.bsb_bangking_jp.core.util.getAppVersion
-import bsb.dev.bsb_bangking_jp.feature.pengaturan.component.AccountProfileCard
-import bsb.dev.bsb_bangking_jp.feature.pengaturan.component.SettingItemData
-import bsb.dev.bsb_bangking_jp.feature.pengaturan.component.SettingSection
+import bsb.dev.bsb_bangking_jp.feature.pengaturan.components.AccountProfileCard
+import bsb.dev.bsb_bangking_jp.feature.pengaturan.components.SettingItemData
+import bsb.dev.bsb_bangking_jp.feature.pengaturan.components.SettingSection
 import org.koin.compose.koinInject
 import bsb.dev.bsb_bangking_jp.core.skeleton.ProfileSettingSkeleton
-import bsb.dev.bsb_bangking_jp.feature.pengaturan.component.BahasaSheet
+import bsb.dev.bsb_bangking_jp.core.theme.appLayout
+import bsb.dev.bsb_bangking_jp.feature.pengaturan.components.BahasaSheet
 import bsb.dev.bsb_bangking_jp.shared.logout.LogoutConfirmSheet
 import bsb.dev.bsb_bangking_jp.shared.profile.presentation.ProfileViewModel
 import bsb.dev.bsb_bangking_jp.viewmodel.SettingsViewModel
@@ -81,6 +82,7 @@ fun PengaturanPage(
     val phoneNumber = uiState.profile?.user?.maskPhone ?: "-"
     var showLogoutSheet by remember { mutableStateOf(false) }
     var showBahasaSheet by remember { mutableStateOf(false) }
+    var showEditProfileSheet by remember { mutableStateOf(false) }
 
     Scaffold(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
@@ -101,7 +103,7 @@ fun PengaturanPage(
                     modifier = Modifier
                         .fillMaxSize()
                         .verticalScroll(rememberScrollState())
-                        .padding(horizontal = 24.dp)
+                        .padding(horizontal = appLayout.defaultPadding)
                 ) {
                     Spacer(modifier = Modifier.height(ProfileCardHalfHeight + 16.dp))
 
@@ -201,28 +203,37 @@ fun PengaturanPage(
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.fillMaxWidth()
                     )
-                    Spacer(modifier = Modifier.height(130.dp))
+                    Spacer(modifier = Modifier.height(100.dp))
                 }
             }
             if (uiState.isLoading) {
                 ProfileSettingSkeleton(
                     modifier = Modifier
                         .align(Alignment.TopCenter)
-                        .padding(horizontal = 16.dp)
+                        .padding(horizontal = appLayout.defaultPadding)
                         .offset(y = HeaderHeight - ProfileCardHalfHeight),
                 )
             } else {
                 AccountProfileCard(
                     nama = namaUser,
                     phoneNumber = phoneNumber,
+                    editclick =  { showEditProfileSheet = true },
                     modifier = Modifier
                         .align(Alignment.TopCenter)
-                        .padding(horizontal = 16.dp)
+                        .padding(horizontal = appLayout.defaultPadding)
                         .offset(y = HeaderHeight - ProfileCardHalfHeight),
                 )
             }
         }
     }
+    if (showEditProfileSheet) {
+        GantiFotoProfilSheet(
+            userId = uiState.profile?.user?.userId ?: "",
+            onDismiss = { showEditProfileSheet= false },
+            onCompleted = { profileViewModel.loadProfile(forceRefresh = true) },
+        )
+    }
+
     if (showLogoutSheet) {
         LogoutConfirmSheet(
             onDismiss = { showLogoutSheet = false },

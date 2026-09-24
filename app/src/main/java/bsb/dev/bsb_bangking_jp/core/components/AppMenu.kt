@@ -39,7 +39,7 @@ fun AppMenu(
 ) {
 
     val iconSize = circleSize * (scale ?: 0.55f)
-    val assetSize = circleSize * (scale ?: 0.35f)
+    val assetSize = circleSize * (scale ?: 0.5f)
     val isSingleWord = !label.trim().contains(" ")
 
     Column(

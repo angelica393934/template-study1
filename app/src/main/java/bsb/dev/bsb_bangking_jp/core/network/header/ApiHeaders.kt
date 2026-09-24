@@ -48,4 +48,15 @@ object ApiHeaders {
         Keys.CONTENT_TYPE to "application/json",
         Keys.DEVICE_ID to DeviceContext.deviceId,
     )
+
+    fun fullWithoutContentType(
+        timestamp: String = currentTimestamp()
+    ): Map<String, String> = linkedMapOf(
+        Keys.TIMESTAMP to timestamp,
+        Keys.DEVICE_ID to DeviceContext.deviceId,
+        Keys.DEVICE_NAME to DeviceContext.deviceName,
+        Keys.OS to DeviceContext.os,
+        Keys.OS_VERSION to DeviceContext.osVersion,
+        Keys.APP_VERSION to DeviceContext.appVersion,
+    )
 }

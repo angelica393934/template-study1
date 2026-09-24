@@ -18,11 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.QrCode
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.TrendingUp
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -35,18 +31,23 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.material3.Surface
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import bsb.dev.bsb_bangking_jp.R
 import bsb.dev.bsb_bangking_jp.feature.pengaturan.PengaturanPage
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import bsb.dev.bsb_bangking_jp.feature.activity.ActivityPage
@@ -57,15 +58,16 @@ import kotlin.Unit
 val NAVBAR_HEIGHT = 70.dp
 
 private data class NavItem(
-    val icon: ImageVector,
+    val imgactive: Int,
+    val img: Int,
     @StringRes val labelRes: Int
 )
 
 private val navItems = listOf(
-    NavItem(Icons.Default.Home, R.string.nav_home),
-    NavItem(Icons.Default.TrendingUp, R.string.nav_activity),
-    NavItem(Icons.Default.Email, R.string.nav_request),
-    NavItem(Icons.Default.Settings, R.string.nav_settings)
+    NavItem(R.drawable.ic_beranda_on,R.drawable.ic_beranda_off, R.string.nav_home),
+    NavItem(R.drawable.ic_aktivitas_on,R.drawable.ic_aktivitas_off, R.string.nav_activity),
+    NavItem(R.drawable.ic_pesan_on,R.drawable.ic_pesan_off, R.string.nav_request),
+    NavItem(R.drawable.ic_pengaturan_on,R.drawable.ic_pengaturan_off, R.string.nav_settings)
 )
 
 @Composable
@@ -173,7 +175,6 @@ private fun ScanQrisFab(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-
                 Icon(
                     imageVector = Icons.Default.QrCode,
                     contentDescription = null,
@@ -200,27 +201,28 @@ private fun BankBottomBar(
     currentIndex: Int,
     onItemSelected: (Int) -> Unit,
 ) {
-    val shadowColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 10f)
+    val cornerShape = RoundedCornerShape(
+        topStart = 30.dp,
+        topEnd = 30.dp
+    )
 
-    val cornerShape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp)
-
-    Box(
+    Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .height(NAVBAR_HEIGHT)
-            .shadow(
-                elevation = 200.dp,
-                shape = cornerShape,
-                ambientColor = shadowColor,
-                spotColor = shadowColor
-            )
-            .clip(cornerShape)
-            .background(MaterialTheme.colorScheme.surface)
+            .height(NAVBAR_HEIGHT),
+        shape = cornerShape,
+        shadowElevation = 8.dp,
+        color = MaterialTheme.colorScheme.surface
     ) {
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 0.dp, bottom = 5.dp, start = 20.dp, end = 20.dp),
+                .padding(
+                    top = 0.dp,
+                    bottom = 5.dp,
+                    start = 20.dp,
+                    end = 20.dp
+                ),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
@@ -230,6 +232,7 @@ private fun BankBottomBar(
                 modifier = Modifier.weight(1f),
                 onClick = { onItemSelected(0) }
             )
+
             NavBarItem(
                 item = navItems[1],
                 isActive = currentIndex == 1,
@@ -237,8 +240,9 @@ private fun BankBottomBar(
                 onClick = { onItemSelected(1) }
             )
 
-            // 🔹 Ruang kosong untuk FAB di tengah (setara notch)
-            Box(modifier = Modifier.width(50.dp))
+            Box(
+                modifier = Modifier.width(50.dp)
+            )
 
             NavBarItem(
                 item = navItems[2],
@@ -246,6 +250,7 @@ private fun BankBottomBar(
                 modifier = Modifier.weight(1f),
                 onClick = { onItemSelected(2) }
             )
+
             NavBarItem(
                 item = navItems[3],
                 isActive = currentIndex == 3,
@@ -275,11 +280,10 @@ private fun NavBarItem(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Icon(
-            imageVector = item.icon,
+        Image(
+            painter =  painterResource(if (isActive) item.imgactive else item.img),
             contentDescription = stringResource(item.labelRes),
-            tint = activeColor,
-            modifier = Modifier.size(25.dp)
+            modifier = Modifier.size(24.dp)
         )
         Box(modifier = Modifier.height(2.dp))
         Text(

@@ -53,7 +53,7 @@ private val topUpMenuItems = listOf(
     TopUpMenuItem(icon = Icons.Default.SignalCellularAlt, scale = 0.7f, label = "Pulsa"),
     TopUpMenuItem(icon = Icons.Default.Language, scale = 0.7f, label = "Paket Data"),
     TopUpMenuItem(iconImg = R.drawable.ic_gopay, scale = 0.6f, label = "Gopay"),
-    TopUpMenuItem(iconImg = R.drawable.ic_bsb_cash, scale = 0.8f, label = "BSB Cash"),
+    TopUpMenuItem(iconImg = R.drawable.ic_bsb_cash1, label = "BSB Cash"),
     TopUpMenuItem(iconImg = R.drawable.ic_ovo, scale = 0.6f, label = "OVO"),
     TopUpMenuItem(iconImg = R.drawable.ic_s_pay, scale = 0.7f, label = "Shopee Pay"),
 )

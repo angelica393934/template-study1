@@ -30,7 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import bsb.dev.bsb_bangking_jp.R
-import bsb.dev.bsb_bangking_jp.core.components.AccountTile
+import bsb.dev.bsb_bangking_jp.feature.transfer.components.AccountTile
 import bsb.dev.bsb_bangking_jp.core.components.AppButton
 import bsb.dev.bsb_bangking_jp.core.components.AppHeader
 import bsb.dev.bsb_bangking_jp.core.components.EmptyState
@@ -39,8 +39,8 @@ import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bsb.dev.bsb_bangking_jp.core.components.LocalToastState
 import bsb.dev.bsb_bangking_jp.core.skeleton.SkeletonList
-import bsb.dev.bsb_bangking_jp.feature.transfer.component.DeleteConfirmSheet
-import bsb.dev.bsb_bangking_jp.feature.transfer.component.UbahAliasSheet
+import bsb.dev.bsb_bangking_jp.feature.transfer.components.DeleteConfirmSheet
+import bsb.dev.bsb_bangking_jp.feature.transfer.components.UbahAliasSheet
 import bsb.dev.bsb_bangking_jp.feature.transfer.saved_recipient.domain.SavedRecipientItem
 import org.koin.androidx.compose.koinViewModel
 import bsb.dev.bsb_bangking_jp.feature.transfer.last_transfer.presentation.LastTransferUiState

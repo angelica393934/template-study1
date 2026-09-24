@@ -141,7 +141,7 @@ fun BerandaPage(
             } else {
                 HaloUserSection(
                     nama = namaUser,
-                    photoBytes = null,
+                    photoBytes = profileUiState.photoBytes,
                     onNotificationClick = onNotificationClick,
                     onLogoutClick = { showLogoutSheet = true },
                 )

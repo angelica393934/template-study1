@@ -4,7 +4,7 @@ package bsb.dev.bsb_bangking_jp.feature.login_existing
 import bsb.dev.bsb_bangking_jp.feature.login_existing.data.LoginRepositoryImpl
 import bsb.dev.bsb_bangking_jp.feature.login_existing.domain.ConfirmMpinUseCase
 import bsb.dev.bsb_bangking_jp.feature.login_existing.domain.LoginInitUseCase
-import bsb.dev.bsb_bangking_jp.feature.login_existing.domain.LoginRepository
+import bsb.dev.bsb_bangking_jp.feature.login_existing.domain.LoginExistingRepository
 import bsb.dev.bsb_bangking_jp.feature.login_existing.domain.ResendOtpUseCase
 import bsb.dev.bsb_bangking_jp.feature.login_existing.domain.VerifyDeviceUseCase
 import bsb.dev.bsb_bangking_jp.feature.login_existing.domain.VerifyOtpUseCase
@@ -13,7 +13,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val loginExistingModule = module {
-    single<LoginRepository> { LoginRepositoryImpl(get(), get(), get()) }
+    single<LoginExistingRepository> { LoginRepositoryImpl(get(), get(), get()) }
     factory { LoginInitUseCase(get()) }
     factory { VerifyOtpUseCase(get()) }
     factory { ResendOtpUseCase(get()) }

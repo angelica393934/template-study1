@@ -11,6 +11,7 @@ import bsb.dev.bsb_bangking_jp.feature.news.domain.NewsRepository
 import bsb.dev.bsb_bangking_jp.feature.transfer.last_transfer.domain.LastTransferRepository
 import bsb.dev.bsb_bangking_jp.feature.manage_scheduled_transfer.domain.ScheduledTransferRepository
 import bsb.dev.bsb_bangking_jp.feature.transfer.saved_recipient.domain.SavedRecipientRepository
+import bsb.dev.bsb_bangking_jp.shared.profile.domain.ProfilePhotoRepository
 import bsb.dev.bsb_bangking_jp.shared.profile.domain.ProfileRepository
 import bsb.dev.bsb_bangking_jp.shared.rekening_lainnya.domain.RekeningLainnyaRepository
 import org.koin.dsl.module
@@ -20,6 +21,7 @@ val sessionModule = module {
         SessionClearer(
             repositories = listOf(
                 get<ProfileRepository>() as ClearableRepository,
+                get<ProfilePhotoRepository>() as ClearableRepository,
                 get<RekeningLainnyaRepository>() as ClearableRepository,
                 get<ActivityHistoryRepository>() as ClearableRepository,
                 get<ScheduledTransferRepository>() as ClearableRepository,
