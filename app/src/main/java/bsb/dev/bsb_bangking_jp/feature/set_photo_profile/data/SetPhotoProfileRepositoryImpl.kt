@@ -1,4 +1,4 @@
-package bsb.dev.bsb_bangking_jp.feature.pengaturan.set_photo_profile.data
+package bsb.dev.bsb_bangking_jp.feature.set_photo_profile.data
 
 import bsb.dev.bsb_bangking_jp.core.device.SecureStorageService
 import bsb.dev.bsb_bangking_jp.core.network.ApiErrorParser
@@ -7,7 +7,7 @@ import bsb.dev.bsb_bangking_jp.core.network.NetworkErrorMapper
 import bsb.dev.bsb_bangking_jp.core.network.header.ApiHeaders
 import bsb.dev.bsb_bangking_jp.core.network.token.TokenPhase
 import bsb.dev.bsb_bangking_jp.core.network.token.TokenPhaseTag
-import bsb.dev.bsb_bangking_jp.feature.pengaturan.set_photo_profile.domain.SetPhotoProfileRepository
+import bsb.dev.bsb_bangking_jp.feature.set_photo_profile.domain.SetPhotoProfileRepository
 import bsb.dev.bsb_bangking_jp.shared.profile.domain.ProfilePhotoRepository
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody

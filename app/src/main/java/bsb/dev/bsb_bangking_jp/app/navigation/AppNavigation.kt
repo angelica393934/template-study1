@@ -88,6 +88,7 @@ import bsb.dev.bsb_bangking_jp.feature.change_pw.OldPasswordPage
 import bsb.dev.bsb_bangking_jp.feature.change_pw.OtpChangePwPage
 import bsb.dev.bsb_bangking_jp.feature.change_pw.presentation.ChangePwViewModel
 import bsb.dev.bsb_bangking_jp.feature.login_existing.loginExistingNavGraph
+import bsb.dev.bsb_bangking_jp.feature.notification.NotifikasiPage
 import bsb.dev.bsb_bangking_jp.feature.pengaturan.FaqPage
 import bsb.dev.bsb_bangking_jp.feature.pengaturan.SyaratKetentuanPage
 import bsb.dev.bsb_bangking_jp.feature.pengaturan.TentangAplikasiPage
@@ -414,6 +415,7 @@ fun AppNavigation(
                         darkTheme = darkTheme,
                         onThemeChange = onThemeChange,
                         initialIndex = 0,
+                        onNotificationClick ={navController.navigate("notifikasi")},
                         onNavigateToScanQris = {
                             navController.navigate("scan_qris")
                         },
@@ -451,7 +453,11 @@ fun AppNavigation(
                         },
                     )
                 }
-
+                composable("notifikasi") {
+                    NotifikasiPage(
+                        onBackClick = { navController.popBackStack() }
+                    )
+                }
                 composable("berita_list") {
                     AllNewsPage(
                         navController = navController,

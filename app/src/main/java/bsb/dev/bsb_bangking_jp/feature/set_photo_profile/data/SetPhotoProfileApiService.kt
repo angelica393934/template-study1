@@ -1,4 +1,4 @@
-package bsb.dev.bsb_bangking_jp.feature.pengaturan.set_photo_profile.data
+package bsb.dev.bsb_bangking_jp.feature.set_photo_profile.data
 
 import bsb.dev.bsb_bangking_jp.core.network.token.TokenPhaseTag
 import okhttp3.MultipartBody

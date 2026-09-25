@@ -80,6 +80,7 @@ fun PengaturanPage(
         ?: "-"
     val settings by settingsViewModel.settings.collectAsState()
     val phoneNumber = uiState.profile?.user?.maskPhone ?: "-"
+    val profileUiState by profileViewModel.uiState.collectAsStateWithLifecycle()
     var showLogoutSheet by remember { mutableStateOf(false) }
     var showBahasaSheet by remember { mutableStateOf(false) }
     var showEditProfileSheet by remember { mutableStateOf(false) }
@@ -215,6 +216,7 @@ fun PengaturanPage(
                 )
             } else {
                 AccountProfileCard(
+                    photoBytes = profileUiState.photoBytes,
                     nama = namaUser,
                     phoneNumber = phoneNumber,
                     editclick =  { showEditProfileSheet = true },

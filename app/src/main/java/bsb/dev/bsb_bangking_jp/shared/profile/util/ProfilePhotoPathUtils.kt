@@ -1,14 +1,27 @@
 package bsb.dev.bsb_bangking_jp.shared.profile.util
 
 object ProfilePhotoPathUtils {
-    /** Ambil path relatif dari nilai mentah `photoprofile` yang dikirim backend. */
+
+    /**
+     * Mengambil path user dari nilai photoprofile backend.
+     * Contoh:
+     * /v1/image/user/xxxx/profile.jpg
+     * -> user/xxxx/profile.jpg
+     */
     fun extractImagePath(rawPath: String?): String {
         if (rawPath.isNullOrBlank()) return ""
 
-        return if (rawPath.contains("://")) {
-            rawPath.substringAfter("://").substringAfter("/", missingDelimiterValue = "")
-        } else {
-            rawPath.trim()
+        val path = rawPath.trim()
+
+        return path.substringAfter(
+            "/user/",
+            missingDelimiterValue = ""
+        ).let { userPath ->
+            if (userPath.isNotEmpty()) {
+                "user/$userPath"
+            } else {
+                ""
+            }
         }
     }
 }

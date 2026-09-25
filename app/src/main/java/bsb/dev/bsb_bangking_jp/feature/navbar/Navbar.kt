@@ -77,6 +77,7 @@ fun Navbar(
     onNavigateToScanQris: () -> Unit,
     darkTheme: Boolean,
     onThemeChange: (Boolean) -> Unit,
+    onNotificationClick : () -> Unit = {},
     onLainnyaClick: () -> Unit = {},
     onTransferClick: () -> Unit = {},
     onTopUpClick: () -> Unit = {},
@@ -127,6 +128,7 @@ fun Navbar(
                     onPajakPendidikanClick = onPajakPendidikanClick,
                     onTagihanClick = onTagihanClick,
                     onCardlessClick = onCardlessClick,
+                    onNotificationClick = onNotificationClick
                 )
                 1 -> ActivityPage()
                 2 -> MessagePage()

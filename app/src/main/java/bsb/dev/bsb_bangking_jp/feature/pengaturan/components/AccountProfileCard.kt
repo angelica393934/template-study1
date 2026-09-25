@@ -32,6 +32,7 @@ fun AccountProfileCard(
     nama: String,
     phoneNumber: String,
     modifier: Modifier = Modifier,
+    photoBytes: ByteArray? = null,
     editclick : () -> Unit = {}
 ) {
     Row(
@@ -49,6 +50,7 @@ fun AccountProfileCard(
         ) {
             InitialAvatar(
                 initials = nama,
+                photoBytes = photoBytes,
             )
 
             Spacer(modifier = Modifier.width(12.dp))

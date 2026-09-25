@@ -24,4 +24,5 @@ object appRadius {
 
 object appLayout {
     val defaultPadding: Dp = 24.dp
+    val verticalPadding: Dp = 16.dp
 }

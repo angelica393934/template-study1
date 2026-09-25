@@ -23,7 +23,8 @@ import bsb.dev.bsb_bangking_jp.feature.message.messageModule
 import bsb.dev.bsb_bangking_jp.feature.news.newsModule
 import bsb.dev.bsb_bangking_jp.feature.registration.registrationModule
 import bsb.dev.bsb_bangking_jp.feature.manage_scheduled_transfer.manageScheduledTransferModule
-import bsb.dev.bsb_bangking_jp.feature.pengaturan.pengaturanModule
+import bsb.dev.bsb_bangking_jp.feature.notification.notificationModule
+import bsb.dev.bsb_bangking_jp.feature.set_photo_profile.setPhotoProfileModule
 import bsb.dev.bsb_bangking_jp.feature.transfer.transferModule
 import bsb.dev.bsb_bangking_jp.shared.logout.logoutModule
 import bsb.dev.bsb_bangking_jp.shared.profile.profileModule
@@ -62,7 +63,8 @@ class BsbApplication : Application() {
                 changeEmailModule,
                 changePwModule,
                 changeMpinModule,
-                pengaturanModule,
+                setPhotoProfileModule,
+                notificationModule,
                 // tambahkan module fitur lain di sini
             )
         }

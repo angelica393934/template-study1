@@ -38,9 +38,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bsb.dev.bsb_bangking_jp.core.components.AppModalBottomSheet
 import bsb.dev.bsb_bangking_jp.core.components.LocalToastState
 import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
-import bsb.dev.bsb_bangking_jp.feature.pengaturan.set_photo_profile.presentation.PhotoProfileEvent
-import bsb.dev.bsb_bangking_jp.feature.pengaturan.set_photo_profile.presentation.PhotoProfileSuccessAction
-import bsb.dev.bsb_bangking_jp.feature.pengaturan.set_photo_profile.presentation.PhotoProfileViewModel
+import bsb.dev.bsb_bangking_jp.feature.set_photo_profile.presentation.PhotoProfileEvent
+import bsb.dev.bsb_bangking_jp.feature.set_photo_profile.presentation.PhotoProfileSuccessAction
+import bsb.dev.bsb_bangking_jp.feature.set_photo_profile.presentation.PhotoProfileViewModel
 import bsb.dev.bsb_bangking_jp.feature.pengaturan.util.ImageCompressUtil
 import org.koin.androidx.compose.koinViewModel
 import java.io.File

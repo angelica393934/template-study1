@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import bsb.dev.bsb_bangking_jp.core.theme.appLayout
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,7 +40,11 @@ fun AppModalBottomSheet(
         },
     ) {
         Column(
-            modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 20.dp),
+            modifier = Modifier.padding(
+                start = appLayout.defaultPadding,
+                end = appLayout.defaultPadding,
+                bottom = appLayout.defaultPadding
+            ),
             content = content,
         )
     }

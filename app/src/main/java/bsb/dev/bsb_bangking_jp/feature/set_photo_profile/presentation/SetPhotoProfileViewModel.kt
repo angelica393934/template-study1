@@ -1,9 +1,9 @@
-package bsb.dev.bsb_bangking_jp.feature.pengaturan.set_photo_profile.presentation
+package bsb.dev.bsb_bangking_jp.feature.set_photo_profile.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import bsb.dev.bsb_bangking_jp.core.network.ApiException
-import bsb.dev.bsb_bangking_jp.feature.pengaturan.set_photo_profile.domain.SetPhotoProfileRepository
+import bsb.dev.bsb_bangking_jp.feature.set_photo_profile.domain.SetPhotoProfileRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

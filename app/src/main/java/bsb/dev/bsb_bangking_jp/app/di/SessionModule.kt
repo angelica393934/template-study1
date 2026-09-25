@@ -10,6 +10,7 @@ import bsb.dev.bsb_bangking_jp.feature.news.domain.NewsDetailRepository
 import bsb.dev.bsb_bangking_jp.feature.news.domain.NewsRepository
 import bsb.dev.bsb_bangking_jp.feature.transfer.last_transfer.domain.LastTransferRepository
 import bsb.dev.bsb_bangking_jp.feature.manage_scheduled_transfer.domain.ScheduledTransferRepository
+import bsb.dev.bsb_bangking_jp.feature.notification.domain.NotifRepository
 import bsb.dev.bsb_bangking_jp.feature.transfer.saved_recipient.domain.SavedRecipientRepository
 import bsb.dev.bsb_bangking_jp.shared.profile.domain.ProfilePhotoRepository
 import bsb.dev.bsb_bangking_jp.shared.profile.domain.ProfileRepository
@@ -32,6 +33,7 @@ val sessionModule = module {
                 get<AllNewsRepository>() as ClearableRepository,
                 get<NewsDetailRepository>() as ClearableRepository,
                 get<ImageRepository>() as ClearableRepository,
+                get<NotifRepository>() as ClearableRepository,
             )
         )
     }

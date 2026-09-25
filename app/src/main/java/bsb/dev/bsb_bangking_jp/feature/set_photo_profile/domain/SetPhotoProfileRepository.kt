@@ -1,4 +1,4 @@
-package bsb.dev.bsb_bangking_jp.feature.pengaturan.set_photo_profile.domain
+package bsb.dev.bsb_bangking_jp.feature.set_photo_profile.domain
 
 import java.io.File
 
