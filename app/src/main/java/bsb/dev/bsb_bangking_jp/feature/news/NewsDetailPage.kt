@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -38,6 +39,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bsb.dev.bsb_bangking_jp.core.components.AppHeader
 import bsb.dev.bsb_bangking_jp.core.components.EmptyState
+import bsb.dev.bsb_bangking_jp.core.theme.appLayout
+import bsb.dev.bsb_bangking_jp.core.theme.appSpacing
+import bsb.dev.bsb_bangking_jp.core.util.DateFormatterUtil.DefaultDateFormatter
 import bsb.dev.bsb_bangking_jp.shared.get_image.NetworkImage
 import bsb.dev.bsb_bangking_jp.shared.get_image.domain.ImageCategory
 import bsb.dev.bsb_bangking_jp.feature.news.domain.NewsDetail
@@ -96,18 +100,18 @@ fun NewsDetailPage(
 
 @Composable
 private fun NewsDetailContent(data: NewsDetail) {
-    val formattedDate = remember(data.createdDate) {
-        SimpleDateFormat("dd MMMM yyyy", Locale("id", "ID")).format(data.createdDate)
-    }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(horizontal = 24.dp, vertical = 20.dp),
+            .padding(
+                horizontal = appLayout.defaultPadding,
+                vertical = appLayout.verticalPadding
+            ),
+        verticalArrangement = Arrangement.spacedBy(appSpacing.xxxs),
     ) {
         Text(text = data.subtitle, style = MaterialTheme.typography.titleLarge)
-        Spacer(modifier = Modifier.height(16.dp))
 
         if (data.pathImage.isNotEmpty()) {
             NetworkImage(
@@ -120,12 +124,12 @@ private fun NewsDetailContent(data: NewsDetail) {
                     .aspectRatio(16f / 9f)
                     .clip(RoundedCornerShape(12.dp)),
             )
-            Spacer(modifier = Modifier.height(10.dp))
         }
-
-        Text(text = formattedDate, style = MaterialTheme.typography.titleSmall)
-        Spacer(modifier = Modifier.height(10.dp))
-
+        Text(
+            text = DefaultDateFormatter(data.createdDate),
+            style = MaterialTheme.typography.titleSmall,
+            color= MaterialTheme.colorScheme.outline
+        )
         Text(
             text = data.description,
             textAlign = TextAlign.Justify,
@@ -134,14 +138,10 @@ private fun NewsDetailContent(data: NewsDetail) {
 
         val targetUrl = data.targetUrl?.trim()
         if (!targetUrl.isNullOrEmpty()) {
-            Spacer(modifier = Modifier.height(10.dp))
-
             Text(
                 text = "Detail lebih lanjut dapat dilihat melalui tautan",
                 style = MaterialTheme.typography.bodyMedium,
             )
-            Spacer(modifier = Modifier.height(4.dp))
-
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = rememberOpenUrlModifier(targetUrl),
@@ -162,8 +162,6 @@ private fun NewsDetailContent(data: NewsDetail) {
                 )
             }
         }
-
-        Spacer(modifier = Modifier.height(20.dp))
     }
 }
 

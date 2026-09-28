@@ -37,6 +37,7 @@ import bsb.dev.bsb_bangking_jp.core.components.EmptyState
 import bsb.dev.bsb_bangking_jp.shared.get_image.NetworkImage
 import bsb.dev.bsb_bangking_jp.shared.get_image.domain.ImageCategory
 import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
+import bsb.dev.bsb_bangking_jp.core.util.DateFormatterUtil.DefaultDateFormatter
 import bsb.dev.bsb_bangking_jp.feature.news.domain.AllNewsItem
 import bsb.dev.bsb_bangking_jp.feature.news.presentation.AllNewsUiState
 import bsb.dev.bsb_bangking_jp.feature.news.presentation.AllNewsViewModel
@@ -124,8 +125,6 @@ private fun BeritaCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val formattedDate = remember(item.date) { formatBeritaDate(item.date) }
-
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -153,7 +152,7 @@ private fun BeritaCard(
 
         Column(modifier = Modifier.padding(12.dp)) {
             Text(
-                text = formattedDate,
+                text = DefaultDateFormatter(item.date),
                 style = MaterialTheme.typography.titleSmall,
             )
             Spacer(modifier = Modifier.height(6.dp))
@@ -164,16 +163,5 @@ private fun BeritaCard(
                 style = MaterialTheme.typography.bodyMedium,
             )
         }
-    }
-}
-
-/** Padanan `DateFormat('yyyy-MM-dd HH:mm:ss').parse(...)` -> `DateFormat('d MMMM yyyy', 'id_ID')`. */
-private fun formatBeritaDate(rawDate: String): String {
-    return try {
-        val parser = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US)
-        val formatter = SimpleDateFormat("d MMMM yyyy", Locale("id", "ID"))
-        formatter.format(parser.parse(rawDate) ?: return rawDate)
-    } catch (e: Exception) {
-        rawDate
     }
 }

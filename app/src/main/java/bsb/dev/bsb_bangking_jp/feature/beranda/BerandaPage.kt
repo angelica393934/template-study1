@@ -37,7 +37,7 @@ import bsb.dev.bsb_bangking_jp.core.components.BannerKeamanan
 import bsb.dev.bsb_bangking_jp.core.components.CustomRefreshIndicator
 import bsb.dev.bsb_bangking_jp.core.components.LocalToastState
 import bsb.dev.bsb_bangking_jp.core.components.SaldoCardEmpty
-import bsb.dev.bsb_bangking_jp.feature.beranda.presentation.BerandaViewModel
+import bsb.dev.bsb_bangking_jp.feature.beranda.get_banner.presentation.BerandaViewModel
 import bsb.dev.bsb_bangking_jp.feature.beranda.section.HaloUserSection
 import bsb.dev.bsb_bangking_jp.feature.beranda.section.MenuUtama
 import bsb.dev.bsb_bangking_jp.feature.beranda.section.SaldoCardDashboard

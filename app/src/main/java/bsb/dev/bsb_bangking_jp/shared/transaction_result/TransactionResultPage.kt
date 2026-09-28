@@ -338,7 +338,6 @@ private fun StatusVisual(status: TransactionResultStatus) {
             )
         }
         TransactionResultStatus.FAILED -> {
-            // TODO: ganti ke ilustrasi resmi kalau sudah ada asetnya dari desain.
             Icon(
                 imageVector = Icons.Filled.Cancel,
                 contentDescription = null,

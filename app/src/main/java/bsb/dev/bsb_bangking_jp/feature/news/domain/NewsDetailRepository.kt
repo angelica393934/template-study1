@@ -7,7 +7,7 @@ data class NewsDetail(
     val subtitle: String,
     val description: String,
     val pathImage: String,
-    val createdDate: Date,
+    val createdDate: String,
     val targetUrl: String?,
 )
 

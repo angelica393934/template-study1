@@ -42,7 +42,7 @@ import androidx.compose.ui.unit.sp
 import bsb.dev.bsb_bangking_jp.R
 import bsb.dev.bsb_bangking_jp.core.device.AppPreferences
 import bsb.dev.bsb_bangking_jp.core.theme.Orange500
-import bsb.dev.bsb_bangking_jp.feature.beranda.domain.get_banner.BannerItem
+import bsb.dev.bsb_bangking_jp.feature.beranda.get_banner.domain.BannerItem
 import kotlinx.coroutines.delay
 import org.koin.compose.koinInject
 

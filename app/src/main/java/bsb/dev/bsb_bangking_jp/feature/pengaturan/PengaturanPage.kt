@@ -83,6 +83,7 @@ fun PengaturanPage(
     val profileUiState by profileViewModel.uiState.collectAsStateWithLifecycle()
     var showLogoutSheet by remember { mutableStateOf(false) }
     var showBahasaSheet by remember { mutableStateOf(false) }
+    var showHelpCenterSheet by remember { mutableStateOf(false) }
     var showEditProfileSheet by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -184,7 +185,7 @@ fun PengaturanPage(
                             SettingItemData(
                                 Icons.Default.HeadsetMic,
                                 stringResource(R.string.menu_pusat_bantuan),
-                                onClick = { navController.navigate("pusat_bantuan") },
+                                onClick =  { showHelpCenterSheet = true },
                             ),
                         )
                     )
@@ -228,6 +229,12 @@ fun PengaturanPage(
             }
         }
     }
+    if (showHelpCenterSheet){
+        HelpCenterSheet(
+            onDismiss = {showHelpCenterSheet= false }
+        )
+    }
+
     if (showEditProfileSheet) {
         GantiFotoProfilSheet(
             userId = uiState.profile?.user?.userId ?: "",

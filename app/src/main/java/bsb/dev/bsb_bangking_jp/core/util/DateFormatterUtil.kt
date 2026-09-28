@@ -43,6 +43,12 @@ object DateFormatterUtil {
             indonesiaLocale,
         )
 
+    private val DefaultDateFormatter =
+        DateTimeFormatter.ofPattern(
+            "dd MMMM yyyy",
+            Locale("id", "ID"),
+        )
+
     /** Padanan DateFormatterUtil.fromYYMMDD -- dipakai buat header tanggal di list transaksi.
          "260119" -> "19 Januari 2026" **/
     fun fromYYMMDD(value: String): String {
@@ -86,6 +92,19 @@ object DateFormatterUtil {
             value
         }
     }
+
+    /** Penggunaaan di halaman allnews
+     * 2026-01-19 08:59:42 ->19 Januari 2026
+     */
+    fun DefaultDateFormatter(value: String): String {
+        return runCatching {
+            LocalDateTime
+                .parse(value, backendDateTimeFormatter)
+                .format( DefaultDateFormatter)
+        }.getOrDefault(value)
+    }
+
+
 }
 
 /** Padanan groupByDateSorted() -- urutkan transaksi terbaru -> terlama, lalu group per tanggal. */

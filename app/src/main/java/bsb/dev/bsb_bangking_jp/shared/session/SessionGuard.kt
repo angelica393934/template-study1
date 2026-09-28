@@ -1,5 +1,10 @@
 package bsb.dev.bsb_bangking_jp.shared.session
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+
 /**
  * Padanan SessionGuard.dart -- penjaga sesi otomatis: idle timeout (15 menit tanpa
  * aktivitas) & background timeout (10 menit app di-background).
@@ -16,15 +21,15 @@ class SessionGuard(
     private val onForceLogout: () -> Unit, // tampilkan SessionExpiredDialog dari sisi UI
 ) {
 
-    companion object {
-        const val IDLE_DURATION_MILLIS = 15 * 60 * 1000L      // 15 menit
-        const val BACKGROUND_LIMIT_MILLIS = 10 * 60 * 1000L   // 10 menit
-    }
+//    companion object {
+//        const val IDLE_DURATION_MILLIS = 15 * 60 * 1000L      // 15 menit
+//        const val BACKGROUND_LIMIT_MILLIS = 10 * 60 * 1000L   // 10 menit
+//    }
 
-    // private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     // private var idleJob: Job? = null
     // private var backgroundTimestamp: Long? = null
-    // private var isShowingPopup = false
+    private var isShowingPopup = false
 
     /** Padanan startIdleTimer()/resetIdleTimer() -- panggil tiap ada interaksi user. */
     fun resetIdleTimer() {
@@ -53,12 +58,12 @@ class SessionGuard(
 
     /** Padanan _forceLogout()/logoutFromInterceptor() -- idle & token-expired lewat jalur ini. */
     private fun forceLogout() {
-        // if (isShowingPopup) return
-        // isShowingPopup = true
-        // scope.launch {
-        //     logoutUseCase() // hit API dulu (padanan LogoutBloc.add(logout()))
-        //     sessionManager.clearSession() // SELALU clear lokal, apapun hasil API-nya
-        //     onForceLogout()
-        // }
+        if (isShowingPopup) return
+        isShowingPopup = true
+        scope.launch {
+        logoutUseCase() // hit API dulu (padanan LogoutBloc.add(logout()))
+        sessionManager.clearSession() // SELALU clear lokal, apapun hasil API-nya
+        onForceLogout()
+        }
     }
 }

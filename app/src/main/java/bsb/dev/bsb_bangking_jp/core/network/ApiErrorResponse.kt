@@ -4,7 +4,6 @@ import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import retrofit2.Response
 
-// TODO: sesuaikan nama field kalau backend pakai key beda (mis. "code"/"message")
 data class ApiErrorResponse(
     @SerializedName("respCode") val respCode: String? = null,
     @SerializedName("respMessage") val respMessage: String? = null,

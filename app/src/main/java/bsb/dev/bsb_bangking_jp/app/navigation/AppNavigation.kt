@@ -92,7 +92,6 @@ import bsb.dev.bsb_bangking_jp.feature.notification.NotifikasiPage
 import bsb.dev.bsb_bangking_jp.feature.pengaturan.FaqPage
 import bsb.dev.bsb_bangking_jp.feature.pengaturan.SyaratKetentuanPage
 import bsb.dev.bsb_bangking_jp.feature.pengaturan.TentangAplikasiPage
-import bsb.dev.bsb_bangking_jp.feature.pengaturan.PusatBantuanPage
 import bsb.dev.bsb_bangking_jp.feature.scan_qris.ScanQrisPage
 
 @Composable
@@ -108,6 +107,7 @@ fun AppNavigation(
     var pendingConfirmResult by remember { mutableStateOf<ConfirmTransferResultItem?>(null) }
     var pendingSumberKlasifikasi by remember { mutableStateOf("Tabungan Sekarang") }
     var pendingSumberSaldoInt by remember { mutableStateOf(0) }
+
     CompositionLocalProvider(LocalToastState provides toastState,
         LocalLoadingOverlay provides loadingOverlayState,
         ) {
@@ -771,9 +771,6 @@ fun AppNavigation(
                 }
                 composable("tentang_aplikasi") {
                     TentangAplikasiPage(onBackClick = { navController.popBackStack() })
-                }
-                composable("pusat_bantuan") {
-                    PusatBantuanPage(onBackClick = { navController.popBackStack() })
                 }
             }
             ToastHost(state = toastState, modifier = Modifier.align(Alignment.TopCenter))

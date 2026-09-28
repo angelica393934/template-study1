@@ -22,17 +22,15 @@ data class NewsDetailDto(
     @SerializedName("subtitle") val subtitle: String = "",
     @SerializedName("description") val description: String = "",
     @SerializedName("pathimage") val pathImage: String = "",
-    @SerializedName("date") val date: String? = null,
+    @SerializedName("date") val date: String = "",
     @SerializedName("targeturl") val targetUrl: String? = null,
 )
-
-private val isoParser = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US)
 
 fun NewsDetailDto.toDomain(): NewsDetail = NewsDetail(
     id = id,
     subtitle = subtitle,
     description = description,
     pathImage = pathImage,
-    createdDate = date?.let { runCatching { isoParser.parse(it) }.getOrNull() } ?: Date(0),
-    targetUrl = targetUrl, // null tetap null, jangan default ""
+    createdDate = date,
+    targetUrl = targetUrl,
 )

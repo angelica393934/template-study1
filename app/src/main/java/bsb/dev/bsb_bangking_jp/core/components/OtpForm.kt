@@ -107,7 +107,7 @@ fun OtpForm(
             Spacer(modifier = Modifier.height(30.dp))
 
             Image(
-                painter = painterResource(id = R.drawable.asset_message), // TODO: sesuaikan nama drawable
+                painter = painterResource(id = R.drawable.asset_message),
                 contentDescription = null,
                 modifier = Modifier.size(100.dp),
                 contentScale = ContentScale.Fit,
