@@ -10,7 +10,6 @@ import org.koin.androidx.compose.koinViewModel
 
 fun NavGraphBuilder.loginExistingNavGraph(navController: NavController) {
     navigation(startDestination = "login_masuk", route = "login_existing") {
-
         composable("login_masuk") { backStackEntry ->
             val parentEntry =
                 remember(backStackEntry) { navController.getBackStackEntry("login_existing") }

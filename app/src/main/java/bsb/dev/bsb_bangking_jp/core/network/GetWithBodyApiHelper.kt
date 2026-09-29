@@ -4,6 +4,7 @@ import bsb.dev.bsb_bangking_jp.core.crypto.SignatureUtils
 import bsb.dev.bsb_bangking_jp.core.device.SecureStorageService
 import bsb.dev.bsb_bangking_jp.core.network.header.ApiHeaders
 import bsb.dev.bsb_bangking_jp.core.network.token.RefreshTokenApiService
+import bsb.dev.bsb_bangking_jp.shared.session.SessionExpiredNotifier
 import com.google.gson.Gson
 
 private const val EXPIRED_RESP_CODE = "0465" // sama dengan TokenRefreshInterceptor
@@ -22,6 +23,7 @@ private const val EXPIRED_RESP_CODE = "0465" // sama dengan TokenRefreshIntercep
 class GetWithBodyApiHelper(
     private val secureStorage: SecureStorageService,
     private val refreshTokenApiService: RefreshTokenApiService,
+    private val sessionExpiredNotifier: SessionExpiredNotifier,
 ) {
     private val gson = Gson()
 
@@ -59,6 +61,8 @@ class GetWithBodyApiHelper(
                 headers = baseHeaders + accessTokenHeader(refreshed)
                 result = GetWithBodyHttpClient.getWithBody(url = url, headers = headers, body = body)
                 parsed = parseOrNull(result.rawBody, responseType)
+            } else if (useLoginPhaseToken) {
+                sessionExpiredNotifier.notifyExpired()
             }
         }
 

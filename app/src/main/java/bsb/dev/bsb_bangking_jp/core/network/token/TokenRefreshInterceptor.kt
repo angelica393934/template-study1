@@ -4,6 +4,7 @@ package bsb.dev.bsb_bangking_jp.core.network.token
 import bsb.dev.bsb_bangking_jp.core.crypto.SignatureUtils
 import bsb.dev.bsb_bangking_jp.core.device.SecureStorageService
 import bsb.dev.bsb_bangking_jp.core.network.header.ApiHeaders
+import bsb.dev.bsb_bangking_jp.shared.session.SessionExpiredNotifier
 import com.google.gson.Gson
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
@@ -15,6 +16,7 @@ private const val EXPIRED_RESP_CODE = "0465"
 class TokenRefreshInterceptor(
     private val secureStorage: SecureStorageService,
     private val refreshApiService: () -> RefreshTokenApiService,
+    private val sessionExpiredNotifier: SessionExpiredNotifier,
 ) : Interceptor {
 
     private val gson = Gson()
@@ -128,7 +130,11 @@ class TokenRefreshInterceptor(
 
     private suspend fun refreshLoginToken(): String? {
         val refreshToken = secureStorage.getLoginRefreshToken() ?: return null
-        val privateKey = secureStorage.getPrivateKey() ?: return null
+        val privateKey = secureStorage.getPrivateKey()
+        if (refreshToken == null || privateKey == null) {
+            sessionExpiredNotifier.notifyExpired()
+            return null
+        }
 
         val timestamp = ApiHeaders.currentTimestamp()
         val baseHeaders = ApiHeaders.full(timestamp)
@@ -137,10 +143,17 @@ class TokenRefreshInterceptor(
                 ("Authorization" to "Bearer $refreshToken")
 
         val response = refreshApiService().refreshLoginToken(headers = headers)
-        if (!response.isSuccessful) return null
+        if (!response.isSuccessful) {
+            if (response.code() in 400..499) sessionExpiredNotifier.notifyExpired()
+            return null
+        }
 
-        val data = response.body()?.data ?: return null
-        val newAccess = data.accessToken ?: return null
+        val data = response.body()?.data
+        val newAccess = data?.accessToken
+        if (newAccess == null) {
+            sessionExpiredNotifier.notifyExpired()
+            return null
+        }
 
         secureStorage.saveLoginAccessToken(newAccess)
         data.refreshToken?.let { secureStorage.saveLoginRefreshToken(it) }

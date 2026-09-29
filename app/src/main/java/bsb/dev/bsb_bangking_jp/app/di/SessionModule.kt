@@ -15,6 +15,8 @@ import bsb.dev.bsb_bangking_jp.feature.transfer.saved_recipient.domain.SavedReci
 import bsb.dev.bsb_bangking_jp.shared.profile.domain.ProfilePhotoRepository
 import bsb.dev.bsb_bangking_jp.shared.profile.domain.ProfileRepository
 import bsb.dev.bsb_bangking_jp.shared.rekening_lainnya.domain.RekeningLainnyaRepository
+import bsb.dev.bsb_bangking_jp.shared.session.SessionExpiredNotifier
+import bsb.dev.bsb_bangking_jp.shared.session.SessionGuard
 import org.koin.dsl.module
 
 val sessionModule = module {
@@ -35,6 +37,15 @@ val sessionModule = module {
                 get<ImageRepository>() as ClearableRepository,
                 get<NotifRepository>() as ClearableRepository,
             )
+        )
+    }
+    single { SessionExpiredNotifier(get()) }
+    // createdAtStart supaya sudah mendengarkan event sejak app hidup
+    single(createdAtStart = true) {
+        SessionGuard(
+            sessionManager = get(),
+            logoutUseCase = get(),
+            sessionExpiredNotifier = get(),
         )
     }
 }

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,10 +33,6 @@ import bsb.dev.bsb_bangking_jp.feature.lainnya.LainnyaPage
 import bsb.dev.bsb_bangking_jp.feature.pajak_pendidikan.LainnyaPajakPage
 import bsb.dev.bsb_bangking_jp.feature.pajak_pendidikan.PajakPendidikanPage
 import bsb.dev.bsb_bangking_jp.feature.login.LoginPage
-import bsb.dev.bsb_bangking_jp.feature.registration.CreateUserIdPageRegistration
-import bsb.dev.bsb_bangking_jp.feature.registration.CreateUserPwPageRegistration
-import bsb.dev.bsb_bangking_jp.feature.registration.OtpPageRegistration
-import bsb.dev.bsb_bangking_jp.feature.registration.FindAccountPageRegistration
 import bsb.dev.bsb_bangking_jp.feature.init.SplashScreen
 import bsb.dev.bsb_bangking_jp.feature.tagihan.TagihanPage
 import bsb.dev.bsb_bangking_jp.feature.transfer.PinTfPage
@@ -46,59 +43,45 @@ import bsb.dev.bsb_bangking_jp.feature.transfer.TransferHomePage
 import bsb.dev.bsb_bangking_jp.feature.transfer.TransferUmumPage
 import bsb.dev.bsb_bangking_jp.feature.transfer.components.PeriksaKembaliData
 import bsb.dev.bsb_bangking_jp.feature.news.AllNewsPage
-import androidx.navigation.compose.navigation
 import androidx.compose.ui.Alignment
 import bsb.dev.bsb_bangking_jp.core.components.LoadingOverlayHost
 import bsb.dev.bsb_bangking_jp.core.components.LocalLoadingOverlay
 import bsb.dev.bsb_bangking_jp.core.components.rememberLoadingOverlayState
 import bsb.dev.bsb_bangking_jp.shared.rekening_lainnya.data.cashBalanceValue
-import org.koin.androidx.compose.koinViewModel
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bsb.dev.bsb_bangking_jp.core.notification.NotificationHelper
 import bsb.dev.bsb_bangking_jp.core.util.RupiahFormat
 import bsb.dev.bsb_bangking_jp.feature.news.NewsDetailPage
-import bsb.dev.bsb_bangking_jp.feature.registration.presentation.RegistrationViewModel
 import bsb.dev.bsb_bangking_jp.feature.transfer.toTransactionResultInfo
 import bsb.dev.bsb_bangking_jp.shared.transaction_result.TransactionResultPage
-import bsb.dev.bsb_bangking_jp.feature.activation.FindAccountPageActivation
-import bsb.dev.bsb_bangking_jp.feature.activation.InputIdPageActivation
-import bsb.dev.bsb_bangking_jp.feature.activation.OtpPageActivation
-import bsb.dev.bsb_bangking_jp.feature.activation.InputPwPageActivation
-import bsb.dev.bsb_bangking_jp.feature.activation.ActivationPinFlow
-import bsb.dev.bsb_bangking_jp.feature.activation.presentation.ActivationViewModel
-import bsb.dev.bsb_bangking_jp.feature.forget_iduser.FindAccountPageForgetId
-import bsb.dev.bsb_bangking_jp.feature.forget_iduser.OtpPageForgetId
-import bsb.dev.bsb_bangking_jp.feature.forget_iduser.ResetIdPageForgetId
-import bsb.dev.bsb_bangking_jp.feature.forget_iduser.presentation.ForgetIdUserViewModel
-import bsb.dev.bsb_bangking_jp.feature.forget_pw.FindAccountPageForgetPw
-import bsb.dev.bsb_bangking_jp.feature.forget_pw.OtpPageForgetPw
-import bsb.dev.bsb_bangking_jp.feature.forget_pw.ResetPwPageForgetPw
-import bsb.dev.bsb_bangking_jp.feature.forget_pw.presentation.ForgetPwViewModel
-import bsb.dev.bsb_bangking_jp.feature.change_email.ChangeEmailPage
-import bsb.dev.bsb_bangking_jp.feature.change_email.ChangeEmailPinPage
-import bsb.dev.bsb_bangking_jp.feature.change_email.presentation.ChangeEmailViewModel
-import bsb.dev.bsb_bangking_jp.feature.manage_scheduled_transfer.ManageScheduledTransferPage
-import bsb.dev.bsb_bangking_jp.feature.manage_scheduled_transfer.ScheduledTransferDetailPage
-import bsb.dev.bsb_bangking_jp.feature.manage_scheduled_transfer.presentation.ScheduledTransferViewModel
-import bsb.dev.bsb_bangking_jp.feature.change_mpin.ChangeMpinFlow
-import bsb.dev.bsb_bangking_jp.feature.change_mpin.OtpChangeMpinPage
-import bsb.dev.bsb_bangking_jp.feature.change_mpin.presentation.ChangeMpinViewModel
-import bsb.dev.bsb_bangking_jp.feature.change_pw.NewPasswordPage
-import bsb.dev.bsb_bangking_jp.feature.change_pw.OldPasswordPage
-import bsb.dev.bsb_bangking_jp.feature.change_pw.OtpChangePwPage
-import bsb.dev.bsb_bangking_jp.feature.change_pw.presentation.ChangePwViewModel
+import bsb.dev.bsb_bangking_jp.feature.activation.activationNavGraph
+import bsb.dev.bsb_bangking_jp.feature.beranda.get_banner.presentation.BerandaViewModel
+import bsb.dev.bsb_bangking_jp.feature.change_email.changeEmailNavGraph
+import bsb.dev.bsb_bangking_jp.feature.change_mpin.changeMPinNavGraph
+import bsb.dev.bsb_bangking_jp.feature.change_pw.changePwNavGraph
+import bsb.dev.bsb_bangking_jp.feature.forget_iduser.forgetIdUserNavGraph
+import bsb.dev.bsb_bangking_jp.feature.forget_pw.forgetPwUserNavGraph
 import bsb.dev.bsb_bangking_jp.feature.login_existing.loginExistingNavGraph
+import bsb.dev.bsb_bangking_jp.feature.manage_scheduled_transfer.manageScheduledTransferNavGraph
 import bsb.dev.bsb_bangking_jp.feature.notification.NotifikasiPage
 import bsb.dev.bsb_bangking_jp.feature.pengaturan.FaqPage
 import bsb.dev.bsb_bangking_jp.feature.pengaturan.SyaratKetentuanPage
 import bsb.dev.bsb_bangking_jp.feature.pengaturan.TentangAplikasiPage
+import bsb.dev.bsb_bangking_jp.feature.registration.registrationNavGraph
 import bsb.dev.bsb_bangking_jp.feature.scan_qris.ScanQrisPage
+import bsb.dev.bsb_bangking_jp.shared.session.SessionExpiredDialog
+import bsb.dev.bsb_bangking_jp.shared.session.SessionGuard
+import org.koin.compose.koinInject
 
 @Composable
 fun AppNavigation(
     darkTheme: Boolean,
     onThemeChange: (Boolean) -> Unit,
 ) {
+    val sessionGuard: SessionGuard = koinInject()
+    val berandaViewModel: BerandaViewModel = koinInject()
+    val showSessionExpired by sessionGuard.showSessionExpired.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val navController = rememberNavController()
     val toastState = rememberToastState()
@@ -108,13 +91,25 @@ fun AppNavigation(
     var pendingSumberKlasifikasi by remember { mutableStateOf("Tabungan Sekarang") }
     var pendingSumberSaldoInt by remember { mutableStateOf(0) }
 
+    LaunchedEffect(showSessionExpired) {
+        if (showSessionExpired) loadingOverlayState.hide() // jangan sampai overlay loading menggantung
+    }
+    if (showSessionExpired) {
+        SessionExpiredDialog(
+            onLoginAgain = {
+                sessionGuard.onLoginAgain()
+                berandaViewModel.resetLocalState() // reset Profile & Rekening ViewModel (singleton)
+                navController.navigate("portal") { popUpTo(0) }
+            },
+        )
+    }
     CompositionLocalProvider(LocalToastState provides toastState,
         LocalLoadingOverlay provides loadingOverlayState,
         ) {
         Box(modifier = Modifier.fillMaxSize()) {
             NavHost(
                 navController = navController,
-                startDestination = "navbar",
+                startDestination = "splash",
             ) {
                 composable("splash") {
                     SplashScreen(navController)
@@ -133,192 +128,31 @@ fun AppNavigation(
                 }
                 //login existing
                 loginExistingNavGraph(navController)
+
                 //registration page
-                navigation(startDestination = "registration_akun", route = "registration") {
+                registrationNavGraph(navController)
 
-                    composable("registration_akun") { backStackEntry ->
-                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("registration") }
-                        val viewModel: RegistrationViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
-
-                        FindAccountPageRegistration(
-                            viewModel = viewModel,
-                            onBackClick = { navController.popBackStack() },
-                            onNavigateToOtp = { navController.navigate("registration_otp") },
-                        )
-                    }
-
-                    composable("registration_otp") { backStackEntry ->
-                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("registration") }
-                        val viewModel: RegistrationViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
-
-                        OtpPageRegistration(
-                            viewModel = viewModel,
-                            onBackClick = { navController.popBackStack() },
-                            onVerified = { navController.navigate("registration_buat_id") },
-                        )
-                    }
-
-                    composable("registration_buat_id") { backStackEntry ->
-                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("registration") }
-                        val viewModel: RegistrationViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
-
-                        CreateUserIdPageRegistration(
-                            viewModel = viewModel,
-                            onBackClick = { navController.popBackStack() },
-                            onNavigateToPasswordPage = { navController.navigate("registration_buat_password") },
-                        )
-                    }
-
-                    composable("registration_buat_password") { backStackEntry ->
-                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("registration") }
-                        val viewModel: RegistrationViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
-
-                        CreateUserPwPageRegistration(
-                            viewModel = viewModel,
-                            onBackClick = { navController.popBackStack() },
-                            onRegistrationSelesai = {
-                                navController.navigate("portal") { popUpTo(0) }
-                            },
-                        )
-                    }
-                }
-                //alur activation
-                navigation(startDestination = "aktivasi_akun", route = "activation") {
-
-                    composable("aktivasi_akun") { backStackEntry ->
-                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("activation") }
-                        val viewModel: ActivationViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
-
-                        FindAccountPageActivation(
-                            viewModel = viewModel,
-                            onBackClick = { navController.popBackStack() },
-                            onNavigateToIdPengguna = { navController.navigate("aktivasi_id") },
-                        )
-                    }
-
-                    composable("aktivasi_id") { backStackEntry ->
-                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("activation") }
-                        val viewModel: ActivationViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
-
-                        InputIdPageActivation(
-                            viewModel = viewModel,
-                            onBackClick = { navController.popBackStack() },
-                            onNavigateToOtp = { navController.navigate("aktivasi_otp") },
-                        )
-                    }
-
-                    composable("aktivasi_otp") { backStackEntry ->
-                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("activation") }
-                        val viewModel: ActivationViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
-
-                        OtpPageActivation(
-                            viewModel = viewModel,
-                            onBackClick = { navController.popBackStack() },
-                            onVerified = { navController.navigate("aktivasi_password") },
-                        )
-                    }
-
-                    composable("aktivasi_password") { backStackEntry ->
-                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("activation") }
-                        val viewModel: ActivationViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
-
-                        InputPwPageActivation(
-                            viewModel = viewModel,
-                            onBackClick = { navController.popBackStack() },
-                            onNavigateToPin = { navController.navigate("aktivasi_pin") },
-                        )
-                    }
-
-                    composable("aktivasi_pin") { backStackEntry ->
-                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("activation") }
-                        val viewModel: ActivationViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
-
-                        ActivationPinFlow(
-                            viewModel = viewModel,
-                            onBackClick = { navController.popBackStack() },
-                            onCompleted = {
-                                navController.navigate("portal") { popUpTo(0) }
-                            },
-                        )
-                    }
-                }
+                //activation page
+                activationNavGraph(navController)
 
                 //lupa id user
-                navigation(startDestination = "forget_iduser_home", route = "forget_iduser") {
+                forgetIdUserNavGraph(navController)
 
-                    composable("forget_iduser_home") { backStackEntry ->
-                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("forget_iduser") }
-                        val viewModel: ForgetIdUserViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
+                //lupa pw user
+                forgetPwUserNavGraph(navController)
 
-                        FindAccountPageForgetId(
-                            viewModel = viewModel,
-                            onBackClick = { navController.popBackStack() },
-                            onNavigateToOtp = { navController.navigate("forget_iduser_otp") },
-                        )
-                    }
+                //manage scheduled transfer
+                manageScheduledTransferNavGraph(navController)
 
-                    composable("forget_iduser_otp") { backStackEntry ->
-                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("forget_iduser") }
-                        val viewModel: ForgetIdUserViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
+                // ganti email
+                changeEmailNavGraph(navController)
 
-                        OtpPageForgetId(
-                            viewModel = viewModel,
-                            onBackClick = { navController.popBackStack() },
-                            onVerified = { navController.navigate("forget_iduser_reset") },
-                        )
-                    }
+                //ganti pw
+                changePwNavGraph(navController)
 
-                    composable("forget_iduser_reset") { backStackEntry ->
-                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("forget_iduser") }
-                        val viewModel: ForgetIdUserViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
+                // ganti m-pin
+                changeMPinNavGraph(navController)
 
-                        ResetIdPageForgetId(
-                            viewModel = viewModel,
-                            onBackClick = { navController.popBackStack() },
-                            onResetSuccessComplete = {
-                                navController.navigate("portal") { popUpTo(0) }
-                            },
-                        )
-                    }
-                }
-                navigation(startDestination = "forget_pw_home", route = "forget_pw") {
-
-                    composable("forget_pw_home") { backStackEntry ->
-                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("forget_pw") }
-                        val viewModel: ForgetPwViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
-
-                        FindAccountPageForgetPw(
-                            viewModel = viewModel,
-                            onBackClick = { navController.popBackStack() },
-                            onNavigateToOtp = { navController.navigate("forget_pw_otp") },
-                        )
-                    }
-                    // forget pw user
-                    composable("forget_pw_otp") { backStackEntry ->
-                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("forget_pw") }
-                        val viewModel: ForgetPwViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
-
-                        OtpPageForgetPw(
-                            viewModel = viewModel,
-                            onBackClick = { navController.popBackStack() },
-                            onVerified = { navController.navigate("forget_pw_reset") },
-                        )
-                    }
-
-                    composable("forget_pw_reset") { backStackEntry ->
-                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("forget_pw") }
-                        val viewModel: ForgetPwViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
-
-                        ResetPwPageForgetPw(
-                            viewModel = viewModel,
-                            onBackClick = { navController.popBackStack() },
-                            onResetSuccessComplete = {
-                                navController.navigate("portal") { popUpTo(0) }
-                            },
-                        )
-                    }
-                }
-                //
                 composable("portal") {
                     LoginPage(navController)
                 }
@@ -445,6 +279,7 @@ fun AppNavigation(
                         }
                     )
                 }
+
                 composable("scan_qris") {
                     ScanQrisPage(
                         onBackClick = { navController.popBackStack() },
@@ -487,36 +322,6 @@ fun AppNavigation(
                         onTransferSekarang = { navController.navigate("transfer_baru") },
                         onAturTerjadwalClick = { navController.navigate("manage_scheduled_transfer") }, // 🔹 tambahkan
                     )
-                }
-
-                    // nav graph baru untuk alur transfer terjadwal
-                navigation(startDestination = "manage_scheduled_transfer_list", route = "manage_scheduled_transfer") {
-
-                    composable("manage_scheduled_transfer_list") { backStackEntry ->
-                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("manage_scheduled_transfer") }
-                        val viewModel: ScheduledTransferViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
-
-                        ManageScheduledTransferPage(
-                            viewModel = viewModel,
-                            onBackClick = { navController.popBackStack() },
-                            onItemClick = { id -> navController.navigate("manage_scheduled_transfer_detail/$id") },
-                        )
-                    }
-
-                    composable(
-                        route = "manage_scheduled_transfer_detail/{id}",
-                        arguments = listOf(navArgument("id") { type = NavType.IntType }),
-                    ) { backStackEntry ->
-                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("manage_scheduled_transfer") }
-                        val viewModel: ScheduledTransferViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
-                        val id = backStackEntry.arguments?.getInt("id") ?: return@composable
-
-                        ScheduledTransferDetailPage(
-                            id = id,
-                            viewModel = viewModel,
-                            onBackClick = { navController.popBackStack() },
-                        )
-                    }
                 }
 
                 composable("transfer_baru") {
@@ -607,7 +412,7 @@ fun AppNavigation(
                             onBerhasilSegera = { confirmResult ->
                                 pendingConfirmResult = confirmResult
 
-//                                 🔹 Trigger notifikasi + suara custom, padanan bank sungguhan.
+                                //🔹 Trigger notifikasi + suara custom, padanan bank sungguhan.
                                 NotificationHelper.showTransaksiBerhasil(
                                     context = context,
                                     title = "Transfer Berhasil",
@@ -671,98 +476,7 @@ fun AppNavigation(
                         )
                     }
                 }
-                // ganti email
-                navigation(startDestination = "change_email_input", route = "change_email") {
-                    composable("change_email_input") { backStackEntry ->
-                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("change_email") }
-                        val viewModel: ChangeEmailViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
 
-                        ChangeEmailPage(
-                            viewModel = viewModel,
-                            onBackClick = { navController.popBackStack() },
-                            onNavigateToPin = { navController.navigate("change_email_pin") },
-                        )
-                    }
-                    composable("change_email_pin") { backStackEntry ->
-                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("change_email") }
-                        val viewModel: ChangeEmailViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
-
-                        ChangeEmailPinPage(
-                            viewModel = viewModel,
-                            onBackClick = { navController.popBackStack() },
-                            onCompleted = {
-                                // padanan 3x Navigator.pop() di ChangeEmailPage.dart -- buang seluruh
-                                // stack alur change_email (input + pin), balik ke PengaturanPage.
-                                navController.popBackStack("change_email", inclusive = true)
-                            },
-                        )
-                    }
-                }
-                //ganti pw
-                navigation(startDestination = "change_pw_old", route = "change_pw") {
-
-                    composable("change_pw_old") { backStackEntry ->
-                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("change_pw") }
-                        val viewModel: ChangePwViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
-
-                        OldPasswordPage(
-                            viewModel = viewModel,
-                            onBackClick = { navController.popBackStack() },
-                            onNavigateToNewPassword = { navController.navigate("change_pw_new") },
-                        )
-                    }
-
-                    composable("change_pw_new") { backStackEntry ->
-                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("change_pw") }
-                        val viewModel: ChangePwViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
-
-                        NewPasswordPage(
-                            viewModel = viewModel,
-                            onBackClick = { navController.popBackStack() },
-                            onNavigateToOtp = { navController.navigate("change_pw_otp") },
-                        )
-                    }
-
-                    composable("change_pw_otp") { backStackEntry ->
-                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("change_pw") }
-                        val viewModel: ChangePwViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
-
-                        OtpChangePwPage(
-                            viewModel = viewModel,
-                            onBackClick = { navController.popBackStack() },
-                            onCompleted = {
-                                // 🔹 AppNavigation cuma tahu SATU hal: ke mana harus pindah setelah selesai.
-                                navController.popBackStack("navbar", inclusive = false)
-                            },
-                        )
-                    }
-                }
-                // ganti m-pin
-                navigation(startDestination = "change_mpin_flow", route = "change_mpin") {
-                    composable("change_mpin_flow") { backStackEntry ->
-                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("change_mpin") }
-                        val viewModel: ChangeMpinViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
-
-                        ChangeMpinFlow(
-                            viewModel = viewModel,
-                            onBackClick = { navController.popBackStack() },
-                            onNavigateToOtp = { navController.navigate("change_mpin_otp") },
-                        )
-                    }
-                    composable("change_mpin_otp") { backStackEntry ->
-                        val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("change_mpin") }
-                        val viewModel: ChangeMpinViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
-
-                        OtpChangeMpinPage(
-                            viewModel = viewModel,
-                            onBackClick = { navController.popBackStack() },
-                            onCompleted = {
-                                // 🔹 AppNavigation cuma tahu SATU hal: ke mana harus pindah setelah selesai.
-                                navController.popBackStack("navbar", inclusive = false)
-                            },
-                        )
-                    }
-                }
                 composable("faq") {
                     FaqPage(onBackClick = { navController.popBackStack() })
                 }

@@ -15,7 +15,7 @@ import bsb.dev.bsb_bangking_jp.feature.login.data.LoginApiService as LoginDirect
 import bsb.dev.bsb_bangking_jp.feature.login_existing.data.LoginExistingApiService as LoginExistingApiService
 
 val networkModule = module {
-    single { GetWithBodyApiHelper(get(), get()) }
+    single { GetWithBodyApiHelper(get(), get(),get ()) }
 
     single {
         HttpLoggingInterceptor().apply {
@@ -51,6 +51,7 @@ val networkModule = module {
         TokenRefreshInterceptor(
             secureStorage = get(),
             refreshApiService = { get<RefreshTokenApiService>() },
+            sessionExpiredNotifier = get(),
         )
     }
 
