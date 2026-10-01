@@ -18,5 +18,5 @@ interface ImageRepository {
 enum class ImageCategory(val segment: String) {
     NEWS("banner"),
     BANK("bank"),
-    // PROFILE("profile"), BANK_LOGO("bank"), dst -- tambah sesuai kebutuhan backend
+   //tambah sesuai kebutuhan backend
 }

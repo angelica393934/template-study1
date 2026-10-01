@@ -24,14 +24,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bsb.dev.bsb_bangking_jp.core.components.EmptyState
 import bsb.dev.bsb_bangking_jp.core.components.InitialAvatar
 import bsb.dev.bsb_bangking_jp.core.components.SearchTextField
+import bsb.dev.bsb_bangking_jp.core.skeleton.SkeletonBox
+import bsb.dev.bsb_bangking_jp.feature.news.domain.AllNewsItem
 import bsb.dev.bsb_bangking_jp.feature.transfer.daftar_bank.domain.BankItem
 import bsb.dev.bsb_bangking_jp.feature.transfer.daftar_bank.presentation.DaftarBankUiState
 import bsb.dev.bsb_bangking_jp.feature.transfer.daftar_bank.presentation.DaftarBankViewModel
+import bsb.dev.bsb_bangking_jp.shared.get_image.NetworkImageState
+import bsb.dev.bsb_bangking_jp.shared.get_image.domain.ImageCategory
+import bsb.dev.bsb_bangking_jp.shared.get_image.rememberNetworkImageState
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -130,11 +136,42 @@ fun PilihBankSheet(
         }
     }
 }
+@Composable
+private fun BankAvatar(
+    bankName: String,
+    picturePath: String?,
+    radius: Double = 28.0,
+) {
+    // Hanya dipanggil saat item benar-benar tampil (LazyColumn), dan otomatis
+    // dibatalkan kalau item keluar layar sebelum selesai.
+    val state = rememberNetworkImageState(path = picturePath, category = ImageCategory.BANK)
+
+    when (state) {
+        is NetworkImageState.Loading -> SkeletonBox(
+            height = (radius * 2).dp,
+            width = (radius * 2).dp,
+            isCircular = true,
+        )
+        is NetworkImageState.Loaded -> InitialAvatar(
+            initials = bankName,
+            photoBytes = state.bytes,
+            radius = radius,
+            imageContentScale = ContentScale.Fit,
+            imagePadding = 6.dp,
+        )
+        is NetworkImageState.Failed -> InitialAvatar( // fallback: inisial
+            initials = bankName,
+            radius = radius,
+        )
+    }
+}
 
 @Composable
 private fun BankItemRow(
     bank: BankItem,
     onClick: () -> Unit,
+    photoBytes: ByteArray? = null,
+
 ) {
     Row(
         modifier = Modifier
@@ -144,13 +181,7 @@ private fun BankItemRow(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start,
     ) {
-        // 🔹 InitialAvatar sudah otomatis fallback ke inisial kalau `imagePath`
-        // null/gagal load (lihat GlideImage di dalamnya) -- padanan skeleton+fallback
-        // manual yang ada di GetImageBloc versi .
-        InitialAvatar(
-            initials = bank.bankName,
-            imagePath = bank.picture,
-        )
+        BankAvatar(bankName = bank.bankName, picturePath = bank.picture)
         Spacer(modifier = Modifier.width(12.dp))
         Text(
             text = bank.bankName,

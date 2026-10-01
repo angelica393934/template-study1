@@ -3,6 +3,7 @@ package bsb.dev.bsb_bangking_jp.core.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
@@ -14,6 +15,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
@@ -30,6 +32,8 @@ fun InitialAvatar(
     radius: Double = 28.0,
     isSelected: Boolean = false,
     showBorder: Boolean = false,
+    imageContentScale: ContentScale = ContentScale.Crop,
+    imagePadding: Dp = 0.dp,
 ) {
     val colorScheme = MaterialTheme.colorScheme
 
@@ -75,10 +79,11 @@ fun InitialAvatar(
             GlideImage(
                 model = imageModel,
                 contentDescription = null,
-                contentScale = ContentScale.Crop,
+                contentScale = imageContentScale,
                 modifier = Modifier
                     .size(diameter)
-                    .clip(CircleShape),
+                    .clip(CircleShape)
+                    .padding(imagePadding),
             )
         }
     }

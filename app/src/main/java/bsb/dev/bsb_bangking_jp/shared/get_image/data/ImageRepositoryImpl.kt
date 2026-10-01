@@ -11,6 +11,9 @@ import bsb.dev.bsb_bangking_jp.core.session.ClearableRepository
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
+import kotlin.coroutines.cancellation.CancellationException
 
 class ImageRepositoryImpl(
     private val api: ImageApiService,
@@ -21,26 +24,38 @@ class ImageRepositoryImpl(
     private val inFlight = mutableMapOf<String, CompletableDeferred<ByteArray?>>()
     private val inFlightMutex = Mutex()
 
+    // Maksimal 4 request gambar berjalan bersamaan.
+    private val requestLimiter = Semaphore(permits = 4)
+
     override suspend fun getImage(path: String?, category: ImageCategory): ByteArray? {
         val fileName = extractFileName(path)
         if (fileName.isEmpty()) return null
 
-        // 🔹 Path final yang benar-benar dikirim ke API, mis. "banner/1770604454_BI Fast.jpeg"
         val requestPath = "${category.segment}/$fileName"
 
         successCache[requestPath]?.let { return it }
 
-        val existing = inFlightMutex.withLock { inFlight[requestPath] }
-        if (existing != null) return existing.await()
-
-        val deferred = CompletableDeferred<ByteArray?>()
-        inFlightMutex.withLock { inFlight[requestPath] = deferred }
+        // Cek + daftarkan secara atomik, supaya dua pemanggil tidak sama-sama jadi "pemilik".
+        val (deferred, isOwner) = inFlightMutex.withLock {
+            val existing = inFlight[requestPath]
+            if (existing != null) existing to false
+            else CompletableDeferred<ByteArray?>().also { inFlight[requestPath] = it } to true
+        }
+        if (!isOwner) return deferred.await()
 
         try {
-            val result = fetchFromApi(requestPath)
+            val result = requestLimiter.withPermit {
+                fetchFromApi(requestPath)
+                // Opsional kalau backend punya rate limit:
+                // .also { delay(100) }
+            }
             if (result != null) successCache[requestPath] = result
             deferred.complete(result)
             return result
+        } catch (e: CancellationException) {
+            // Pemilik dibatalkan (item keluar layar): lepaskan penunggu supaya tidak menggantung.
+            deferred.complete(null)
+            throw e
         } finally {
             inFlightMutex.withLock { inFlight.remove(requestPath) }
         }
