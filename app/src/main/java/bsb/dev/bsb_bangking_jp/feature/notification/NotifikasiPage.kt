@@ -91,7 +91,7 @@ fun NotifikasiPage(
                     Text(
                         text = "Semua Notifikasi",
                         style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.padding(horizontal = appLayout.defaultPadding, vertical = appLayout.verticalPadding),
+                        modifier = Modifier.padding(horizontal = appLayout.defaultPadding, vertical = appLayout.verticalPadding16),
                     )
                     HorizontalDivider(color = MaterialTheme.extendedColors.strip)
 
@@ -149,7 +149,7 @@ private fun NotifRow(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = appLayout.defaultPadding, vertical = appLayout.verticalPadding)
+                .padding(horizontal = appLayout.defaultPadding, vertical = appLayout.verticalPadding16)
                 .then(Modifier),
             horizontalArrangement = androidx.compose.foundation.layout.Arrangement.SpaceBetween,
         ) {

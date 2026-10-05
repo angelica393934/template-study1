@@ -1,13 +1,14 @@
 package bsb.dev.bsb_bangking_jp.feature.registration
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,14 +18,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import bsb.dev.bsb_bangking_jp.core.components.AdaptiveScrollColumn
 import bsb.dev.bsb_bangking_jp.core.components.AppButton
 import bsb.dev.bsb_bangking_jp.core.components.AppHeader
 import bsb.dev.bsb_bangking_jp.core.components.AppTextField
 import bsb.dev.bsb_bangking_jp.core.components.LocalLoadingOverlay
 import bsb.dev.bsb_bangking_jp.core.components.LocalToastState
 import bsb.dev.bsb_bangking_jp.core.components.RuleBullet
+import bsb.dev.bsb_bangking_jp.core.theme.appLayout
+import bsb.dev.bsb_bangking_jp.core.theme.appSpacing
 import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
 import bsb.dev.bsb_bangking_jp.feature.registration.presentation.RegistrationViewModel
 import bsb.dev.bsb_bangking_jp.feature.registration.presentation.RegistrationNavEvent
@@ -65,21 +68,22 @@ fun CreateUserIdPageRegistration(
 
     Column(modifier = Modifier.fillMaxSize()) {
         AppHeader(title = "Buat ID Pengguna", onBackClick = onBackClick)
-
+        AdaptiveScrollColumn(
+            modifier = Modifier
+                .weight(1f)
+                .imePadding(),                       // supaya tidak tertutup keyboard
+        ) {
         Column(
             modifier = Modifier
-                .padding(horizontal = 24.dp)
-                .padding(top = 20.dp),
-        ) {
+                .padding(all = appLayout.defaultPadding),
+            verticalArrangement = Arrangement.spacedBy(appSpacing.xxxs),
+            ) {
             Text(text = "Buat ID Pengguna Kamu", style = MaterialTheme.typography.titleLarge)
-            Spacer(modifier = Modifier.height(10.dp))
             Text(
                 text = "ID Pengguna ini akan digunakan untuk masuk ke akun dan mengakses Bank Sumsel Babel Mobile Banking.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.extendedColors.textSecondary,
             )
-            Spacer(modifier = Modifier.height(15.dp))
-
             AppTextField(
                 value = userId,
                 onValueChange = {
@@ -93,8 +97,6 @@ fun CreateUserIdPageRegistration(
                 showError = uiState.userIdError != null,
                 enableFocusBackground = true,
             )
-            Spacer(modifier = Modifier.height(10.dp))
-
             AppTextField(
                 value = confirmUserId,
                 onValueChange = {
@@ -108,24 +110,20 @@ fun CreateUserIdPageRegistration(
                 showError = confirmError != null,
                 enableFocusBackground = true,
             )
-
-            Spacer(modifier = Modifier.height(10.dp))
-            HorizontalDivider(color = MaterialTheme.extendedColors.divider)
-            Spacer(modifier = Modifier.height(10.dp))
-
             Text(
                 text = "Aturan ID Pengguna",
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.extendedColors.textSecondary,
             )
-            Spacer(modifier = Modifier.height(10.dp))
             RuleBullet("Gunakan tepat 8 karakter", userId.isNotEmpty(), has8Chars)
-            Spacer(modifier = Modifier.height(5.dp))
-            RuleBullet("Gunakan kombinasi huruf besar dan kecil", userId.isNotEmpty(), hasUpperLower)
-            Spacer(modifier = Modifier.height(5.dp))
+            RuleBullet(
+                "Gunakan kombinasi huruf besar dan kecil",
+                userId.isNotEmpty(),
+                hasUpperLower
+            )
             RuleBullet("Sertakan angka", userId.isNotEmpty(), hasNumber)
 
-            Spacer(modifier = Modifier.height(30.dp))
+            Spacer(modifier = Modifier.height(appSpacing.ss))
 
             AppButton(
                 text = "Lanjutkan",
@@ -139,7 +137,7 @@ fun CreateUserIdPageRegistration(
                     viewModel.addIdUser(userId, confirmUserId)
                 },
             )
-            Spacer(modifier = Modifier.height(30.dp))
+        }
         }
     }
 }

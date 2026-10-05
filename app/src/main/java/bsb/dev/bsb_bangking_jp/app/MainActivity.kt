@@ -11,6 +11,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.only
@@ -23,7 +24,10 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import bsb.dev.bsb_bangking_jp.app.navigation.AppNavigation
@@ -32,7 +36,6 @@ import bsb.dev.bsb_bangking_jp.core.theme.BSBBangkingJPTheme
 import bsb.dev.bsb_bangking_jp.viewmodel.SettingsViewModel
 
 class MainActivity : ComponentActivity() {
-
     private val settingsViewModel: SettingsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,12 +71,19 @@ class MainActivity : ComponentActivity() {
                 window.navigationBarColor = if (settings.darkTheme) Color.BLACK else Color.WHITE
                 insetsController.isAppearanceLightNavigationBars = !settings.darkTheme
             }
+            val focusManager = LocalFocusManager.current
+            val keyboardController = LocalSoftwareKeyboardController.current
 
             BSBBangkingJPTheme(darkTheme = settings.darkTheme) {
                 Surface(
-                    modifier = Modifier.windowInsetsPadding(
-                        WindowInsets.systemBars.only(WindowInsetsSides.Bottom)
-                    ),
+                    modifier = Modifier
+                        .windowInsetsPadding(WindowInsets.systemBars.only(WindowInsetsSides.Bottom))
+                        .pointerInput(Unit) {
+                            detectTapGestures(onTap = {
+                                focusManager.clearFocus()
+                                keyboardController?.hide()
+                            })
+                        },
                     color = MaterialTheme.colorScheme.background
                 ) {
                     AppNavigation(

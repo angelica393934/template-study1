@@ -11,15 +11,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import bsb.dev.bsb_bangking_jp.core.components.AdaptiveScrollColumn
 import bsb.dev.bsb_bangking_jp.core.components.AppButton
 import bsb.dev.bsb_bangking_jp.core.components.AppHeader
 import bsb.dev.bsb_bangking_jp.core.components.AppTextField
 import bsb.dev.bsb_bangking_jp.core.components.LocalLoadingOverlay
 import bsb.dev.bsb_bangking_jp.core.components.LocalToastState
+import bsb.dev.bsb_bangking_jp.core.theme.appLayout
+import bsb.dev.bsb_bangking_jp.core.theme.appSpacing
 import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
 import bsb.dev.bsb_bangking_jp.feature.login_existing.presentation.LoginExistingNavEvent
 import bsb.dev.bsb_bangking_jp.feature.login_existing.presentation.LoginExistingUiEvent
@@ -61,24 +64,28 @@ fun MasukPage(
             title = "Masuk Akun",
             onBackClick = onBackClick,
         )
-
-        Spacer(modifier = Modifier.height(30.dp))
-
-        Column(
-            modifier = Modifier.padding(horizontal = 24.dp),
+        AdaptiveScrollColumn(
+            modifier = Modifier
+                .weight(1f)
+                .imePadding(),                       // supaya tidak tertutup keyboard
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(all = appLayout.defaultPadding),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(appSpacing.xxxs),
+            ) {
             Text(
                 text = "Masukkan Nomor Handphone",
                 style = MaterialTheme.typography.titleLarge,
             )
-            Spacer(modifier = Modifier.height(10.dp))
             Text(
                 text = "Silakan masukkan nomor handphone Anda yang terdaftar untuk melanjutkan proses login.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.extendedColors.textSecondary,
             )
-            Spacer(modifier = Modifier.height(20.dp))
-
             AppTextField(
                 value = phoneInput,
                 onValueChange = { phoneInput = it },
@@ -91,13 +98,13 @@ fun MasukPage(
                 onClearError = { viewModel.clearPhoneError() },
                 enableFocusBackground = true,
             )
-
-            Spacer(modifier = Modifier.height(30.dp))
-
+                Spacer(modifier = Modifier.height(appSpacing.ss))
+                
             AppButton(
                 text ="Lanjutkan",
                 onClick = { viewModel.loginInit(phoneInput) },
             )
         }
     }
+}
 }

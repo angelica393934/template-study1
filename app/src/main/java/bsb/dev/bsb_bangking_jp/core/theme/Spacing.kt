@@ -4,6 +4,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 object appSpacing {
+    val ss: Dp = 0.dp
+
     val xxxxs: Dp = 4.dp
     val xxxs: Dp = 8.dp
     val xxs: Dp = 12.dp
@@ -24,5 +26,7 @@ object appRadius {
 
 object appLayout {
     val defaultPadding: Dp = 24.dp
-    val verticalPadding: Dp = 16.dp
+    val verticalPadding16: Dp = 16.dp
+    val verticalPadding12: Dp = 12.dp
+
 }

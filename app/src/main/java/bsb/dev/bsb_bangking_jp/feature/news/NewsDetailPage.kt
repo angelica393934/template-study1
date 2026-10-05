@@ -107,7 +107,7 @@ private fun NewsDetailContent(data: NewsDetail) {
             .verticalScroll(rememberScrollState())
             .padding(
                 horizontal = appLayout.defaultPadding,
-                vertical = appLayout.verticalPadding
+                vertical = appLayout.verticalPadding16
             ),
         verticalArrangement = Arrangement.spacedBy(appSpacing.xxxs),
     ) {

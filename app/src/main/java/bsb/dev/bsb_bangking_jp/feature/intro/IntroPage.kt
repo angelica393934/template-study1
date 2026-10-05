@@ -5,7 +5,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material3.*
@@ -23,7 +25,8 @@ import androidx.navigation.NavController
 import bsb.dev.bsb_bangking_jp.R
 import bsb.dev.bsb_bangking_jp.core.components.AppButton
 import bsb.dev.bsb_bangking_jp.core.components.AppSwitch
-import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
+import bsb.dev.bsb_bangking_jp.core.theme.appLayout
+import bsb.dev.bsb_bangking_jp.core.util.getResponsiveCardHeight
 import kotlinx.coroutines.launch
 
 data class IntroPageData(
@@ -64,46 +67,58 @@ fun IntroPage(
 
     val scope = rememberCoroutineScope()
 
-    Box(
+    BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.primaryContainer)
     ) {
+        // 🔹 Ukuran dihitung dari layar, bukan fixed dp
+        val screenHeight = maxHeight
+        val cardHeight = getResponsiveCardHeight(maxHeight)
+        // jarak dari atas layar = 1/6 tinggi layar
+        val topGap = screenHeight / 6
+        // jarak gambar ke card
+        val bottomGap = 28.dp
+
+        // Background atas
         Image(
             painter = painterResource(R.drawable.bg),
             contentDescription = null,
             modifier = Modifier
                 .fillMaxWidth(),
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.FillWidth
         )
+
+        // Gambar tiap page: dipusatkan di area ANTARA header dan card
         HorizontalPager(
             state = pagerState,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = cardHeight)   // ganti Spacer(200.dp) fixed
         ) { page ->
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.fillMaxSize()
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = topGap, bottom = bottomGap),
+                contentAlignment = Alignment.Center
             ) {
-                Spacer(modifier = Modifier.weight(1f))
                 Image(
                     painter = painterResource(pages[page].image),
                     contentDescription = null,
-                    modifier = Modifier.size(270.dp)
+                    modifier = Modifier.fillMaxHeight(), // tinggi = ruang yang tersedia
+                    contentScale = ContentScale.Fit      // lebar otomatis mengikuti rasio gambar
                 )
-                Spacer(modifier = Modifier.weight(1f))
-                Spacer(modifier = Modifier.height(200.dp))
             }
         }
 
+        // Header (indikator, lewati, switch tema) — tidak berubah
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(24.dp)
+                .statusBarsPadding()
+                .padding(horizontal = appLayout.defaultPadding, vertical = appLayout.verticalPadding12)
                 .align(Alignment.TopCenter)
         ) {
-
-            Spacer(modifier = Modifier.height(20.dp))
-
             Row {
                 repeat(pages.size) { index ->
                     Box(
@@ -115,110 +130,91 @@ fun IntroPage(
                             .background(
                                 if (pagerState.currentPage == index)
                                     MaterialTheme.colorScheme.primary
-                                else
-                                    MaterialTheme.colorScheme.secondary
+                                else MaterialTheme.colorScheme.secondary
                             )
                     )
                 }
             }
             Spacer(modifier = Modifier.height(10.dp))
 
-
             TextButton(
                 modifier = Modifier.align(Alignment.End),
                 onClick = {
-                    navController.navigate("intro4") {
-                        popUpTo("intro") {
-                            inclusive = true
-                        }
-                    }
+                    navController.navigate("intro4") { popUpTo("intro") { inclusive = true } }
                 }
             ) {
-                Text("Lewati",
-                        color = MaterialTheme.colorScheme.primary
-                )
-
+                Text("Lewati", color = MaterialTheme.colorScheme.primary)
                 Icon(
                     Icons.AutoMirrored.Filled.ArrowForward,
                     tint = MaterialTheme.colorScheme.primary,
                     contentDescription = null
                 )
             }
-            Spacer(modifier = Modifier.height(8.dp))
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = if (darkTheme) "Dark" else "Light",
-                    color = MaterialTheme.colorScheme.primary
-                )
-
-                Spacer(modifier = Modifier.width(8.dp))
-
                 AppSwitch(
                     checked = darkTheme,
-                    onCheckedChange = onThemeChange
+                    onCheckedChange = onThemeChange,
+                    modifier = Modifier.size(
+                        width = 40.dp,
+                        height = 20.dp
+                    )
                 )
             }
         }
 
+        // 🔹 Card bawah: tinggi proporsional + isi bisa scroll
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(328.dp)
+                .height(cardHeight)
                 .align(Alignment.BottomCenter),
-            shape = RoundedCornerShape(
-                topStart = 30.dp,
-                topEnd = 30.dp
-            ),
-             colors = CardDefaults.cardColors(
-             containerColor = MaterialTheme.colorScheme.surface
-            )
+            shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
         ) {
-
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(
-                        horizontal = 24.dp,
-                        vertical = 30.dp
-                    ),
-                verticalArrangement = Arrangement.SpaceBetween
+                    .padding(all= appLayout.defaultPadding),
             ) {
+                // Judul + deskripsi: area yang bisa scroll kalau teks panjang / layar kecil
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .verticalScroll(rememberScrollState()),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = pages[pagerState.currentPage].title,
+                        style = MaterialTheme.typography.displaySmall,
+                        color = MaterialTheme.colorScheme.primary,
+                        textAlign = TextAlign.Center,
+                    )
+                    Text(
+                        text = pages[pagerState.currentPage].desc,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
+                }
+                Spacer(modifier = Modifier.height(10.dp))
 
-                Text(
-                    text = pages[pagerState.currentPage].title,
-                    style = MaterialTheme.typography.displaySmall,
-                    color = MaterialTheme.colorScheme.primary,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                Text(
-                    text = pages[pagerState.currentPage].desc,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.extendedColors.textDisabled,
-                    textAlign = TextAlign.Center
-                )
+                // Tombol selalu menempel di bawah, tidak ikut ter-scroll
                 AppButton(
-                    text = if (pagerState.currentPage == 0) {
-                        "Mulai"
-                    } else {
-                        "Lanjutkan"
-                    },
+                    text = if (pagerState.currentPage == 0) "Mulai" else "Lanjutkan",
                     onClick = {
                         scope.launch {
                             if (pagerState.currentPage < pages.lastIndex) {
-                                pagerState.animateScrollToPage(
-                                    pagerState.currentPage + 1
-                                )
+                                pagerState.animateScrollToPage(pagerState.currentPage + 1)
                             } else {
                                 navController.navigate("intro4") {
-                                    popUpTo("intro") {
-                                        inclusive = true
-                                    }
+                                    popUpTo("intro") { inclusive = true }
                                 }
                             }
                         }

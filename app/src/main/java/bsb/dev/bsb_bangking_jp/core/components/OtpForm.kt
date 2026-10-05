@@ -139,7 +139,7 @@ fun OtpForm(
                 Spacer(modifier = Modifier.height(12.dp))
             }
 
-            OtpPinInput(
+            OtpInput(
                 value = otpValue,
                 onValueChange = { newValue ->
                     otpValue = newValue

@@ -25,7 +25,7 @@ fun SkeletonList(
     modifier: Modifier = Modifier,
     itemCount: Int = 8,
     avatarSize: Int = 48,
-    itemVerticalPadding: Int = 14,
+    itemverticalPadding16: Int = 14,
     showDateHeader: Boolean = true,
     trailingType: SkeletonTrailingType = SkeletonTrailingType.COLUMN,
     layout: SkeletonListLayout = SkeletonListLayout.AVATAR,
@@ -44,7 +44,7 @@ fun SkeletonList(
 
         for (index in 0 until itemCount) {
             Column(modifier = Modifier.padding(horizontal = 24.dp)) {
-                Column(modifier = Modifier.padding(vertical = itemVerticalPadding.dp)) {
+                Column(modifier = Modifier.padding(vertical = itemverticalPadding16.dp)) {
                     when (layout) {
                         SkeletonListLayout.AVATAR -> AvatarItem(
                             avatarSize = avatarSize,

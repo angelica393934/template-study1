@@ -19,6 +19,7 @@
         android:theme="@style/Theme.BSB_bangking_JP">
         <activity
             android:name=".app.MainActivity"
+            android:screenOrientation="portrait"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.BSB_bangking_JP">

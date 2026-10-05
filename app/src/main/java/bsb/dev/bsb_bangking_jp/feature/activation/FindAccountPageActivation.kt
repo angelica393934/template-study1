@@ -1,10 +1,13 @@
 package bsb.dev.bsb_bangking_jp.feature.activation
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CreditCard
@@ -23,11 +26,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bsb.dev.bsb_bangking_jp.R
+import bsb.dev.bsb_bangking_jp.core.components.AdaptiveScrollColumn
 import bsb.dev.bsb_bangking_jp.core.components.AppButton
 import bsb.dev.bsb_bangking_jp.core.components.AppHeader
 import bsb.dev.bsb_bangking_jp.core.components.AppTextField
 import bsb.dev.bsb_bangking_jp.core.components.LocalLoadingOverlay
 import bsb.dev.bsb_bangking_jp.core.components.LocalToastState
+import bsb.dev.bsb_bangking_jp.core.theme.appLayout
+import bsb.dev.bsb_bangking_jp.core.theme.appSpacing
 import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
 import bsb.dev.bsb_bangking_jp.feature.activation.presentation.ActivationNavEvent
 import bsb.dev.bsb_bangking_jp.feature.activation.presentation.ActivationUiEvent
@@ -61,51 +67,54 @@ fun FindAccountPageActivation(
 
     Column(modifier = Modifier.fillMaxSize()) {
         AppHeader(title = "Aktivasi Akun", onBackClick = onBackClick)
-
-        Column(
+        AdaptiveScrollColumn(
             modifier = Modifier
-            .padding(horizontal = 24.dp, vertical = 30.dp),
+                .weight(1f)
+                .imePadding(),                       // supaya tidak tertutup keyboard
             horizontalAlignment = Alignment.CenterHorizontally,
-            )
-        {
-            Image(
-                painter = painterResource(R.drawable.asset_atur_id),
-                contentDescription = "asset_atur_id"
-            )
-            Text(
-                text = "Aktifkan akun Anda untuk mulai menggunakan aplikasi",
-                style = MaterialTheme.typography.displaySmall,
-                textAlign = TextAlign.Center,
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-            Text(
-                text = "Aktivasi akun diperlukan agar Anda bisa login dan menikmati layanan mobile banking dengan aman.",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.extendedColors.textSecondary,
-                textAlign = TextAlign.Center,
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-
-            AppTextField(
-                value = rekeningInput,
-                onValueChange = {
-                    rekeningInput = it
-                    viewModel.clearAtmCardError()
-                },
-                labelText = "Rekening atau ATM",
-                hintText = "Masukkan Nomor Rekening / ATM",
-                icon = Icons.Default.CreditCard,
-                isNumberOnly = true,
-                errorText = uiState.atmCardError,
-                showError = uiState.atmCardError != null,
-                enableFocusBackground = true,
-            )
-
-            Spacer(modifier = Modifier.height(20.dp))
-            AppButton(
-                text = "Lanjutkan",
-                onClick = { viewModel.getAccountActivation(rekeningInput) },
-            )
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(all = appLayout.defaultPadding),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(appSpacing.xxxs),
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.asset_atur_id),
+                    contentDescription = "asset_atur_id"
+                )
+                Text(
+                    text = "Aktifkan akun Anda untuk mulai menggunakan aplikasi",
+                    style = MaterialTheme.typography.displaySmall,
+                    textAlign = TextAlign.Center,
+                )
+                Text(
+                    text = "Aktivasi akun diperlukan agar Anda bisa login dan menikmati layanan mobile banking dengan aman.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.extendedColors.textSecondary,
+                    textAlign = TextAlign.Center,
+                )
+                AppTextField(
+                    value = rekeningInput,
+                    onValueChange = {
+                        rekeningInput = it
+                        viewModel.clearAtmCardError()
+                    },
+                    labelText = "Rekening atau ATM",
+                    hintText = "Masukkan Nomor Rekening / ATM",
+                    icon = Icons.Default.CreditCard,
+                    isNumberOnly = true,
+                    errorText = uiState.atmCardError,
+                    showError = uiState.atmCardError != null,
+                    enableFocusBackground = true,
+                )
+                Spacer(modifier = Modifier.height(appSpacing.ss))
+                AppButton(
+                    text = "Lanjutkan",
+                    onClick = { viewModel.getAccountActivation(rekeningInput) },
+                )
+            }
         }
     }
 }

@@ -7,6 +7,8 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Density
 
 private val LightColorScheme = lightColorScheme(
     // Primary → aksi utama, tombol, dsb. Sering dipakai sbg bg komponen dgn teks putih
@@ -98,8 +100,13 @@ fun BSBBangkingJPTheme(
 ) {
     val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
     val extendedColors = if (darkTheme) DarkExtendedColors else LightExtendedColors
-
+    val density = LocalDensity.current
+    val cappedDensity = Density(
+        density = density.density,
+        fontScale = density.fontScale.coerceAtMost(MAX_FONT_SCALE),
+    )
     CompositionLocalProvider(
+        LocalDensity provides cappedDensity,
         LocalExtendedColors provides extendedColors,
         LocalRippleConfiguration provides null
     ) {
@@ -110,7 +117,7 @@ fun BSBBangkingJPTheme(
         )
     }
 }
-
+private const val MAX_FONT_SCALE = 1.2f
 // Extension biar akses gampang: MaterialTheme.extendedColors.textPrimary
 val MaterialTheme.extendedColors: ExtendedColors
     @Composable
