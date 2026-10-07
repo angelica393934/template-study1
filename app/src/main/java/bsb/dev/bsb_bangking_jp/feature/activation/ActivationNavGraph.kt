@@ -10,7 +10,6 @@ import org.koin.androidx.compose.koinViewModel
 
 fun NavGraphBuilder.activationNavGraph(navController: NavController) {
     navigation(startDestination = "aktivasi_akun", route = "activation") {
-
         composable("aktivasi_akun") { backStackEntry ->
             val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("activation") }
             val viewModel: ActivationViewModel = koinViewModel(viewModelStoreOwner = parentEntry)

@@ -30,6 +30,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import bsb.dev.bsb_bangking_jp.R
+import bsb.dev.bsb_bangking_jp.core.theme.appLayout
+import bsb.dev.bsb_bangking_jp.core.theme.appSpacing
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -99,105 +101,117 @@ fun OtpForm(
 
     Column(modifier = modifier) {
         AppHeader(title = title, onBackClick = onBackClick)
-
-        Column(
-            modifier = Modifier.padding(horizontal = 24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
+        AdaptiveScrollColumn(
+            modifier = Modifier
+                .weight(1f)
+                .imePadding(),                       // supaya tidak tertutup keyboard
         ) {
-            Spacer(modifier = Modifier.height(30.dp))
-
-            Image(
-                painter = painterResource(id = R.drawable.asset_message),
-                contentDescription = null,
-                modifier = Modifier.size(100.dp),
-                contentScale = ContentScale.Fit,
-            )
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Text(
-                text = buildAnnotatedString {
-                    append("Masukkan 6 digit kode OTP yang telah dikirimkan ke nomor ")
-                    withStyle(SpanStyle(color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)) {
-                        append(phoneNumber)
-                    }
-                },
-                style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.Center,
-            )
-
-            Spacer(modifier = Modifier.height(50.dp))
-
-            if (displayedError != null) {
+            Column(
+                modifier = Modifier
+                    .padding(all = appLayout.defaultPadding),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(appSpacing.xxxs),
+                ) {
+                Image(
+                    painter = painterResource(id = R.drawable.asset_message),
+                    contentDescription = null,
+                    modifier = Modifier.size(100.dp),
+                    contentScale = ContentScale.Fit,
+                )
                 Text(
-                    text = displayedError,
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodySmall,
+                    text = buildAnnotatedString {
+                        append("Masukkan 6 digit kode OTP yang telah dikirimkan ke nomor ")
+                        withStyle(
+                            SpanStyle(
+                                color = MaterialTheme.colorScheme.primary,
+                                fontWeight = FontWeight.Bold
+                            )
+                        ) {
+                            append(phoneNumber)
+                        }
+                    },
+                    style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.Center,
+                )
+
+                if (displayedError != null) {
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Text(
+                        text = displayedError,
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.bodySmall,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.offset(x = otpShakeOffset.value.dp),
+                    )
+                }
+                Spacer(modifier = Modifier.height(10.dp))
+
+                OtpInput(
+                    value = otpValue,
+                    onValueChange = { newValue ->
+                        otpValue = newValue
+                        if (newValue.length == OTP_LENGTH && !isProcessing) {
+                            onVerify(newValue)
+                        }
+                    },
+                    enabled = !isExpired && !isProcessing,
+                    isError = isExpired || errorMessage != null,
                     modifier = Modifier.offset(x = otpShakeOffset.value.dp),
                 )
-                Spacer(modifier = Modifier.height(12.dp))
-            }
 
-            OtpInput(
-                value = otpValue,
-                onValueChange = { newValue ->
-                    otpValue = newValue
-                    if (newValue.length == OTP_LENGTH && !isProcessing) {
-                        onVerify(newValue)
-                    }
-                },
-                length = OTP_LENGTH,
-                enabled = !isExpired && !isProcessing,
-                isError = isExpired || errorMessage != null,
-                modifier = Modifier.offset(x = otpShakeOffset.value.dp),
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Text(
-                text = formatTime(remainingSeconds),
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.primary,
-            )
-
-            Spacer(modifier = Modifier.height(50.dp))
-
-            Row(
-                modifier = Modifier.offset(x = resendShakeOffset.value.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
                 Text(
-                    text = "Tidak menerima kode OTP? ",
-                    style = MaterialTheme.typography.bodyMedium,
+                    text = formatTime(remainingSeconds),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.primary,
                 )
-                Text(
-                    text = if (isResending) "Mengirim..." else "Kirim Ulang OTP",
-                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-                    color = if (isExpired && !isResending) MaterialTheme.colorScheme.primary else Color.Gray,
-                    modifier = Modifier.clip(RoundedCornerShape(4.dp))
-                        .then(
-                            if (isExpired && !isResending) {
-                                Modifier.androidx_clickable(onClick = {
-                                    scope.launch {
-                                        isResending = true
-                                        val success = onResend()
-                                        isResending = false
-                                        // 🔹 KUNCI PERBAIKAN: countdown & status "aktif kembali"
-                                        // HANYA direset kalau resend benar-benar sukses.
-                                        // Kalau gagal, isExpired tetap true dan tombol
-                                        // "Kirim Ulang OTP" tetap bisa ditekan ulang.
-                                        if (success) {
-                                            restartCountdown()
+
+                FlowRow(
+                    modifier = Modifier.offset(x = resendShakeOffset.value.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalArrangement = Arrangement.Center,
+                    itemVerticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = "Tidak menerima kode OTP?",
+                        style = MaterialTheme.typography.bodyMedium,
+                        textAlign = TextAlign.Center,
+                    )
+
+                    Text(
+                        text = if (isResending) "Mengirim..." else "Kirim Ulang OTP",
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            fontWeight = FontWeight.Bold
+                        ),
+                        textAlign = TextAlign.Center,
+                        color = if (isExpired && !isResending) {
+                            MaterialTheme.colorScheme.primary
+                        } else {
+                            MaterialTheme.colorScheme.onSurfaceVariant
+                        },
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(4.dp))
+                            .then(
+                                if (isExpired && !isResending) {
+                                    Modifier.clickable {
+                                        scope.launch {
+                                            isResending = true
+
+                                            val success = onResend()
+
+                                            isResending = false
+
+                                            if (success) {
+                                                restartCountdown()
+                                            }
                                         }
                                     }
-                                })
-                            } else Modifier
-                        ),
-                )
+                                } else {
+                                    Modifier
+                                }
+                            ),
+                    )
+                }
             }
-
-            Spacer(modifier = Modifier.height(40.dp))
         }
     }
 }

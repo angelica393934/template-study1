@@ -8,7 +8,6 @@ import bsb.dev.bsb_bangking_jp.core.components.InputPinPage
 import bsb.dev.bsb_bangking_jp.core.components.LocalLoadingOverlay
 import bsb.dev.bsb_bangking_jp.core.components.LocalToastState
 import bsb.dev.bsb_bangking_jp.feature.transfer.transfer_core.domain.ConfirmTransferResultItem
-import bsb.dev.bsb_bangking_jp.feature.transfer.components.PeriksaKembaliData
 import bsb.dev.bsb_bangking_jp.feature.transfer.transfer_core.presentation.TransferNavEvent
 import bsb.dev.bsb_bangking_jp.feature.transfer.transfer_core.presentation.TransferUiEvent
 import bsb.dev.bsb_bangking_jp.feature.transfer.transfer_core.presentation.TransferViewModel
@@ -63,7 +62,7 @@ fun PinTfPage(
     InputPinPage(
         title = "Masukkan M-PIN",
         onBackClick = onBack,
-        centerTitleWithBackButton = true,
+        showTopBackground=true,
         validator = null,
         externalError = uiState.confirmError,
         onPinComplete = { pin ->

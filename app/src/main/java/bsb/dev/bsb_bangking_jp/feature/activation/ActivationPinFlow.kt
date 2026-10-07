@@ -56,10 +56,8 @@ fun ActivationPinFlow(
 
     when (step) {
         PinStep.CREATE -> InputPinPage(
-            title = "Masukkan M-PIN Anda",
-            usePolaHeader = true,
-            customHeader = { AppHeader(title = "Masukkan M-PIN Anda", onBackClick = onBackClick) },
-            showTopBackground = false,
+            title = "Buat M-PIN Anda",
+            showTopBackground = true,
             onBackClick = onBackClick,
             validator = { pin -> PinValidator.validateNewPin(pin) },
             onPinComplete = { pin ->
@@ -71,10 +69,7 @@ fun ActivationPinFlow(
 
         PinStep.CONFIRM -> InputPinPage(
             title = "Konfirmasi M-PIN Anda",
-            usePolaHeader = true,
-            centerTitleWithBackButton = true,
-            customHeader = { AppHeader(title = "Konfirmasi M-PIN Anda", onBackClick = { step = PinStep.CREATE }) },
-            showTopBackground = false,
+            showTopBackground = true,
             onBackClick = { step = PinStep.CREATE },
             externalError = confirmMismatchError ?: uiState.confirmPinError,
             validator = { pin ->

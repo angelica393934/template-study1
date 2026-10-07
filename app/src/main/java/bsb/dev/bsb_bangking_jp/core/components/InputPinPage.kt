@@ -41,19 +41,16 @@ private const val PIN_LENGTH = 6
 
 @Composable
 fun InputPinPage(
-    title: String,
+    title: String? = null,
     onBackClick: () -> Unit = {},
     showBack: Boolean = true,
-    centerTitleWithBackButton: Boolean = false,
     onPinComplete: ((String) -> Unit)? = null,
     validator: (suspend (String) -> String?)? = null,
     externalError: String? = null,
-    usePolaHeader: Boolean = false,
-    customHeader: (@Composable () -> Unit)? = null,
+    customHeader: (@Composable () -> Unit)? = null, // kalau diisi -> pakai header custom
     subtitle: String? = null,
     showTopBackground: Boolean = true,
     @DrawableRes backgroundRes: Int = R.drawable.bg,
-    modifier: Modifier = Modifier,
 ) {
     var pin by remember { mutableStateOf("") }
     var pinSalah by remember { mutableStateOf(false) }
@@ -72,8 +69,6 @@ fun InputPinPage(
         pin = ""
     }
 
-    // Padanan `didUpdateWidget`: tiap kali `externalError` baru datang dari
-    // caller (mis. dari state management/ViewModel), tampilkan sebagai error.
     LaunchedEffect(externalError) {
         if (externalError != null) {
             showError(externalError)
@@ -94,12 +89,13 @@ fun InputPinPage(
         pin = ""
     }
 
-    val isUsingCustomHeader = usePolaHeader || centerTitleWithBackButton
+    BoxWithConstraints(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+    ) {
+        val keyboardButtonSize = pinKeyboardButtonSize(maxHeight * 0.42f)
 
-    // Box di root = padanan `Stack` di : latar (bg.png) digambar penuh
-    // satu layar dulu, baru Scaffold (header + konten + banner + keypad) di
-    // atasnya dengan container transparan supaya latarnya kelihatan.
-    Box(modifier = modifier.background(MaterialTheme.colorScheme.background)) {
         if (showTopBackground) {
             Image(
                 painter = painterResource(id = backgroundRes),
@@ -112,21 +108,21 @@ fun InputPinPage(
 
         Scaffold(
             containerColor = Color.Transparent,
-            topBar = {// ---- Header ----
-                if (usePolaHeader) {
-                    customHeader?.invoke()
-                } else if (centerTitleWithBackButton) {
-                    CenteredPinHeader(title = title, showBack = showBack, onBackClick = onBackClick)
+            topBar = {
+                if (customHeader != null) {
+                    customHeader()
                 } else {
-                    DefaultPinHeader(showBack = showBack, onBackClick = onBackClick)
+                    CenteredPinHeader(
+                        title = title,
+                        showBack = showBack,
+                        onBackClick = onBackClick,
+                    )
                 }
-                     },
+            },
             bottomBar = {
                 Column {
-                    BannerKeamanan(
-                        modifier = Modifier.padding(horizontal = 24.dp, vertical = 20.dp),
-                    )
                     AppPinKeyboard(
+                        buttonSize = keyboardButtonSize,
                         onKeyTap = { key ->
                             if (pin.length < PIN_LENGTH) {
                                 if (pinSalah || errorMessage != null) {
@@ -152,69 +148,70 @@ fun InputPinPage(
                     .fillMaxSize()
                     .padding(innerPadding),
             ) {
-
-
-                // ---- Konten scrollable ----
-                Column(
+                BoxWithConstraints(
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxWidth()
-                        .verticalScroll(rememberScrollState())
-                        .padding(horizontal = 24.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center,
                 ) {
-                    if (!isUsingCustomHeader) {
-                        Spacer(modifier = Modifier.height(12.dp))
-                        Text(
-                            text = title,
-                            style = MaterialTheme.typography.titleLarge,
-                            textAlign = TextAlign.Center,
-                        )
-                        Spacer(modifier = Modifier.height(30.dp))
-                    }
+                    val areaHeight = maxHeight
+                    val minGap = 16.dp // jarak MINIMUM antar item
 
-                    subtitle?.let {
-                        Spacer(modifier = Modifier.height(12.dp))
-                        Text(
-                            text = it,
-                            style = MaterialTheme.typography.titleLarge,
-                            textAlign = TextAlign.Center,
-                        )
-                        Spacer(modifier = Modifier.height(30.dp))
-                    }
-
-                    Row(
-                        modifier = Modifier.graphicsLayer { translationX = shakeOffset.value },
-                        horizontalArrangement = Arrangement.Center,
-                    ) {
-                        repeat(PIN_LENGTH) { index ->
-                            val filled = index < pin.length
-                            Box(
-                                modifier = Modifier
-                                    .padding(horizontal = 12.dp)
-                                    .size(12.dp)
-                                    .clip(CircleShape)
-                                    .background(
-                                        when {
-                                            filled && pinSalah -> MaterialTheme.extendedColors.danger
-                                            filled -> MaterialTheme.colorScheme.primary
-                                            else -> MaterialTheme.extendedColors.divider
-                                        }
-                                    ),
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .verticalScroll(rememberScrollState())
+                            .heightIn(min = areaHeight)  //kunci: tinggi minimal = area tersedia
+                            .padding(horizontal = 24.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {// jarak sisa di atas (fleksibel) + jarak minimum
+                        Spacer(modifier = Modifier.weight(1f))
+                        subtitle?.let {
+                            Text(
+                                text = it,
+                                style = MaterialTheme.typography.titleLarge,
+                                color = MaterialTheme.extendedColors.textPrimary,
+                                textAlign = TextAlign.Center,
                             )
+                            Spacer(modifier = Modifier.height(minGap))
+                            Spacer(modifier = Modifier.weight(1f))
                         }
-                    }
 
-                    errorMessage?.let {
-                        Spacer(modifier = Modifier.height(18.dp))
-                        Text(
-                            text = it,
-                            textAlign = TextAlign.Center,
-                            style = MaterialTheme.typography.bodyMedium,
-                            fontWeight = FontWeight.Medium,
-                            color = MaterialTheme.extendedColors.danger,
-                        )
+                        errorMessage?.let {
+                            Text(
+                                text = it,
+                                textAlign = TextAlign.Center,
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontWeight = FontWeight.Medium,
+                                color = MaterialTheme.extendedColors.danger,
+                            )
+                            Spacer(modifier = Modifier.height(minGap))
+                        }
+
+                        Row(
+                            modifier = Modifier.graphicsLayer { translationX = shakeOffset.value },
+                            horizontalArrangement = Arrangement.Center,
+                        ) {
+                            repeat(PIN_LENGTH) { index ->
+                                val filled = index < pin.length
+                                Box(
+                                    modifier = Modifier
+                                        .padding(horizontal = 12.dp)
+                                        .size(12.dp)
+                                        .clip(CircleShape)
+                                        .background(
+                                            when {
+                                                filled && pinSalah -> MaterialTheme.extendedColors.danger
+                                                filled -> MaterialTheme.colorScheme.primary
+                                                else -> MaterialTheme.extendedColors.divider
+                                            }
+                                        )
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(minGap))
+                        Spacer(modifier = Modifier.weight(1f))
+                        BannerKeamanan()
+                        Spacer(modifier = Modifier.height(minGap))
                     }
                 }
             }
@@ -223,33 +220,15 @@ fun InputPinPage(
 }
 
 @Composable
-private fun DefaultPinHeader(
-    showBack: Boolean,
-    onBackClick: () -> Unit,
-) {
-    Row(modifier = Modifier.padding(horizontal = 10.dp, vertical = 8.dp)) {
-        if (showBack) {
-            IconButton(onClick = onBackClick) {
-                Icon(
-                    imageVector = Icons.Default.ChevronLeft,
-                    contentDescription = "Kembali",
-                    modifier = Modifier.size(40.dp),
-                )
-            }
-        }
-    }
-}
-
-@Composable
 private fun CenteredPinHeader(
-    title: String,
+    title: String?,
     showBack: Boolean,
     onBackClick: () -> Unit,
 ) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 10.dp, vertical = 20.dp),
+            .padding(top= 40.dp, bottom = 10.dp, start = 10.dp),
         contentAlignment = Alignment.Center,
     ) {
         if (showBack) {
@@ -264,9 +243,8 @@ private fun CenteredPinHeader(
                 )
             }
         }
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleLarge,
-        )
+        title?.let {
+            Text(text = it, style = MaterialTheme.typography.titleLarge,)
+        }
     }
 }

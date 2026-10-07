@@ -7,12 +7,6 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
-import bsb.dev.bsb_bangking_jp.feature.activation.ActivationPinFlow
-import bsb.dev.bsb_bangking_jp.feature.activation.FindAccountPageActivation
-import bsb.dev.bsb_bangking_jp.feature.activation.InputIdPageActivation
-import bsb.dev.bsb_bangking_jp.feature.activation.InputPwPageActivation
-import bsb.dev.bsb_bangking_jp.feature.activation.OtpPageActivation
-import bsb.dev.bsb_bangking_jp.feature.activation.presentation.ActivationViewModel
 import bsb.dev.bsb_bangking_jp.feature.manage_scheduled_transfer.presentation.ScheduledTransferViewModel
 import org.koin.androidx.compose.koinViewModel
 

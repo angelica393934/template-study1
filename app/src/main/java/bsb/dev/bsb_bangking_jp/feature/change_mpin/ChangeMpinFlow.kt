@@ -50,7 +50,6 @@ fun ChangeMpinFlow(
     when (step) {
         ChangeMpinStep.OLD -> InputPinPage(
             title = "Masukkan M-PIN Lama",
-            usePolaHeader = true,
             customHeader = { AppHeader(title = "Masukkan M-PIN Lama", onBackClick = onBackClick) },
             showTopBackground = false,
             onBackClick = onBackClick,
@@ -61,10 +60,8 @@ fun ChangeMpinFlow(
 
         ChangeMpinStep.NEW -> InputPinPage(
             title = "Masukkan M-PIN Baru Yang Ingin Digunakan",
-            usePolaHeader = true,
-            centerTitleWithBackButton = true,
+             showTopBackground = true,
             customHeader = { AppHeader(title = "Masukkan M-PIN Baru", onBackClick = { step = ChangeMpinStep.OLD }) },
-            showTopBackground = false,
             onBackClick = { step = ChangeMpinStep.OLD },
             validator = { pin -> PinValidator.validateNewPin(pin) },
             onPinComplete = { pin ->
@@ -76,8 +73,6 @@ fun ChangeMpinFlow(
 
         ChangeMpinStep.CONFIRM -> InputPinPage(
             title = "Konfirmasi M-PIN Baru Anda",
-            usePolaHeader = true,
-            centerTitleWithBackButton = true,
             customHeader = { AppHeader(title = "Konfirmasi M-PIN Baru", onBackClick = { step = ChangeMpinStep.NEW }) },
             showTopBackground = false,
             onBackClick = { step = ChangeMpinStep.NEW },

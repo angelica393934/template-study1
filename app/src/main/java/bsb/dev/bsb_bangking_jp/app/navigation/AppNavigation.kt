@@ -99,7 +99,7 @@ fun AppNavigation(
             onLoginAgain = {
                 sessionGuard.onLoginAgain()
                 berandaViewModel.resetLocalState() // reset Profile & Rekening ViewModel (singleton)
-                navController.navigate("intro") { popUpTo(0) }
+                navController.navigate("portal") { popUpTo(0) }
             },
         )
     }
@@ -109,7 +109,7 @@ fun AppNavigation(
         Box(modifier = Modifier.fillMaxSize()) {
             NavHost(
                 navController = navController,
-                startDestination = "intro",
+                startDestination = "splash",
             ) {
                 composable("splash") {
                     SplashScreen(navController)

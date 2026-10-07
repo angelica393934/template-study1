@@ -1,4 +1,3 @@
-// feature/login_existing/MasukPinFlow.kt
 package bsb.dev.bsb_bangking_jp.feature.login_existing
 
 import androidx.compose.runtime.Composable
@@ -51,10 +50,8 @@ fun MasukPinFlow(
 
     when (step) {
         PinStep.CREATE -> InputPinPage(
-            title = "Masukkan M-PIN",
-            usePolaHeader = true,
             customHeader = { AppHeader(title = "Masukkan M-PIN", onBackClick = onBackClick) },
-            subtitle = "Buat M-PIN Baru Mobile Banking Anda!",
+            subtitle = "Buat M-PIN Baru Untuk Mulai Menggunakan Mobile Banking Anda",
             showTopBackground = false,
             onBackClick = onBackClick,
             validator = { pin -> PinValidator.validateNewPin(pin) },
@@ -66,12 +63,9 @@ fun MasukPinFlow(
         )
 
         PinStep.CONFIRM -> InputPinPage(
-            title = "Konfirmasi M-PIN",
-            usePolaHeader = true,
-            centerTitleWithBackButton = true,
-            customHeader = { AppHeader(title = "Konfirmasi M-PIN", onBackClick = { step = PinStep.CREATE }) },
-            subtitle = "Konfirmasi M-PIN Baru Anda",
             showTopBackground = false,
+            customHeader = { AppHeader(title = "Masukkan PIN", onBackClick = { step = PinStep.CREATE }) },
+            subtitle = "Ulangi M-PIN Anda untuk melanjutkan",
             onBackClick = { step = PinStep.CREATE },
             externalError = confirmMismatchError ?: uiState.confirmPinError,
             validator = { pin ->
