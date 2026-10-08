@@ -31,8 +31,8 @@ import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
  */
 @Composable
 fun rememberShimmerBrush(): Brush {
-    val baseColor = MaterialTheme.extendedColors.strip
-    val highlightColor = MaterialTheme.extendedColors.onSuccess
+    val baseColor = extendedColors.strip
+    val highlightColor = extendedColors.onSuccess
 
     val transition = rememberInfiniteTransition(label = "shimmer")
     val translateAnim by transition.animateFloat(

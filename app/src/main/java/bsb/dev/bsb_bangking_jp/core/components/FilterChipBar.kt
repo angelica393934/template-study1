@@ -50,14 +50,14 @@ fun FilterChipBar(
                 modifier = Modifier
                     .size(28.dp)
                     .clip(CircleShape)
-                    .border(1.dp, MaterialTheme.extendedColors.textSecondary, CircleShape)
+                    .border(1.dp, extendedColors.textSecondary, CircleShape)
                     .clickable { onClearAll() },
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
                     imageVector = Icons.Default.Close,
                     contentDescription = "Hapus semua filter",
-                    tint = MaterialTheme.extendedColors.textSecondary,
+                    tint = extendedColors.textSecondary,
                     modifier = Modifier.size(18.dp),
                 )
             }

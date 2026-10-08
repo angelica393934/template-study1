@@ -33,8 +33,8 @@ fun AppSwitch(
     thumbPadding: Dp = 3.dp,
     trackColorOn: Color = MaterialTheme.colorScheme.inverseSurface,
     thumbColorOn: Color = MaterialTheme.colorScheme.primary,
-    trackColorOff: Color =  MaterialTheme.extendedColors.strip,
-    thumbColorOff: Color = MaterialTheme.extendedColors.divider,
+    trackColorOff: Color =  extendedColors.strip,
+    thumbColorOff: Color = extendedColors.divider,
 ) {
     val trackColor by animateColorAsState(
         targetValue = if (checked) trackColorOn else trackColorOff,

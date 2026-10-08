@@ -40,7 +40,7 @@ fun SettingSection(
         Spacer(modifier = Modifier.height(15.dp))
 
         HorizontalDivider(
-            color = MaterialTheme.extendedColors.strip
+            color = extendedColors.strip
         )
         Card(
             modifier = Modifier.fillMaxWidth(),
@@ -72,21 +72,21 @@ fun SettingSection(
                         Text(
                             text = item.title,
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.extendedColors.textPrimary,
+                            color = extendedColors.textPrimary,
                             modifier = Modifier.weight(1f)
                         )
                     }
 
                     if (index != items.lastIndex) {
                         HorizontalDivider(
-                            color = MaterialTheme.extendedColors.strip
+                            color = extendedColors.strip
                         )
                     }
                 }
             }
         }
         HorizontalDivider(
-            color = MaterialTheme.extendedColors.strip
+            color = extendedColors.strip
         )
         Spacer(modifier = Modifier.height(appSpacing.xxxs))
     }

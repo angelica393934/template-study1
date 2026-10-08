@@ -27,6 +27,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import bsb.dev.bsb_bangking_jp.R
@@ -171,12 +173,16 @@ fun TransferHomePage(
                     Text(
                         text = "Transfer terjadwal lebih mudah!",
                         style = MaterialTheme.typography.titleMedium,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         text = "Pantau dan kelola jadwal transfer sesuai kebutuhan anda.",
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.extendedColors.textSecondary,
+                        color = extendedColors.textSecondary,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
                     )
                 }
                 Icon(
@@ -230,7 +236,7 @@ fun TransferHomePage(
                         Icon(
                             imageVector = if (isDeleteMode) Icons.Default.Close else Icons.Default.Delete,
                             contentDescription = null,
-                            tint = if (isDeleteMode) MaterialTheme.extendedColors.danger else MaterialTheme.colorScheme.primary,
+                            tint = if (isDeleteMode) extendedColors.danger else MaterialTheme.colorScheme.primary,
                             modifier = Modifier.size(18.dp),
                         )
                         Spacer(modifier = Modifier.width(4.dp))
@@ -238,7 +244,7 @@ fun TransferHomePage(
                             text = if (isDeleteMode) "Batal" else "Hapus Daftar",
                             style = MaterialTheme.typography.titleSmall,
                             fontWeight = FontWeight.SemiBold,
-                            color = if (isDeleteMode) MaterialTheme.extendedColors.danger else MaterialTheme.colorScheme.primary,
+                            color = if (isDeleteMode) extendedColors.danger else MaterialTheme.colorScheme.primary,
                         )
                     }
                     Spacer(modifier = Modifier.height(8.dp))
@@ -394,7 +400,8 @@ private fun TransferTab(
         Text(
             text = title,
             fontWeight = FontWeight.Bold,
-            color = if (active) MaterialTheme.extendedColors.textPrimary else MaterialTheme.extendedColors.textDisabled,
+            textAlign = TextAlign.Center,
+            color = if (active) extendedColors.textPrimary else extendedColors.textDisabled,
         )
         Spacer(modifier = Modifier.height(8.dp))
         Box(

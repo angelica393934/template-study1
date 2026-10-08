@@ -81,7 +81,7 @@ fun AppModalConfirm(
                 Text(
                     text = it,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.extendedColors.textSecondary,
+                    color = extendedColors.textSecondary,
                     textAlign = TextAlign.Center,
                 )
             }

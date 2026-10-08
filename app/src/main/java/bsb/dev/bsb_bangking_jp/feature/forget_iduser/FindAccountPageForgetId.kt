@@ -86,7 +86,7 @@ fun FindAccountPageForgetId(
                 text = "Atur ulang ID Pengguna untuk memulihkan akses, dan kelancaran penggunaan layanan.",
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.extendedColors.textSecondary,
+                color = extendedColors.textSecondary,
             )
             AppTextField(
                 value = accountInput,

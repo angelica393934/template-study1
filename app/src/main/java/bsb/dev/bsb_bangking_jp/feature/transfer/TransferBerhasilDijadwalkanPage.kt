@@ -111,16 +111,16 @@ fun TransferBerhasilDijadwalkanPage(
                 Text(
                     text = tanggalFormatted,
                     style = MaterialTheme.typography.bodySmall.copy(fontSize = 10.sp),
-                    color = MaterialTheme.extendedColors.textSecondary,
+                    color = extendedColors.textSecondary,
                 )
                 Spacer(modifier = Modifier.height(2.dp))
-                HorizontalDivider(color = MaterialTheme.extendedColors.divider)
+                HorizontalDivider(color = extendedColors.divider)
                 Spacer(modifier = Modifier.height(2.dp))
             }
             Text(
                 text = "Penerima",
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.extendedColors.textSecondary,
+                color = extendedColors.textSecondary,
             )
             Spacer(modifier = Modifier.height(10.dp))
 
@@ -132,23 +132,23 @@ fun TransferBerhasilDijadwalkanPage(
                     Text(
                         text = result.beneficiaryBankName,
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.extendedColors.textSecondary,
+                        color = extendedColors.textSecondary,
                     )
                     Text(
                         text = result.beneficiaryAccountNo,
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.extendedColors.textSecondary,
+                        color = extendedColors.textSecondary,
                     )
                 }
             }
             Spacer(modifier = Modifier.height(4.dp))
             HorizontalDivider(
                 modifier = Modifier.padding(horizontal = 18.dp),
-                color = MaterialTheme.extendedColors.divider)
+                color = extendedColors.divider)
             Text(
                 text = "Detail Transaksi",
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.extendedColors.textSecondary,
+                color = extendedColors.textSecondary,
             )
             Spacer(modifier = Modifier.height(4.dp))
             TransactionDetailRow("Pilihan Transaksi", "Terjadwal")
@@ -161,16 +161,16 @@ fun TransferBerhasilDijadwalkanPage(
             )
             HorizontalDivider(
                 modifier = Modifier.padding(horizontal = 18.dp),
-                color = MaterialTheme.extendedColors.divider)
+                color = extendedColors.divider)
             TransactionDetailRow(
                 title = "Keterangan",
                 value = result.remark?.takeIf { it.isNotBlank() } ?: "-",
                 titleStyle = MaterialTheme.typography.bodySmall,
-                valueStyle = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.extendedColors.textSecondary),
+                valueStyle = MaterialTheme.typography.bodySmall.copy(color = extendedColors.textSecondary),
             )
             HorizontalDivider(
                 modifier = Modifier.padding(horizontal = 18.dp),
-                color = MaterialTheme.extendedColors.divider)
+                color = extendedColors.divider)
             TransactionDetailRow(
                 title = "Frekuensi",
                 value = if (isOnce) "Sekali" else "Setiap Bulan",
@@ -202,7 +202,7 @@ fun TransferBerhasilDijadwalkanPage(
             }
             HorizontalDivider(
                 modifier = Modifier.padding(horizontal = 18.dp),
-                color = MaterialTheme.extendedColors.divider)
+                color = extendedColors.divider)
             Spacer(modifier = Modifier.height(3.dp))
 
             Text(
@@ -216,7 +216,7 @@ fun TransferBerhasilDijadwalkanPage(
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(16.dp))
                     .background(MaterialTheme.colorScheme.background)
-                    .border(1.dp, MaterialTheme.extendedColors.strip, RoundedCornerShape(16.dp))
+                    .border(1.dp, extendedColors.strip, RoundedCornerShape(16.dp))
                     .padding(15.dp),
             ) {
                 Row(
@@ -240,7 +240,7 @@ fun TransferBerhasilDijadwalkanPage(
             Text(
                 text = "Pastikan saldo Anda mencukupi sebelum jadwal transaksi.",
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.extendedColors.textSecondary,
+                color = extendedColors.textSecondary,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(),
             )
@@ -258,7 +258,7 @@ fun TransferBerhasilDijadwalkanPage(
             Icon(
                 imageVector = Icons.Default.Close,
                 contentDescription = "Tutup",
-                tint = MaterialTheme.extendedColors.textPrimary,
+                tint = extendedColors.textPrimary,
             )
         }
     }

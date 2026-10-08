@@ -102,7 +102,7 @@ private fun LanguageOption(
             .background(if (selected) Primary8 else MaterialTheme.colorScheme.background)
             .border(
                 width = 1.5.dp,
-                color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.extendedColors.divider,
+                color = if (selected) MaterialTheme.colorScheme.primary else extendedColors.divider,
                 shape = RoundedCornerShape(25.dp),
             )
             .clickable { onTap() }
@@ -111,7 +111,7 @@ private fun LanguageOption(
         Text(
             text = label,
             style = MaterialTheme.typography.titleMedium,
-            color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.extendedColors.textPrimary,
+            color = if (selected) MaterialTheme.colorScheme.primary else extendedColors.textPrimary,
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth(),
         )

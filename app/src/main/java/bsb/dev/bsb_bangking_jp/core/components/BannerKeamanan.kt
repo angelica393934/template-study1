@@ -37,7 +37,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import bsb.dev.bsb_bangking_jp.R
 import bsb.dev.bsb_bangking_jp.core.device.AppPreferences
@@ -59,14 +61,13 @@ fun BannerKeamanan(
     backgroundColor: Color? = null,
     showCloseButton: Boolean = true,
     persistKey: String = "keamanan_statis",
-    modifier: Modifier = Modifier,
 ) {
     DismissibleBanner(
         contents = listOf(BannerContent(title, desc)),
         backgroundColor = backgroundColor,
         showCloseButton = showCloseButton,
         persistKey = persistKey,
-        modifier = modifier,
+        modifier = Modifier,
     )
 }
 
@@ -122,8 +123,6 @@ private fun DismissibleBanner(
 
     if (!isVisible) return
 
-    val announcement = contents[currentIndex.coerceIn(0, contents.lastIndex)]
-
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -138,7 +137,9 @@ private fun DismissibleBanner(
                     )
             },
             label = "bannerPemberitahuanSwitch",
-        ) { _ ->
+        ) { targetIndex ->
+            val announcement = contents[targetIndex.coerceIn(0, contents.lastIndex)]
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -161,6 +162,8 @@ private fun DismissibleBanner(
                         text = announcement.desc,
                         fontSize = 10.sp,
                         color = Color.White,
+                        maxLines = 3,
+                        overflow = TextOverflow.Ellipsis
                     )
                 }
 

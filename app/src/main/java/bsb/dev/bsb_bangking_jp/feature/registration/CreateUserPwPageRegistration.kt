@@ -91,7 +91,7 @@ fun CreateUserPwPageRegistration(
                     text = "Kata sandi ini akan digunakan setiap kali kamu masuk ke Bank Sumsel Babel Mobile Banking. " +
                             "Pastikan sulit ditebak dan tidak digunakan di akun lain.",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.extendedColors.textSecondary,
+                    color = extendedColors.textSecondary,
                 )
                 AppTextField(
                     value = passcode,
@@ -124,7 +124,7 @@ fun CreateUserPwPageRegistration(
                 Text(
                     text = "Aturan Kata Sandi",
                     style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.extendedColors.textSecondary,
+                    color = extendedColors.textSecondary,
                 )
                 RuleBullet("Gunakan tepat 8 karakter", passcode.isNotEmpty(), has8Chars)
                 RuleBullet(

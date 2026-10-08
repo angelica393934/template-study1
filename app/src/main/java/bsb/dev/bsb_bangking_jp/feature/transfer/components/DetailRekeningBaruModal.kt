@@ -65,7 +65,7 @@ fun DetailRekeningBaruModal(
         )
 
         Spacer(modifier = Modifier.height(20.dp))
-        HorizontalDivider(color = MaterialTheme.extendedColors.inputBackground)
+        HorizontalDivider(color = extendedColors.inputBackground)
         Spacer(modifier = Modifier.height(10.dp))
 
         AccountTile(
@@ -75,7 +75,7 @@ fun DetailRekeningBaruModal(
             accountNumber = inquiry.beneficiaryAccountNo,
         )
         Spacer(modifier = Modifier.height(10.dp))
-        HorizontalDivider(color = MaterialTheme.extendedColors.inputBackground)
+        HorizontalDivider(color = extendedColors.inputBackground)
         Spacer(modifier = Modifier.height(20.dp))
 
         Row(

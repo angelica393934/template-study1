@@ -78,7 +78,7 @@ fun PilihHariSheet(
                             )
                             .border(
                                 1.dp,
-                                if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.extendedColors.divider,
+                                if (isSelected) MaterialTheme.colorScheme.primary else extendedColors.divider,
                                 CircleShape,
                             )
                             .clickable {
@@ -91,14 +91,14 @@ fun PilihHariSheet(
                             text = dayStr,
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.SemiBold,
-                            color = if (isSelected) MaterialTheme.extendedColors.onSuccess else MaterialTheme.extendedColors.textPrimary,
+                            color = if (isSelected) extendedColors.onSuccess else extendedColors.textPrimary,
                         )
                     }
                 }
             }
 
             Spacer(modifier = Modifier.height(20.dp))
-            HorizontalDivider(color = MaterialTheme.extendedColors.divider)
+            HorizontalDivider(color = extendedColors.divider)
             Spacer(modifier = Modifier.height(12.dp))
 
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -114,7 +114,7 @@ fun PilihHariSheet(
                 Text(
                     text = "Setiap Akhir Bulan",
                     style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.extendedColors.textSecondary,
+                    color = extendedColors.textSecondary,
                 )
             }
 

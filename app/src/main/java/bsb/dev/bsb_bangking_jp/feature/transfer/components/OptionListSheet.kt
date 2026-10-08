@@ -88,9 +88,9 @@ private fun OptionRow(
     onTap: () -> Unit,
 ) {
     val backgroundColor = if (isActive) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.background
-    val borderColor = if (isActive) MaterialTheme.colorScheme.primary else MaterialTheme.extendedColors.divider
-    val textColor = if (isActive) MaterialTheme.colorScheme.primary else MaterialTheme.extendedColors.textPrimary
-    val subtextColor = if (isActive) MaterialTheme.colorScheme.scrim else MaterialTheme.extendedColors.textSecondary
+    val borderColor = if (isActive) MaterialTheme.colorScheme.primary else extendedColors.divider
+    val textColor = if (isActive) MaterialTheme.colorScheme.primary else extendedColors.textPrimary
+    val subtextColor = if (isActive) MaterialTheme.colorScheme.scrim else extendedColors.textSecondary
     Box(
         modifier = Modifier
             .fillMaxWidth()

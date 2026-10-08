@@ -27,6 +27,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bsb.dev.bsb_bangking_jp.core.util.RupiahFormat
@@ -125,7 +127,7 @@ fun ActivityItemRow(
 
             Row(
                 modifier = Modifier.weight(1f),
-                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Top,
             ) {
                 Column(
                     modifier = Modifier.weight(1f),
@@ -133,7 +135,8 @@ fun ActivityItemRow(
                     Text(
                         text = title,
                         style = MaterialTheme.typography.titleMedium,
-                        maxLines = 1,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
                     )
 
                     if (subtitle.isNotBlank()) {
@@ -143,6 +146,8 @@ fun ActivityItemRow(
                             text = subtitle,
                             fontSize = 12.sp,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis,
                         )
                     }
                 }
@@ -150,9 +155,11 @@ fun ActivityItemRow(
                 Spacer(modifier = Modifier.width(12.dp))
 
                 Text(
+                    modifier = Modifier.weight(1f),
                     text = nominalDisplay,
                     style = MaterialTheme.typography.titleMedium,
                     color = warnaNominal,
+
                 )
             }
         }

@@ -90,9 +90,9 @@ fun AppTextField(
 
     val borderColor = when {
         showError -> MaterialTheme.colorScheme.error
-        isReadOnlyField && !isDropdown -> MaterialTheme.extendedColors.textDisabled
+        isReadOnlyField && !isDropdown -> extendedColors.textDisabled
         isFocused -> MaterialTheme.colorScheme.primary
-        else -> MaterialTheme.extendedColors.textDisabled
+        else -> extendedColors.textDisabled
     }
 
     val backgroundColor: Color = when {
@@ -130,7 +130,7 @@ fun AppTextField(
                 text = it,
                 style = MaterialTheme.typography.bodySmall,
                 color = if (showError) MaterialTheme.colorScheme.error
-                else MaterialTheme.extendedColors.textPrimary,
+                else extendedColors.textPrimary,
                 modifier = Modifier.padding(start = 20.dp, top = 4.dp),
             )
             Spacer(modifier = Modifier.height(4.dp))
@@ -161,7 +161,7 @@ fun AppTextField(
                 singleLine = true,
                 enabled = true,
                 textStyle = InputStyle.copy(
-                    color = MaterialTheme.extendedColors.textPrimary
+                    color = extendedColors.textPrimary
                 ),
                 cursorBrush = SolidColor(cursorColor),
                 visualTransformation =
@@ -206,7 +206,9 @@ fun AppTextField(
                                 Text(
                                     text = hintText,
                                     style = MaterialTheme.typography.bodyMedium,
-                                    color = MaterialTheme.extendedColors.textDisabled,
+                                    color = extendedColors.textDisabled,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
                                 )
                             }
                             innerTextField()
@@ -222,7 +224,7 @@ fun AppTextField(
                                 else
                                     MaterialTheme.typography.bodyMedium,
                                 color = if (isRightTextGreen)
-                                    MaterialTheme.extendedColors.success
+                                    extendedColors.success
                                 else
                                     Color.Unspecified,
                             )
@@ -238,7 +240,7 @@ fun AppTextField(
                                 Icon(
                                     imageVector = Icons.Default.KeyboardArrowDown,
                                     contentDescription = null,
-                                    tint = MaterialTheme.extendedColors.textDisabled,
+                                    tint = extendedColors.textDisabled,
                                     modifier = Modifier.size(25.dp),
                                 )
                             }
@@ -247,7 +249,7 @@ fun AppTextField(
                                 Icon(
                                     imageVector = if (isHidden) Icons.Default.VisibilityOff else Icons.Default.Visibility,
                                     contentDescription = null,
-                                    tint = MaterialTheme.extendedColors.textDisabled,
+                                    tint = extendedColors.textDisabled,
                                     modifier = Modifier
                                         .size(20.dp)
                                         .clickable(
@@ -263,7 +265,7 @@ fun AppTextField(
                             Text(
                                 text = "${value.length}/$maxLength",
                                 style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.extendedColors.textSecondary,
+                                color = extendedColors.textSecondary,
                             )
                         }
                     }

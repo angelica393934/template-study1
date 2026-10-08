@@ -102,7 +102,7 @@ private fun NumberKey(
         modifier = Modifier
             .size(size)
             .clip(CircleShape)
-            .background(MaterialTheme.extendedColors.inputBackground)
+            .background(extendedColors.inputBackground)
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
@@ -113,7 +113,7 @@ private fun NumberKey(
         Text(
             text = label,
             style = MaterialTheme.typography.displaySmall,
-            color = MaterialTheme.extendedColors.textPrimary,
+            color = extendedColors.textPrimary,
         )
     }
 }
@@ -137,7 +137,7 @@ private fun BackKey(
         Icon(
             imageVector = Icons.Default.Backspace,
             contentDescription = "Hapus",
-            tint = MaterialTheme.extendedColors.textPrimary,
+            tint = extendedColors.textPrimary,
         )
     }
 }

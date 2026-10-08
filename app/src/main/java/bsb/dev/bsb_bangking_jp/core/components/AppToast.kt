@@ -145,7 +145,7 @@ private fun SuccessToastContent(message: String) {
     Row(
         modifier = Modifier
             .background(
-                color = MaterialTheme.extendedColors.success,
+                color = extendedColors.success,
                 shape = RoundedCornerShape(10.dp),
             )
             .padding(horizontal = 12.dp, vertical = 10.dp),
@@ -171,7 +171,7 @@ private fun ErrorToastContent(message: String) {
     Row(
         modifier = Modifier
             .background(
-                color = MaterialTheme.extendedColors.danger,
+                color = extendedColors.danger,
                 shape = RoundedCornerShape(10.dp),
             )
             .padding(horizontal = 12.dp, vertical = 10.dp),

@@ -128,7 +128,7 @@ fun ResetIdPageForgetId(
             Text(
                 text = "Aturan ID Pengguna",
                 style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.extendedColors.textSecondary,
+                color = extendedColors.textSecondary,
                 textAlign = TextAlign.Left,
 
                 )

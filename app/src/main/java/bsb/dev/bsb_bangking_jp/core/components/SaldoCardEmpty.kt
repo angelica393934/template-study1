@@ -45,7 +45,7 @@ fun SaldoCardEmpty(
             Text(
                 text = "Data rekening tidak tersedia",
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.extendedColors.textSecondary,
+                color = extendedColors.textSecondary,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.weight(1f),

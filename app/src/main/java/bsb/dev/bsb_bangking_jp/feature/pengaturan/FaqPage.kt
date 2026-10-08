@@ -64,7 +64,7 @@ private fun FaqCard(item: DummyFaqItem, modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
-            .border(0.5.dp, MaterialTheme.extendedColors.textDisabled,
+            .border(0.5.dp, extendedColors.textDisabled,
                 RoundedCornerShape(12.dp))
             .background(MaterialTheme.colorScheme.background),
     ) {
@@ -84,13 +84,13 @@ private fun FaqCard(item: DummyFaqItem, modifier: Modifier = Modifier) {
             Icon(
                 imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
                 contentDescription = null,
-                tint = MaterialTheme.extendedColors.textSecondary,
+                tint = extendedColors.textSecondary,
             )
         }
 
         AnimatedVisibility(visible = expanded) {
             Column {
-                HorizontalDivider(thickness = 0.5.dp ,color = MaterialTheme.extendedColors.textDisabled)
+                HorizontalDivider(thickness = 0.5.dp ,color = extendedColors.textDisabled)
                 Column(modifier = Modifier.padding( appSpacing.xxxs)) {
                     FaqAnswerContent(answer = item.answer)
                 }
@@ -102,7 +102,7 @@ private fun FaqCard(item: DummyFaqItem, modifier: Modifier = Modifier) {
 @Composable
 private fun FaqAnswerContent(answer: DummyFaqAnswer) {
     answer.text?.let {
-        Text(text = it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.extendedColors.textSecondary)
+        Text(text = it, style = MaterialTheme.typography.bodySmall, color = extendedColors.textSecondary)
         if (answer.bullets.isNotEmpty()) Spacer(modifier = Modifier.height(6.dp))
     }
     if (answer.bullets.isNotEmpty()) {
@@ -122,14 +122,14 @@ private fun FaqBulletList(bullets: List<DummyFaqBullet>, indent: Dp = 0.dp) {
                 Icon(
                     imageVector = Icons.Default.Circle,
                     contentDescription = null,
-                    tint = MaterialTheme.extendedColors.textSecondary,
+                    tint = extendedColors.textSecondary,
                     modifier = Modifier.padding(top = 6.dp).size(if (indent == 0.dp) 6.dp else 5.dp),
                 )
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
                     text = bullet.text,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.extendedColors.textSecondary,
+                    color = extendedColors.textSecondary,
                     textAlign = TextAlign.Start,
                     modifier = Modifier.weight(1f),
                 )

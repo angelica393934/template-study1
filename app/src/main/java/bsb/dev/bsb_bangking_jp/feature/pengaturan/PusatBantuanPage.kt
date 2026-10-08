@@ -69,7 +69,7 @@ fun HelpCenterSheet(
             Text(
                 text = "Jika mengalami kendala, Anda dapat menghubungi Customer Service kami",
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.extendedColors.textSecondary,
+                color = extendedColors.textSecondary,
             )
 
             bantuanContacts.forEach { contact ->
@@ -106,7 +106,7 @@ fun HelpCenterSheet(
                                 Text(
                                     text = contact.value,
                                     style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.extendedColors.textSecondary,
+                                    color = extendedColors.textSecondary,
                                 )
                             }
                         }

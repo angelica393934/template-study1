@@ -63,6 +63,7 @@ fun PilihBulanTahunSheet(
 
     AppModalBottomSheet(
         onDismissRequest = onDismiss,
+        scrollable = false,
     ) {
         Column(modifier = Modifier.fillMaxWidth().heightIn(max = 560.dp)) {
             Column {
@@ -112,7 +113,7 @@ fun PilihBulanTahunSheet(
                             .background(
                                 when {
                                     isSelected -> MaterialTheme.colorScheme.primaryContainer
-                                    isDisabled -> MaterialTheme.extendedColors.inputBackground
+                                    isDisabled -> extendedColors.inputBackground
                                     else -> MaterialTheme.colorScheme.background
                                 },
                             )
@@ -120,8 +121,8 @@ fun PilihBulanTahunSheet(
                                 1.dp,
                                 when {
                                     isSelected -> MaterialTheme.colorScheme.primary
-                                    isDisabled -> MaterialTheme.extendedColors.divider
-                                    else -> MaterialTheme.extendedColors.textDisabled
+                                    isDisabled -> extendedColors.divider
+                                    else -> extendedColors.textDisabled
                                 },
                                 RoundedCornerShape(25.dp),
                             )
@@ -133,9 +134,9 @@ fun PilihBulanTahunSheet(
                             text = monthName,
                             style = MaterialTheme.typography.titleMedium,
                             color = when {
-                                isDisabled -> MaterialTheme.extendedColors.textDisabled
+                                isDisabled -> extendedColors.textDisabled
                                 isSelected -> MaterialTheme.colorScheme.primary
-                                else -> MaterialTheme.extendedColors.textPrimary
+                                else -> extendedColors.textPrimary
                             },
                         )
                     }

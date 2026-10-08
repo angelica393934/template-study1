@@ -55,7 +55,7 @@ fun BottomSheetIndicator(
             Icon(
                 imageVector = Icons.Default.Close,
                 contentDescription = "Tutup",
-                tint = MaterialTheme.extendedColors.textPrimary, // padanan gray950
+                tint = extendedColors.textPrimary, // padanan gray950
             )
         }
     }

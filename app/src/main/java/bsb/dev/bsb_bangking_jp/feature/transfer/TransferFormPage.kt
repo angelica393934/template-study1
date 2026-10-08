@@ -284,7 +284,7 @@ fun TransferFormPage(
                         Text(
                             text = "$bank\n$accountNumber",
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.extendedColors.textSecondary,
+                            color = extendedColors.textSecondary,
                         )
                     }
                     IconButton(onClick = onBack) {
@@ -307,7 +307,7 @@ fun TransferFormPage(
                 )
 
                 Spacer(modifier = Modifier.height(10.dp))
-                HorizontalDivider(color = MaterialTheme.extendedColors.divider)
+                HorizontalDivider(color = extendedColors.divider)
                 Spacer(modifier = Modifier.height(10.dp))
 
                 Row(modifier = Modifier.fillMaxWidth()) {
@@ -315,8 +315,8 @@ fun TransferFormPage(
                         text = "Segera",
                         icon = Icons.Default.DoneAll,
                         iconBeforeText = true,
-                        backgroundColor = if (!isScheduled) MaterialTheme.colorScheme.primary else MaterialTheme.extendedColors.inputBackground,
-                        textColor = if (!isScheduled) MaterialTheme.extendedColors.onSuccess else MaterialTheme.extendedColors.textSecondary,
+                        backgroundColor = if (!isScheduled) MaterialTheme.colorScheme.primary else extendedColors.inputBackground,
+                        textColor = if (!isScheduled) extendedColors.onSuccess else extendedColors.textSecondary,
                         onClick = { isScheduled = false },
                         modifier = Modifier
                             .weight(1f)
@@ -327,8 +327,8 @@ fun TransferFormPage(
                         text = "Terjadwal",
                         icon = Icons.Default.CalendarMonth,
                         iconBeforeText = true,
-                        backgroundColor = if (isScheduled) MaterialTheme.colorScheme.primary else MaterialTheme.extendedColors.inputBackground,
-                        textColor = if (isScheduled) MaterialTheme.extendedColors.onSuccess else MaterialTheme.extendedColors.textSecondary,
+                        backgroundColor = if (isScheduled) MaterialTheme.colorScheme.primary else extendedColors.inputBackground,
+                        textColor = if (isScheduled) extendedColors.onSuccess else extendedColors.textSecondary,
                         onClick = { isScheduled = true },
                         modifier = Modifier
                             .weight(1f)
@@ -424,7 +424,7 @@ fun TransferFormPage(
                     }
 
                     Spacer(modifier = Modifier.height(15.dp))
-                    HorizontalDivider(color = MaterialTheme.extendedColors.divider)
+                    HorizontalDivider(color = extendedColors.divider)
                 }
             }
 
@@ -614,12 +614,3 @@ private val bulanIndonesia = listOf(
     "Januari", "Februari", "Maret", "April", "Mei", "Juni",
     "Juli", "Agustus", "September", "Oktober", "November", "Desember",
 )
-
-private fun formatTanggalIndonesia(millis: Long): String {
-    val cal = Calendar.getInstance()
-    cal.timeInMillis = millis
-    val day = cal.get(Calendar.DAY_OF_MONTH)
-    val month = bulanIndonesia[cal.get(Calendar.MONTH)]
-    val year = cal.get(Calendar.YEAR)
-    return "$day $month $year"
-}

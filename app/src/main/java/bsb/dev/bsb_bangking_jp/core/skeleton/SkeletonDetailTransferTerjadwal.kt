@@ -49,7 +49,7 @@ fun SkeletonDetailTransferTerjadwal(modifier: Modifier = Modifier) {
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-        HorizontalDivider(color = MaterialTheme.extendedColors.divider)
+        HorizontalDivider(color = extendedColors.divider)
 
         Spacer(modifier = Modifier.height(12.dp))
         // === TITLE ===
@@ -61,14 +61,14 @@ fun SkeletonDetailTransferTerjadwal(modifier: Modifier = Modifier) {
         repeat(5) { DetailRowSkeleton() }
 
         Spacer(modifier = Modifier.height(12.dp))
-        HorizontalDivider(color = MaterialTheme.extendedColors.divider)
+        HorizontalDivider(color = extendedColors.divider)
 
         Spacer(modifier = Modifier.height(4.dp))
         // === KETERANGAN ===
         DetailRowSkeleton(longValue = true)
 
         Spacer(modifier = Modifier.height(12.dp))
-        HorizontalDivider(color = MaterialTheme.extendedColors.divider)
+        HorizontalDivider(color = extendedColors.divider)
         Spacer(modifier = Modifier.height(16.dp))
 
         // === REKENING SUMBER ===

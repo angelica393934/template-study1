@@ -61,7 +61,7 @@ fun OldPasswordPage(
                 Text(
                     text = "Sebelum mengubah kata sandi, masukkan kata sandi lama Anda.",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.extendedColors.textSecondary,
+                    color = extendedColors.textSecondary,
                 )
 
                 AppTextField(

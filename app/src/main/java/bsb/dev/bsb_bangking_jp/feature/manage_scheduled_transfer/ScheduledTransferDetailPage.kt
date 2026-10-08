@@ -159,18 +159,18 @@ private fun DetailContent(
                     Text(
                         text = detail.beneficiaryBankName,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.extendedColors.textSecondary,
+                        color = extendedColors.textSecondary,
                     )
                     Text(
                         text = detail.beneficiaryAccountNo,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.extendedColors.textSecondary,
+                        color = extendedColors.textSecondary,
                     )
                 }
             }
 
             Spacer(modifier = Modifier.height(16.dp))
-            HorizontalDivider(color = MaterialTheme.extendedColors.divider)
+            HorizontalDivider(color = extendedColors.divider)
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(text = "Detail Transaksi", style = MaterialTheme.typography.titleMedium)
@@ -189,11 +189,11 @@ private fun DetailContent(
 
             DetailRow("Jumlah Transfer", detail.nominalFormatted)
 
-            HorizontalDivider(color = MaterialTheme.extendedColors.divider)
+            HorizontalDivider(color = extendedColors.divider)
 
             DetailRow("Keterangan", detail.remark.ifEmpty { "-" })
 
-            HorizontalDivider(color = MaterialTheme.extendedColors.divider)
+            HorizontalDivider(color = extendedColors.divider)
             Spacer(modifier = Modifier.height(10.dp))
 
             Text(text = "Rekening Sumber", style = MaterialTheme.typography.bodyMedium)
@@ -203,14 +203,14 @@ private fun DetailContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(25.dp))
-                    .border(1.dp, MaterialTheme.extendedColors.textDisabled, RoundedCornerShape(25.dp))
+                    .border(1.dp, extendedColors.textDisabled, RoundedCornerShape(25.dp))
                     .padding(16.dp),
             ) {
                 Column {
                     Text(
                         text = "Saldo Sekarang",
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.extendedColors.textSecondary,
+                        color = extendedColors.textSecondary,
                     )
                     Spacer(modifier = Modifier.height(6.dp))
                     Text(
@@ -221,7 +221,7 @@ private fun DetailContent(
                     Text(
                         text = detail.sourceAccountNo,
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.extendedColors.textSecondary,
+                        color = extendedColors.textSecondary,
                     )
                 }
             }
@@ -230,7 +230,7 @@ private fun DetailContent(
             Text(
                 text = "Pastikan saldo Anda mencukupi sebelum jadwal transaksi.",
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.extendedColors.textSecondary,
+                color = extendedColors.textSecondary,
             )
         }
 
@@ -239,8 +239,8 @@ private fun DetailContent(
                 text = if (detail.isActive) "Jeda" else "Lanjutkan",
                 icon = if (detail.isActive) Icons.Default.Timer else Icons.Default.PlayArrow,
                 iconBeforeText = true,
-                backgroundColor = if (detail.isActive) MaterialTheme.extendedColors.inputBackground else MaterialTheme.colorScheme.primaryContainer,
-                textColor = if (detail.isActive) MaterialTheme.extendedColors.textSecondary else MaterialTheme.colorScheme.primary,
+                backgroundColor = if (detail.isActive) extendedColors.inputBackground else MaterialTheme.colorScheme.primaryContainer,
+                textColor = if (detail.isActive) extendedColors.textSecondary else MaterialTheme.colorScheme.primary,
                 modifier = Modifier.weight(1f),
                 onClick = onTogglePause,
             )
@@ -275,7 +275,7 @@ private fun DetailRow(
         Text(
             text = label,
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.extendedColors.textSecondary,
+            color = extendedColors.textSecondary,
             modifier = Modifier.weight(1f),
         )
 
@@ -283,7 +283,7 @@ private fun DetailRow(
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(20.dp))
-                    .background(if (isActive) MaterialTheme.extendedColors.success else MaterialTheme.extendedColors.textDisabled)
+                    .background(if (isActive) extendedColors.success else extendedColors.textDisabled)
                     .padding(horizontal = 12.dp, vertical = 4.dp),
             ) {
                 Text(text = value, fontSize = 10.sp, color = Color.White)

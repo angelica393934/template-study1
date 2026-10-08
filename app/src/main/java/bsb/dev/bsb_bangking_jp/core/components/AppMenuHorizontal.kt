@@ -73,7 +73,7 @@ fun AppMenuHorizontal(
             Text(
                 text = label,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.extendedColors.textPrimary,
+                color = extendedColors.textPrimary,
                 modifier = Modifier.weight(1f),
             )
 
@@ -82,12 +82,12 @@ fun AppMenuHorizontal(
             Icon(
                 imageVector = Icons.Default.KeyboardArrowRight,
                 contentDescription = null,
-                tint = MaterialTheme.extendedColors.textDisabled,
+                tint = extendedColors.textDisabled,
             )
         }
 
         if (showDivider) {
-            HorizontalDivider(color = MaterialTheme.extendedColors.strip)
+            HorizontalDivider(color = extendedColors.strip)
         }
     }
 }

@@ -78,12 +78,12 @@ fun AccountTile(
                 Text(
                     text = bank,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.extendedColors.textSecondary,
+                    color = extendedColors.textSecondary,
                 )
                 Text(
                     text = accountNumber,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.extendedColors.textSecondary,
+                    color = extendedColors.textSecondary,
                 )
             }
 

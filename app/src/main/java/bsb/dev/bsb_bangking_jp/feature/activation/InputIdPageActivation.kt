@@ -81,7 +81,7 @@ fun InputIdPageActivation(
                 Text(
                     text = "Gunakan ID Pengguna yang sudah Anda daftarkan untuk melanjutkan aktivasi.",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.extendedColors.textSecondary,
+                    color = extendedColors.textSecondary,
                 )
                 AppTextField(
                     value = userIdInput,

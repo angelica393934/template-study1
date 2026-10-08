@@ -32,15 +32,15 @@ fun TransactionDetailRow(
     val isGratis = value.trim().equals("gratis", ignoreCase = true)
 
     val finalValueStyle = valueStyle ?: if (isGratis) {
-        MaterialTheme.typography.titleMedium.copy(color = MaterialTheme.extendedColors.success)
+        MaterialTheme.typography.titleMedium.copy(color = extendedColors.success)
     } else {
         MaterialTheme.typography.bodyMedium.copy(
-            color = MaterialTheme.extendedColors.textSecondary,
+            color = extendedColors.textSecondary,
             fontWeight = FontWeight.Medium,
         )
     }
     val finalTitleStyle = titleStyle ?: MaterialTheme.typography.bodyMedium.copy(
-        color = MaterialTheme.extendedColors.textSecondary,
+        color = extendedColors.textSecondary,
     )
 
     Row(

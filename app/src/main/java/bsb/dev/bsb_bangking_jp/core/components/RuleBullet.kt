@@ -18,9 +18,9 @@ import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
 @Composable
 internal fun RuleBullet(text: String, hasInput: Boolean, isValid: Boolean) {
     val color = when {
-        !hasInput -> MaterialTheme.extendedColors.textDisabled
-        isValid -> MaterialTheme.extendedColors.success
-        else -> MaterialTheme.extendedColors.danger
+        !hasInput -> extendedColors.textDisabled
+        isValid -> extendedColors.success
+        else -> extendedColors.danger
     }
     Row(verticalAlignment = Alignment.CenterVertically) {
         Icon(

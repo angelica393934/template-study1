@@ -131,7 +131,7 @@ fun ResetPwPageForgetPw(
                 text = "Aturan Password Pengguna",
                 style = MaterialTheme.typography.titleSmall,
                 textAlign = TextAlign.Left,
-                color = MaterialTheme.extendedColors.textSecondary,
+                color = extendedColors.textSecondary,
             )
             RuleBullet("Gunakan maksimal 8 karakter", newPasscode.isNotEmpty(), has8Chars)
             RuleBullet("Gunakan huruf besar dan kecil", newPasscode.isNotEmpty(), hasUpperLower)

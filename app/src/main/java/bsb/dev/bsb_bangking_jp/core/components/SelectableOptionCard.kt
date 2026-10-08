@@ -31,9 +31,9 @@ fun SelectableOptionCard(
     onTap: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val borderColor = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.extendedColors.divider
+    val borderColor = if (isSelected) MaterialTheme.colorScheme.primary else extendedColors.divider
     val backgroundColor = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.background
-    val titleColor = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.extendedColors.textPrimary
+    val titleColor = if (isSelected) MaterialTheme.colorScheme.primary else extendedColors.textPrimary
 
     Box(
         modifier = modifier
@@ -56,7 +56,7 @@ fun SelectableOptionCard(
                 Text(
                     text = description,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.extendedColors.textSecondary,
+                    color = extendedColors.textSecondary,
                 )
             }
             Spacer(modifier = Modifier.width(12.dp))

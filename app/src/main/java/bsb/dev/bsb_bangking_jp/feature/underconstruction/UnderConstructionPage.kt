@@ -59,7 +59,7 @@ fun UnderConstructionPage(
             textAlign = TextAlign.Center,
             fontSize = 14.sp,
             lineHeight = 21.sp,
-            color = MaterialTheme.extendedColors.textSecondary,
+            color = extendedColors.textSecondary,
         )
 
         Spacer(modifier = Modifier.weight(1f))

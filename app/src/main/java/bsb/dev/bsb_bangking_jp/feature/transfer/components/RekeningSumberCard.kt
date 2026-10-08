@@ -100,7 +100,7 @@ private fun RekeningSumberContent(
             .fillMaxWidth()
             .clip(RoundedCornerShape(25.dp))
             .background(MaterialTheme.colorScheme.background)
-            .border(1.dp, MaterialTheme.extendedColors.textDisabled, RoundedCornerShape(25.dp)),
+            .border(1.dp, extendedColors.textDisabled, RoundedCornerShape(25.dp)),
     ) {
         Image(
             painter = painterResource(id = R.drawable.bg_card),
@@ -131,7 +131,7 @@ private fun RekeningSumberContent(
                 Text(
                     text = aktif.number,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.extendedColors.textSecondary,
+                    color = extendedColors.textSecondary,
                 )
             }
 

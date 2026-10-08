@@ -43,7 +43,7 @@ fun CardHistory(
             .clip(RoundedCornerShape(8.dp))
             .border(
                 width = 1.dp,
-                color = MaterialTheme.extendedColors.strip,
+                color = extendedColors.strip,
                 shape = RoundedCornerShape(10.dp),
             )
             .background(MaterialTheme.colorScheme.background)
@@ -71,7 +71,7 @@ fun CardHistory(
         // ---- Divider tanpa padding (melebar penuh) ----
         HorizontalDivider(
             thickness = 1.dp,
-            color = MaterialTheme.extendedColors.strip,
+            color = extendedColors.strip,
         )
 
         // ---- Bagian bawah: title & subtitle ----
@@ -94,7 +94,7 @@ fun CardHistory(
                 text = subtitle,
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.extendedColors.textSecondary,
+                color = extendedColors.textSecondary,
             )
             Spacer(modifier = Modifier.height(8.dp))
         }

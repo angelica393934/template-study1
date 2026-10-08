@@ -169,7 +169,7 @@ fun InputPinPage(
                             Text(
                                 text = it,
                                 style = MaterialTheme.typography.titleLarge,
-                                color = MaterialTheme.extendedColors.textPrimary,
+                                color = extendedColors.textPrimary,
                                 textAlign = TextAlign.Center,
                             )
                             Spacer(modifier = Modifier.height(minGap))
@@ -182,7 +182,7 @@ fun InputPinPage(
                                 textAlign = TextAlign.Center,
                                 style = MaterialTheme.typography.bodyMedium,
                                 fontWeight = FontWeight.Medium,
-                                color = MaterialTheme.extendedColors.danger,
+                                color = extendedColors.danger,
                             )
                             Spacer(modifier = Modifier.height(minGap))
                         }
@@ -200,9 +200,9 @@ fun InputPinPage(
                                         .clip(CircleShape)
                                         .background(
                                             when {
-                                                filled && pinSalah -> MaterialTheme.extendedColors.danger
+                                                filled && pinSalah -> extendedColors.danger
                                                 filled -> MaterialTheme.colorScheme.primary
-                                                else -> MaterialTheme.extendedColors.divider
+                                                else -> extendedColors.divider
                                             }
                                         )
                                 )

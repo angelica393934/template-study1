@@ -114,7 +114,7 @@ fun FilterTransaksiModal(
                             .weight(1f)
                             .padding(horizontal = 4.dp)
                             .clip(RoundedCornerShape(100.dp))
-                            .background(if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.extendedColors.inputBackground)
+                            .background(if (isSelected) MaterialTheme.colorScheme.primary else extendedColors.inputBackground)
                             .clickable {
                                 selectedQuickRange = if (isSelected) null else range
                                 if (selectedQuickRange != null) {
@@ -128,7 +128,7 @@ fun FilterTransaksiModal(
                             text = "$range Hari Terakhir",
                             style = MaterialTheme.typography.bodySmall,
                             fontWeight = FontWeight.Bold,
-                            color = if (isSelected) MaterialTheme.extendedColors.onSuccess else MaterialTheme.extendedColors.textSecondary,
+                            color = if (isSelected) extendedColors.onSuccess else extendedColors.textSecondary,
                             modifier = Modifier.fillMaxWidth(),
                             textAlign = TextAlign.Center,
                         )
@@ -137,7 +137,7 @@ fun FilterTransaksiModal(
             }
 
             Spacer(modifier = Modifier.height(20.dp))
-            HorizontalDivider(color = MaterialTheme.extendedColors.divider)
+            HorizontalDivider(color = extendedColors.divider)
             Spacer(modifier = Modifier.height(10.dp))
 
             Text(text = "Jenis Transaksi", style = MaterialTheme.typography.titleMedium)
@@ -234,14 +234,14 @@ private fun FilterChoiceChip(label: String, isSelected: Boolean, onTap: () -> Un
     Row(
         modifier = Modifier
             .clip(RoundedCornerShape(100.dp))
-            .background(if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.extendedColors.inputBackground)
+            .background(if (isSelected) MaterialTheme.colorScheme.primary else extendedColors.inputBackground)
             .clickable { onTap() }
             .padding(horizontal = 16.dp, vertical = 10.dp),
     ) {
         Text(
             text = label,
             style = MaterialTheme.typography.titleSmall,
-            color = if (isSelected) MaterialTheme.extendedColors.onSuccess else MaterialTheme.extendedColors.textSecondary,
+            color = if (isSelected) extendedColors.onSuccess else extendedColors.textSecondary,
         )
     }
 }

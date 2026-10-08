@@ -139,7 +139,7 @@ fun PilihRentangTanggalSheet(
                 Text(
                     text = "Awal",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.extendedColors.textSecondary,
+                    color = extendedColors.textSecondary,
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
@@ -157,7 +157,7 @@ fun PilihRentangTanggalSheet(
                 Text(
                     text = "Akhir",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.extendedColors.textSecondary,
+                    color = extendedColors.textSecondary,
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
@@ -191,7 +191,7 @@ fun PilihRentangTanggalSheet(
                     Icon(
                         Icons.Default.ChevronLeft,
                         contentDescription = "Bulan sebelumnya",
-                        tint = if (isPrevDisabled) Gray300 else MaterialTheme.extendedColors.textPrimary,
+                        tint = if (isPrevDisabled) Gray300 else extendedColors.textPrimary,
                     )
                 }
                 IconButton(
@@ -201,7 +201,7 @@ fun PilihRentangTanggalSheet(
                     Icon(
                         Icons.Default.ChevronRight,
                         contentDescription = "Bulan berikutnya",
-                        tint = if (isNextDisabled) Gray300 else MaterialTheme.extendedColors.textPrimary,
+                        tint = if (isNextDisabled) Gray300 else extendedColors.textPrimary,
                     )
                 }
             }
@@ -216,7 +216,7 @@ fun PilihRentangTanggalSheet(
                     Text(
                         text = hari,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = if (hari == "Min") Red500 else MaterialTheme.extendedColors.textSecondary,
+                        color = if (hari == "Min") Red500 else extendedColors.textSecondary,
                     )
                 }
             }
@@ -267,10 +267,10 @@ fun PilihRentangTanggalSheet(
                                 fontWeight = if (isStart || isEnd) FontWeight.Bold else FontWeight.Normal,
                                 color = when {
                                     isPastDate -> Gray300
-                                    isStart || isEnd -> MaterialTheme.extendedColors.onSuccess
+                                    isStart || isEnd -> extendedColors.onSuccess
                                     !day.inCurrentMonth -> Gray300
                                     isSunday -> Red500
-                                    else -> MaterialTheme.extendedColors.textPrimary
+                                    else -> extendedColors.textPrimary
                                 },
                             )
                         }

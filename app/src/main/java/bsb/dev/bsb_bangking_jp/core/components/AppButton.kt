@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
 
@@ -31,7 +32,7 @@ fun AppButton(
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
 
     backgroundColor: Color = MaterialTheme.colorScheme.primary,
-    textColor: Color = MaterialTheme.extendedColors.onSuccess,
+    textColor: Color = extendedColors.onSuccess,
 
     outlined: Boolean = false,
     enabled: Boolean = true,
@@ -69,8 +70,9 @@ fun AppButton(
             Text(
                 text = text,
                 style = textStyle,
-                color = textColor
-            )
+                color = textColor,
+                textAlign = TextAlign.Center,
+                )
 
             if (!iconBeforeText && icon != null) {
                 Spacer(Modifier.width(8.dp))

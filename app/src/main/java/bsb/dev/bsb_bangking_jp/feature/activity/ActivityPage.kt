@@ -35,7 +35,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -64,6 +67,15 @@ import org.koin.compose.koinInject
 import kotlin.math.roundToInt
 
 private val PULL_REFRESH_MAX_PUSH = 30.dp
+
+// helper: tarik elemen naik sebesar [overlap], tapi tinggi layout ikut menyesuaikan
+private fun Modifier.overlapTop(overlap: Dp): Modifier = this.layout { measurable, constraints ->
+    val placeable = measurable.measure(constraints)
+    val overlapPx = overlap.roundToPx()
+    layout(placeable.width, placeable.height - overlapPx) {
+        placeable.place(0, -overlapPx)
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -145,53 +157,46 @@ fun ActivityPage(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
     ) {
+        // Header biru
+        AppHeader(
+            title = "",
+            showBackButton = false,
+            height = 160.dp,
+        )
+
+        // Saldo card: naik 95.dp menimpa header, tinggi layout menyesuaikan isi card
         Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp),
+                .padding(horizontal = appLayout.defaultPadding)
+                .overlapTop(95.dp),   // 160 - 65 = 95 -> posisi sama seperti sebelumnya
         ) {
-            AppHeader(
-                title = "",
-                showBackButton = false,
-                height = 160.dp,
-            )
-
-            Box(
-                modifier = Modifier
-                    .padding(horizontal = appLayout.defaultPadding)
-                    .offset(y = 65.dp),
-            ) {
-                when {
-                    rekeningUiState.isLoading &&
-                            rekeningUiState.rekeningList == null -> {
-                        SkeletonSaldoCard()
-                    }
-
-                    rekeningUiState.rekeningList != null -> {
-                        SaldoCardSelector(
-                            rekeningList = rekeningUiState.rekeningList!!,
-                            activeAccountNumber = accountNo,
-                            onRekeningSelected = { selected ->
-                                activityViewModel.switchAccount(selected.number)
-                            },
-                        )
-                    }
-
-                    else -> {
-                        SaldoCardEmpty(
-                            onRetry = {
-                                rekeningViewModel.load(forceRefresh = true)
-                            },
-                        )
-                    }
+            when {
+                rekeningUiState.isLoading && rekeningUiState.rekeningList == null -> {
+                    SkeletonSaldoCard()
+                }
+                rekeningUiState.rekeningList != null -> {
+                    SaldoCardSelector(
+                        rekeningList = rekeningUiState.rekeningList!!,
+                        activeAccountNumber = accountNo,
+                        onRekeningSelected = { selected ->
+                            activityViewModel.switchAccount(selected.number)
+                        },
+                    )
+                }
+                else -> {
+                    SaldoCardEmpty(
+                        onRetry = { rekeningViewModel.load(forceRefresh = true) },
+                    )
                 }
             }
         }
+
+        // Judul + tombol cari: padding atas dikecilkan karena jarak sudah otomatis
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
-                    top = 40.dp,
+                    top = 16.dp,   // sebelumnya 40.dp (untuk mengimbangi tinggi tetap)
                     bottom = 10.dp,
                     start = appLayout.defaultPadding,
                     end = appLayout.defaultPadding,
@@ -203,6 +208,7 @@ fun ActivityPage(
                 text = "Transaksi Bulan Ini",
                 style = MaterialTheme.typography.titleLarge,
                 maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.weight(1f),
             )
 
@@ -224,6 +230,8 @@ fun ActivityPage(
                 Text(
                     text = "Cari Transaksi",
                     style = MaterialTheme.typography.titleSmall,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                     color = MaterialTheme.colorScheme.primary,
                 )
             }
@@ -368,7 +376,7 @@ fun ActivityPage(
                                 }
                             }
 
-                            item(key = "bottom_spacer") { Spacer(modifier = Modifier.height(100.dp),)
+                            item(key = "bottom_spacer") { Spacer(modifier = Modifier.height(100.dp))
                             }
                         }
                     }

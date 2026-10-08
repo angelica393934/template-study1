@@ -93,7 +93,7 @@ fun NotifikasiPage(
                         style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier.padding(horizontal = appLayout.defaultPadding, vertical = appLayout.verticalPadding16),
                     )
-                    HorizontalDivider(color = MaterialTheme.extendedColors.strip)
+                    HorizontalDivider(color = extendedColors.strip)
 
                     if (state.items.isEmpty()) {
                         EmptyState(
@@ -113,7 +113,7 @@ fun NotifikasiPage(
                                     notif = notif,
                                     onClick = { selectedNotif = notif },
                                 )
-                                HorizontalDivider(color = MaterialTheme.extendedColors.textDisabled)
+                                HorizontalDivider(color = extendedColors.textDisabled)
                             }
                         }
                     }
@@ -167,7 +167,7 @@ private fun NotifRow(
                     Text(
                         text = DateFormatterUtil.toShortDate(notif.date),
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.extendedColors.textSecondary,
+                        color = extendedColors.textSecondary,
                     )
                 }
                 Spacer(modifier = Modifier.height(appSpacing.xxxxs))
@@ -176,7 +176,7 @@ private fun NotifRow(
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.extendedColors.textSecondary,
+                    color = extendedColors.textSecondary,
                 )
             }
         }
@@ -218,14 +218,14 @@ private fun NotifDetailContent(
             Text(
                 text = DateFormatterUtil.toFullDateTime(notif.date),
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.extendedColors.textSecondary,
+                color = extendedColors.textSecondary,
             )
 
             Text(
                 text = notif.description,
                 textAlign = androidx.compose.ui.text.style.TextAlign.Center,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.extendedColors.textSecondary,
+                color = extendedColors.textSecondary,
             )
         }
         AppButton(

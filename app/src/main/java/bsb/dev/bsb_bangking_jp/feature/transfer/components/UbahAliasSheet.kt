@@ -119,7 +119,7 @@ fun UbahAliasSheet(
 
             HorizontalDivider(
                 thickness = 1.dp,
-                color = MaterialTheme.extendedColors.strip,
+                color = extendedColors.strip,
             )
 
             Spacer(
@@ -142,7 +142,7 @@ fun UbahAliasSheet(
             Text(
                 text = "Perbarui nama rekening agar mudah dikenali saat melakukan transfer.",
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.extendedColors.cardBackground,
+                color = extendedColors.cardBackground,
             )
 
             Spacer(

@@ -157,7 +157,7 @@ private fun TempelkanKartuContent(onBackClick: () -> Unit) {
         Text(
             text = "Aktifkan NFC di pengaturan ponsel.\n Tempelkan kartu di bagian belakang ponsel hingga terbaca.",
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.extendedColors.textSecondary,
+            color = extendedColors.textSecondary,
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .fillMaxWidth()
@@ -218,7 +218,7 @@ private fun MembacaKartuContent() {
         Text(
             text = "Pastikan NFC aktif dan kartu tetap menempel.\nJangan lepaskan kartu sampai proses selesai.",
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.extendedColors.textSecondary,
+            color = extendedColors.textSecondary,
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .fillMaxWidth()

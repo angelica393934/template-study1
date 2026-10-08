@@ -1,18 +1,13 @@
-// feature/portal/LoginSheet.kt
 package bsb.dev.bsb_bangking_jp.feature.login
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.PersonAdd
-import androidx.compose.material.icons.filled.Security
-import androidx.compose.material.icons.outlined.LocationOn
-import androidx.compose.material.icons.outlined.PersonAdd
-import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -38,13 +33,12 @@ import bsb.dev.bsb_bangking_jp.core.components.LocalLoadingOverlay
 import bsb.dev.bsb_bangking_jp.core.components.LocalToastState
 import bsb.dev.bsb_bangking_jp.core.components.AppCheckBox
 import bsb.dev.bsb_bangking_jp.core.components.AppMenu
+import bsb.dev.bsb_bangking_jp.core.theme.appSpacing
 import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
 import bsb.dev.bsb_bangking_jp.feature.login.presentation.LoginNavEvent
 import bsb.dev.bsb_bangking_jp.feature.login.presentation.LoginUiEvent
 import bsb.dev.bsb_bangking_jp.feature.login.presentation.LoginViewModel
-import bsb.dev.bsb_bangking_jp.shared.profile.presentation.ProfileViewModel
 import org.koin.androidx.compose.koinViewModel
-import org.koin.compose.koinInject
 
 @Composable
 fun LoginSheet(
@@ -72,7 +66,6 @@ fun LoginSheet(
     // dari uiState.useridLogin kalau ada nilai "remembered" tersimpan.
     var useridInput by remember(uiState.useridLogin) { mutableStateOf(uiState.useridLogin) }
     var passcodeInput by remember { mutableStateOf("") }
-    val profileViewModel: ProfileViewModel = koinInject()
     var showForgotAccountSheet by remember { mutableStateOf(false) }
 
     LaunchedEffect(uiState.isLoading) {
@@ -93,12 +86,9 @@ fun LoginSheet(
         }
     }
 
-    // Catatan: pemblokiran back-press saat loading (padanan PopScope -mu)
-    // sengaja tidak ditambahkan di sini karena AppModalBottomSheet pembungkusnya
-    // sudah skipPartiallyExpanded + non-dismissable secara default saat dibutuhkan.
-    // Kalau kamu mau block back-press eksplisit, tambahkan BackHandler(enabled = uiState.isLoading) {}.
-
-    Column {
+    Column (
+        verticalArrangement = Arrangement.spacedBy(appSpacing.xxxs)
+    ){
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -120,12 +110,10 @@ fun LoginSheet(
                 Icon(
                     imageVector = Icons.Default.Close,
                     contentDescription = "Tutup",
-                    tint = MaterialTheme.extendedColors.textPrimary, // padanan gray950
+                    tint = extendedColors.textPrimary, // padanan gray950
                 )
             }
         }
-
-        Spacer(modifier = Modifier.height(10.dp))
 
         AppTextField(
             value = useridInput,
@@ -137,7 +125,6 @@ fun LoginSheet(
             showError = uiState.useridError != null,
             onClearError = { viewModel.clearUseridError() },
         )
-        Spacer(modifier = Modifier.height(10.dp))
 
         AppTextField(
             value = passcodeInput,
@@ -150,8 +137,6 @@ fun LoginSheet(
             showError = uiState.passcodeError != null,
             onClearError = { viewModel.clearPasscodeError() },
         )
-
-        Spacer(modifier = Modifier.height(15.dp))
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -169,19 +154,15 @@ fun LoginSheet(
 
             Text(
                 style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.extendedColors.cardBackground,
+                color = extendedColors.cardBackground,
                 text = rememberUserId,
             )
         }
-        Spacer(modifier = Modifier.height(15.dp))
 
         AppButton(
             text = loginText,
             onClick = { viewModel.login(useridInput, passcodeInput) },
         )
-
-        Spacer(modifier = Modifier.height(10.dp))
-
         TextButton(
             onClick = {
                 showForgotAccountSheet = true
@@ -191,11 +172,10 @@ fun LoginSheet(
             Text(
                 forgotPassword,
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.extendedColors.divider,
+                color = extendedColors.divider,
+                textAlign = TextAlign.Center
             )
         }
-
-        Spacer(modifier = Modifier.height(20.dp))
 
         Row(
             horizontalArrangement = Arrangement.spacedBy(32.dp, Alignment.CenterHorizontally) ,
@@ -234,12 +214,9 @@ fun LoginSheet(
                 },
             )
         }
-
-        Spacer(modifier = Modifier.height(20.dp))
     }
 
     if (showForgotAccountSheet) {
-        bsb.dev.bsb_bangking_jp.feature.login.
         ForgotAccountBottomSheet(
             onDismiss = { showForgotAccountSheet = false },
             onSelectUserId = {

@@ -29,19 +29,11 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.foundation.layout.calculateEndPadding
-import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -56,6 +48,7 @@ import bsb.dev.bsb_bangking_jp.feature.message.MessagePage
 import kotlin.Unit
 
 val NAVBAR_HEIGHT = 70.dp
+val NAVBAR_PADDING = 60.dp
 
 private data class NavItem(
     val imgactive: Int,
@@ -108,13 +101,11 @@ fun Navbar(
             }
         }
     ){ innerPadding ->
-        val layoutDirection = LocalLayoutDirection.current
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(
-                    start = innerPadding.calculateStartPadding(layoutDirection),
-                    end = innerPadding.calculateEndPadding(layoutDirection)
+                    bottom = innerPadding.calculateBottomPadding()
                 )
         ) {
             when (currentIndex) {
@@ -211,10 +202,16 @@ private fun BankBottomBar(
     Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .height(NAVBAR_HEIGHT),
+            .height(NAVBAR_HEIGHT)
+            .shadow(
+                elevation = 16.dp,
+                shape = cornerShape,
+                clip = false,
+                ambientColor = Color.Black.copy(alpha = 0.25f),
+                spotColor = Color.Black.copy(alpha = 0.25f),
+            ),
         shape = cornerShape,
-        shadowElevation = 8.dp,
-        color = MaterialTheme.colorScheme.surface
+        color = MaterialTheme.colorScheme.surface,
     ) {
         Row(
             modifier = Modifier

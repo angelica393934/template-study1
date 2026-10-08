@@ -117,8 +117,8 @@ fun BSBBangkingJPTheme(
         )
     }
 }
-private const val MAX_FONT_SCALE = 1.2f
-// Extension biar akses gampang: MaterialTheme.extendedColors.textPrimary
-val MaterialTheme.extendedColors: ExtendedColors
+private const val MAX_FONT_SCALE = 1.5f
+// Extension biar akses gampang: extendedColors.textPrimary
+val extendedColors: ExtendedColors
     @Composable
     get() = LocalExtendedColors.current

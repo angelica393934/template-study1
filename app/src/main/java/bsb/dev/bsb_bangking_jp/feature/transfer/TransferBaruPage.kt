@@ -184,6 +184,7 @@ fun TransferBaruPage(
         AppModalBottomSheet(
             onDismissRequest = { closeBankSheet() },
             sheetState = bankSheetState,
+            scrollable = false,
         ) {
             PilihBankSheet(
                 viewModel = daftarBankViewModel,

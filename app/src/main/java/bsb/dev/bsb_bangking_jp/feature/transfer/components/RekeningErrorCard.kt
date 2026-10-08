@@ -34,15 +34,15 @@ fun RekeningErrorCard(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
-            .background(MaterialTheme.extendedColors.inputBackground)
-            .border(1.dp, MaterialTheme.extendedColors.divider, RoundedCornerShape(16.dp))
+            .background(extendedColors.inputBackground)
+            .border(1.dp, extendedColors.divider, RoundedCornerShape(16.dp))
             .padding(16.dp),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
                 imageVector = Icons.Filled.ErrorOutline,
                 contentDescription = null,
-                tint = MaterialTheme.extendedColors.danger,
+                tint = extendedColors.danger,
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
@@ -54,7 +54,7 @@ fun RekeningErrorCard(
         Text(
             text = message,
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.extendedColors.textSecondary,
+            color = extendedColors.textSecondary,
         )
         Spacer(modifier = Modifier.height(12.dp))
         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {

@@ -73,7 +73,7 @@ fun OtpInput(
                             color = when {
                                 isError -> MaterialTheme.colorScheme.error
                                 isFocusedBox -> MaterialTheme.colorScheme.primary
-                                else -> MaterialTheme.extendedColors.textDisabled
+                                else -> extendedColors.textDisabled
                             },
                             shape = shape,
                         ),

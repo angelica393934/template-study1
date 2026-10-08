@@ -23,13 +23,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import bsb.dev.bsb_bangking_jp.R
+import bsb.dev.bsb_bangking_jp.core.theme.appSpacing
 import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
 import bsb.dev.bsb_bangking_jp.core.util.RupiahFormat
 import bsb.dev.bsb_bangking_jp.shared.rekening_lainnya.data.RekeningItem
@@ -87,7 +87,8 @@ fun RekeningLainnyaSheet(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .wrapContentHeight()
+                .wrapContentHeight(),
+            verticalArrangement = Arrangement.spacedBy(appSpacing.xxxs),
         ) {
 
             if (resolvedTitle.isNotEmpty()) {
@@ -95,18 +96,15 @@ fun RekeningLainnyaSheet(
                     text = resolvedTitle,
                     style = MaterialTheme.typography.titleLarge,
                 )
-                Spacer(modifier = Modifier.height(16.dp))
             }
-
             daftarRekening.forEach { item ->
-                RekeningItemCard(
-                    rekening = item,
-                    isActive = isActive(item),
-                    showCopy = showCopy,
-                    onTap = { onItemTap(item) },
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-            }
+                        RekeningItemCard(
+                            rekening = item,
+                            isActive = isActive(item),
+                            showCopy = showCopy,
+                            onTap = { onItemTap(item) },
+                        )
+                    }
 
             if (useButton) {
                 Spacer(modifier = Modifier.height(6.dp))
@@ -134,11 +132,12 @@ private fun RekeningItemCard(
     modifier: Modifier = Modifier,
 
 ) {
-    val context = LocalContext.current
     val clipboardManager = LocalClipboardManager.current
 
-    val borderColor = if (isActive) MaterialTheme.colorScheme.primary else MaterialTheme.extendedColors.textDisabled
-    val backgroundColor = if (isActive) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.background
+    val borderColor =
+        if (isActive) MaterialTheme.colorScheme.primary else extendedColors.textDisabled
+    val backgroundColor =
+        if (isActive) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.background
     val toastState = LocalToastState.current
 
     val saldoFormatted = RupiahFormat(rekening.cashBalanceValue().toInt())
@@ -167,7 +166,7 @@ private fun RekeningItemCard(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(24.dp, top = 24.dp, end = 24.dp, bottom = 10.dp)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -175,70 +174,75 @@ private fun RekeningItemCard(
             ) {
                 Text(
                     text = "Tabungan Sekarang",
+                    modifier = Modifier.weight(1f),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.extendedColors.textSecondary,
+                    color = extendedColors.textSecondary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
+
                 Text(
                     text = rekening.accountTypeName.ifEmpty { "Tabungan" },
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.extendedColors.textPrimary,
-                )
-            }
-
-            Spacer(modifier = Modifier.height(4.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    text = saldoFormatted,
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold,
+                    color = extendedColors.textPrimary,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.weight(1f),
                 )
-
-                if (showCopy) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.clickable {
-                            clipboardManager.setText(
-                                AnnotatedString(
-                                    "Bank Sumsel Babel\n${rekening.number}\n${rekening.name}"
-                                )
-                            )
-                            toastState.showSuccess( "Rekening berhasil disalin")
-                        }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.ContentCopy,
-                            contentDescription = "Salin",
-                            tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(16.dp)
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(
-                            text = "Salin",
-                            style = MaterialTheme.typography.bodySmall,
-                            fontWeight = FontWeight.SemiBold,
-                            color = MaterialTheme.colorScheme.primary,
-                        )
-                    }
-                }
             }
 
-            Spacer(modifier = Modifier.height(2.dp))
+                Spacer(modifier = Modifier.height(4.dp))
 
-            Text(
-                text = rekening.number,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.extendedColors.textSecondary,
-            )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = saldoFormatted,
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                    )
+
+                    if (showCopy) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.clickable {
+                                clipboardManager.setText(
+                                    AnnotatedString(
+                                        "Bank Sumsel Babel\n${rekening.number}\n${rekening.name}"
+                                    )
+                                )
+                                toastState.showSuccess("Rekening berhasil disalin")
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.ContentCopy,
+                                contentDescription = "Salin",
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(16.dp)
+                            )
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Text(
+                                text = "Salin",
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                style = MaterialTheme.typography.bodySmall,
+                                fontWeight = FontWeight.SemiBold,
+                                color = MaterialTheme.colorScheme.primary,
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(2.dp))
+
+                Text(
+                    text = rekening.number,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = extendedColors.textSecondary,
+                )
+            }
         }
-    }
 }

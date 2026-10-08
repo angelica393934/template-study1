@@ -92,7 +92,7 @@ fun FindAccountPageActivation(
                 Text(
                     text = "Aktivasi akun diperlukan agar Anda bisa login dan menikmati layanan mobile banking dengan aman.",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.extendedColors.textSecondary,
+                    color = extendedColors.textSecondary,
                     textAlign = TextAlign.Center,
                 )
                 AppTextField(

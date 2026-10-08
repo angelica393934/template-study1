@@ -82,7 +82,7 @@ fun CreateUserIdPageRegistration(
             Text(
                 text = "ID Pengguna ini akan digunakan untuk masuk ke akun dan mengakses Bank Sumsel Babel Mobile Banking.",
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.extendedColors.textSecondary,
+                color = extendedColors.textSecondary,
             )
             AppTextField(
                 value = userId,
@@ -113,7 +113,7 @@ fun CreateUserIdPageRegistration(
             Text(
                 text = "Aturan ID Pengguna",
                 style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.extendedColors.textSecondary,
+                color = extendedColors.textSecondary,
             )
             RuleBullet("Gunakan tepat 8 karakter", userId.isNotEmpty(), has8Chars)
             RuleBullet(

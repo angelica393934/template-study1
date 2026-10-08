@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import bsb.dev.bsb_bangking_jp.R
 import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
@@ -59,11 +60,13 @@ fun AccountProfileCard(
                 Text(
                     text = nama,
                     style = MaterialTheme.typography.titleMedium,
-                )
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    )
                 Text(
                     text = phoneNumber,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.extendedColors.textSecondary,
+                    color = extendedColors.textSecondary,
                 )
             }
         }

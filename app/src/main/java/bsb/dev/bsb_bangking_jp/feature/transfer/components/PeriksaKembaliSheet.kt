@@ -56,7 +56,7 @@ fun PeriksaKembaliSheet(
         Text(
             text = "Pastikan Penerima Sudah Sesuai",
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.extendedColors.textSecondary,
+            color = extendedColors.textSecondary,
         )
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -71,13 +71,13 @@ fun PeriksaKembaliSheet(
         )
         Spacer(modifier = Modifier.height(8.dp))
 
-        HorizontalDivider(color = MaterialTheme.extendedColors.divider)
+        HorizontalDivider(color = extendedColors.divider)
 
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = "Detail Transaksi",
             style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.extendedColors.textSecondary,
+            color = extendedColors.textSecondary,
         )
         Spacer(modifier = Modifier.height(4.dp))
 
@@ -96,15 +96,15 @@ fun PeriksaKembaliSheet(
         )
         Spacer(modifier = Modifier.height(10.dp))
 
-        HorizontalDivider(color = MaterialTheme.extendedColors.divider)
+        HorizontalDivider(color = extendedColors.divider)
 
         DetailRow(
             title = "Keterangan",
             value = result.keterangan.ifEmpty { "-" },
             titleStyle = MaterialTheme.typography.titleSmall,
-            valueStyle = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.extendedColors.textSecondary),
+            valueStyle = MaterialTheme.typography.bodySmall.copy(color = extendedColors.textSecondary),
         )
-        HorizontalDivider(color = MaterialTheme.extendedColors.divider)
+        HorizontalDivider(color = extendedColors.divider)
         Spacer(modifier = Modifier.height(10.dp))
 
         if (result.isScheduled) {
@@ -148,7 +148,7 @@ fun PeriksaKembaliSheet(
             text = "Rekening Sumber",
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Medium,
-            color = MaterialTheme.extendedColors.textSecondary,
+            color = extendedColors.textSecondary,
         )
         Spacer(modifier = Modifier.height(10.dp))
         Text(
@@ -160,7 +160,7 @@ fun PeriksaKembaliSheet(
             style = MaterialTheme.typography.bodyMedium,
         )
         Spacer(modifier = Modifier.height(10.dp))
-        HorizontalDivider(color = MaterialTheme.extendedColors.divider)
+        HorizontalDivider(color = extendedColors.divider)
         Spacer(modifier = Modifier.height(10.dp))
 
         AppButton(
@@ -183,15 +183,15 @@ private fun DetailRow(
     val isGratis = value.trim().equals("gratis", ignoreCase = true)
 
     val finalValueStyle = valueStyle ?: if (isGratis) {
-        MaterialTheme.typography.titleMedium.copy(color = MaterialTheme.extendedColors.success)
+        MaterialTheme.typography.titleMedium.copy(color = extendedColors.success)
     } else {
         MaterialTheme.typography.bodyMedium.copy(
-            color = MaterialTheme.extendedColors.textSecondary,
+            color = extendedColors.textSecondary,
             fontWeight = FontWeight.Medium,
         )
     }
     val finalTitleStyle = titleStyle ?: MaterialTheme.typography.bodyMedium.copy(
-        color = MaterialTheme.extendedColors.textSecondary,
+        color = extendedColors.textSecondary,
     )
 
     Row(

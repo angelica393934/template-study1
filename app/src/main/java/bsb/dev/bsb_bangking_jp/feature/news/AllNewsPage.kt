@@ -132,8 +132,8 @@ private fun BeritaCard(
             .shadow(
                 elevation = 6.dp,
                 shape = RoundedCornerShape(10.dp),
-                ambientColor = MaterialTheme.extendedColors.divider,
-                spotColor = MaterialTheme.extendedColors.divider,
+                ambientColor = extendedColors.divider,
+                spotColor = extendedColors.divider,
             )
             .clip(RoundedCornerShape(10.dp))
             .background(MaterialTheme.colorScheme.background)

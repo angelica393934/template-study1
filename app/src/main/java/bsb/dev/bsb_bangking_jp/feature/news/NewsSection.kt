@@ -104,7 +104,7 @@ private fun NewsSectionUnavailable(
                 .fillMaxWidth()
                 .aspectRatio(16f / 9f)
                 .clip(RoundedCornerShape(12.dp))
-                .background(MaterialTheme.extendedColors.inputBackground)
+                .background(extendedColors.inputBackground)
                 .clickable { onRetry() },
             contentAlignment = Alignment.Center,
         ) {
@@ -112,14 +112,14 @@ private fun NewsSectionUnavailable(
                 Icon(
                     imageVector = Icons.Default.ImageNotSupported,
                     contentDescription = null,
-                    tint = MaterialTheme.extendedColors.textDisabled,
+                    tint = extendedColors.textDisabled,
                     modifier = Modifier.size(40.dp),
                 )
                 Spacer(modifier = Modifier.height(6.dp))
                 Text(
                     text = "Berita tidak tersedia",
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.extendedColors.textSecondary,
+                    color = extendedColors.textSecondary,
                 )
             }
         }

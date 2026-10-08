@@ -45,13 +45,13 @@ fun NetworkImage(
         }
         is NetworkImageState.Failed -> {
             Box(
-                modifier = modifier.background(MaterialTheme.extendedColors.inputBackground),
+                modifier = modifier.background(extendedColors.inputBackground),
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
                     imageVector = Icons.Default.BrokenImage,
                     contentDescription = null,
-                    tint = MaterialTheme.extendedColors.textDisabled,
+                    tint = extendedColors.textDisabled,
                 )
             }
         }

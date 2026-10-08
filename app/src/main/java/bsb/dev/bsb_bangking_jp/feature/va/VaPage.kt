@@ -90,7 +90,7 @@ fun VaPage(
                 Text(
                     text = "Daftar Pembayaran Terakhir",
                     style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.extendedColors.textSecondary,
+                    color = extendedColors.textSecondary,
                 )
                 Row(
                     modifier = Modifier.clickable { onNavigateToUnavailable() },

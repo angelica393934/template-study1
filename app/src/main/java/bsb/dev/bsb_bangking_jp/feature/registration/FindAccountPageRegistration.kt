@@ -94,7 +94,7 @@ fun FindAccountPageRegistration(
                     text = "Lengkapi data dirimu untuk membuat akun dan nikmati kemudahan transaksi.",
                     style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.Center,
-                    color = MaterialTheme.extendedColors.textSecondary,
+                    color = extendedColors.textSecondary,
                 )
                 AppTextField(
                     value = rekeningInput,
@@ -110,6 +110,7 @@ fun FindAccountPageRegistration(
                     showError = uiState.atmCardError != null,
                     enableFocusBackground = true,
                 )
+
                 AppTextField(
                     value = phoneInput,
                     onValueChange = {

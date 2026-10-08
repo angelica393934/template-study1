@@ -87,7 +87,7 @@ fun JumlahTransferField(
                 singleLine = true,
                 textStyle = MaterialTheme.typography.headlineSmall.copy(
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.extendedColors.textPrimary,
+                    color = extendedColors.textPrimary,
                 ),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier.weight(1f),
@@ -101,7 +101,7 @@ fun JumlahTransferField(
                         modifier = Modifier
                             .size(20.dp)
                             .clip(CircleShape)
-                            .background(MaterialTheme.extendedColors.divider),
+                            .background(extendedColors.divider),
                         contentAlignment = Alignment.Center,
                     ) {
                         Icon(
@@ -116,7 +116,7 @@ fun JumlahTransferField(
         }
 
         HorizontalDivider(
-            color = MaterialTheme.extendedColors.divider,
+            color = extendedColors.divider,
             thickness = 2.dp,
             modifier = Modifier.padding(top = 8.dp),
         )
@@ -126,7 +126,7 @@ fun JumlahTransferField(
             Text(
                 text = it,
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.extendedColors.danger,
+                color = extendedColors.danger,
             )
         }
     }

@@ -19,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import bsb.dev.bsb_bangking_jp.core.components.RekeningLainnyaSheet
 import bsb.dev.bsb_bangking_jp.core.components.RekeningSheetMode
@@ -62,6 +63,8 @@ fun SaldoCardSelector(
                 text = "Rekening Aktif",
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
             Row(
                 modifier = Modifier.clickable(enabled = rekeningList.size > 1) { showSheet = true },
@@ -71,6 +74,8 @@ fun SaldoCardSelector(
                     text = "Ganti Rekening",
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.primary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Icon(

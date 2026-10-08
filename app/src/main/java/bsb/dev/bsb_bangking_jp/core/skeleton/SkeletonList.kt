@@ -54,7 +54,7 @@ fun SkeletonList(
                     }
                 }
                 if (index != itemCount - 1) {
-                    HorizontalDivider(thickness = 1.dp, color = MaterialTheme.extendedColors.strip)
+                    HorizontalDivider(thickness = 1.dp, color = extendedColors.strip)
                 }
             }
         }

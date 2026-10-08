@@ -78,7 +78,7 @@ fun InputPwPageActivation(
                 Text(
                     text = "Gunakan Password yang sudah Anda daftarkan untuk melanjutkan aktivasi.",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.extendedColors.textSecondary,
+                    color = extendedColors.textSecondary,
                 )
                 AppTextField(
                     value = passcodeInput,

@@ -156,7 +156,7 @@ private fun PhotoOptionItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .border(1.dp, MaterialTheme.extendedColors.divider, RoundedCornerShape(100.dp))
+            .border(1.dp, extendedColors.divider, RoundedCornerShape(100.dp))
             .clickable { onTap() }
             .padding(vertical = 16.dp, horizontal = 22.dp),
         verticalAlignment = Alignment.CenterVertically,

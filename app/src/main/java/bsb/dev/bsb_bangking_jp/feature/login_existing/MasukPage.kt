@@ -84,7 +84,7 @@ fun MasukPage(
             Text(
                 text = "Silakan masukkan nomor handphone Anda yang terdaftar untuk melanjutkan proses login.",
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.extendedColors.textSecondary,
+                color = extendedColors.textSecondary,
             )
             AppTextField(
                 value = phoneInput,

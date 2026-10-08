@@ -234,7 +234,7 @@ fun LainnyaPage(
                         Text(
                             text = stringResource(R.string.lainnya_section_menu_teratas),
                             style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.extendedColors.textPrimary,
+                            color = extendedColors.textPrimary,
                         )
                         Spacer(modifier = Modifier.height(20.dp))
                         MenuGrid(items = menuTeratas, useThemeStyle = true, onItemTap = onItemTap)
@@ -354,13 +354,13 @@ private fun ExpandableMenuSection(
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.extendedColors.textPrimary,
+                color = extendedColors.textPrimary,
                 modifier = Modifier.weight(1f),
             )
             Icon(
                 imageVector = Icons.Default.KeyboardArrowDown,
                 contentDescription = null,
-                tint = MaterialTheme.extendedColors.textSecondary,
+                tint = extendedColors.textSecondary,
                 modifier = Modifier.rotate(arrowRotation),
             )
         }

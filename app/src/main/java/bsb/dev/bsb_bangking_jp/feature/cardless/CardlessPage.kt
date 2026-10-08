@@ -82,7 +82,7 @@ fun CardlessPage(
         Text(
             text = "Daftar Cardless Terakhir",
             style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.extendedColors.textSecondary,
+            color = extendedColors.textSecondary,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp, vertical = 20.dp),
@@ -93,7 +93,7 @@ fun CardlessPage(
             itemsIndexed(DummyData.cardlessHistoryList) { index, item ->
                 CardlessListItem(item = item)
                 if (index != DummyData.cardlessHistoryList.lastIndex) {
-                    HorizontalDivider(thickness = 1.dp, color = MaterialTheme.extendedColors.strip)
+                    HorizontalDivider(thickness = 1.dp, color = extendedColors.strip)
                 }
             }
         }
@@ -103,7 +103,7 @@ fun CardlessPage(
 @Composable
 private fun CardlessListItem(item: DummyCardlessHistory) {
     val isBerhasil = item.status.trim().equals("berhasil", ignoreCase = true)
-    val statusColor = if (isBerhasil) MaterialTheme.extendedColors.success else MaterialTheme.extendedColors.danger
+    val statusColor = if (isBerhasil) extendedColors.success else extendedColors.danger
 
     // Padanan: item.date.replaceFirst('-', '-\n')
     val displayDate = if (item.date.contains("-")) item.date.replaceFirst("-", "-\n") else item.date
@@ -140,7 +140,7 @@ private fun CardlessListItem(item: DummyCardlessHistory) {
             Text(
                 text = displayDate,
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.extendedColors.textSecondary,
+                color = extendedColors.textSecondary,
             )
         }
 

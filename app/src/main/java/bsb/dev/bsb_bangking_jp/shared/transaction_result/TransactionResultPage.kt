@@ -182,36 +182,36 @@ fun TransactionResultPage(
                         text = "$tanggalFormatted\nRef:${data.referenceNumber}",
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.bodySmall.copy(fontSize = 10.sp),
-                        color = MaterialTheme.extendedColors.textSecondary,
+                        color = extendedColors.textSecondary,
                     )
                     Spacer(modifier = Modifier.height(10.dp))
 
                     HorizontalDivider(
                         modifier = Modifier.padding(horizontal = 18.dp),
-                        color = MaterialTheme.extendedColors.divider)
+                        color = extendedColors.divider)
                 }
 
                 Text(
                     text = "Penerima",
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Medium,
-                    color = MaterialTheme.extendedColors.textSecondary,
+                    color = extendedColors.textSecondary,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(text = data.beneficiaryName.uppercase(), style = MaterialTheme.typography.titleMedium)
                 Text(
                     text = "${data.beneficiaryBankName} - ${data.beneficiaryAccountNo}",
                     style = MaterialTheme.typography.bodySmall.copy(fontSize = 10.sp),
-                    color = MaterialTheme.extendedColors.textSecondary,
+                    color = extendedColors.textSecondary,
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 HorizontalDivider(
                     modifier = Modifier.padding(horizontal = 18.dp),
-                    color = MaterialTheme.extendedColors.divider)
+                    color = extendedColors.divider)
                 Text(
                     text = "Detail Transaksi",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.extendedColors.textSecondary,
+                    color = extendedColors.textSecondary,
                 )
                 Spacer(modifier = Modifier.height(3.dp))
 
@@ -228,7 +228,7 @@ fun TransactionResultPage(
                 Spacer(modifier = Modifier.height(15.dp))
                 HorizontalDivider(
                     modifier = Modifier.padding(horizontal = 18.dp),
-                    color = MaterialTheme.extendedColors.divider)
+                    color = extendedColors.divider)
                 Spacer(modifier = Modifier.height(8.dp))
 
                 // 🔹 Bagian "Pengirim" opsional -- auto-hide kalau senderName tidak ada
@@ -238,7 +238,7 @@ fun TransactionResultPage(
                         text = "Pengirim",
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Medium,
-                        color = MaterialTheme.extendedColors.textSecondary,
+                        color = extendedColors.textSecondary,
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(text = data.senderName.uppercase(), style = MaterialTheme.typography.titleMedium)
@@ -248,18 +248,18 @@ fun TransactionResultPage(
                     Spacer(modifier = Modifier.height(8.dp))
                     HorizontalDivider(
                         modifier = Modifier.padding(horizontal = 18.dp),
-                        color = MaterialTheme.extendedColors.divider)
+                        color = extendedColors.divider)
                 }
 
                 TransactionDetailRow(
                     title = "Keterangan",
                     value = data.remark?.takeIf { it.isNotBlank() } ?: "-",
                     titleStyle = MaterialTheme.typography.bodySmall,
-                    valueStyle = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.extendedColors.textSecondary),
+                    valueStyle = MaterialTheme.typography.bodySmall.copy(color = extendedColors.textSecondary),
                 )
                 HorizontalDivider(
                     modifier = Modifier.padding(horizontal = 18.dp),
-                    color = MaterialTheme.extendedColors.divider)
+                    color = extendedColors.divider)
                 Column(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
@@ -268,7 +268,7 @@ fun TransactionResultPage(
                     Text(
                         text = "Resi ini merupakan bukti transaksi yang sah.",
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.extendedColors.textSecondary,
+                        color = extendedColors.textSecondary,
                     )
                     Spacer(modifier = Modifier.height(15.dp))
                 }
@@ -308,7 +308,7 @@ fun TransactionResultPage(
                 Icon(
                     imageVector = Icons.Default.Close,
                     contentDescription = "Tutup",
-                    tint = MaterialTheme.extendedColors.textPrimary,
+                    tint = extendedColors.textPrimary,
                 )
             }
         }
@@ -317,7 +317,7 @@ fun TransactionResultPage(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(MaterialTheme.extendedColors.inputBackground.copy(alpha = 0.9f)),
+                    .background(extendedColors.inputBackground.copy(alpha = 0.9f)),
                 contentAlignment = Alignment.Center,
             ) {
                 CircularProgressIndicator()
@@ -341,7 +341,7 @@ private fun StatusVisual(status: TransactionResultStatus) {
             Icon(
                 imageVector = Icons.Filled.Cancel,
                 contentDescription = null,
-                tint = MaterialTheme.extendedColors.danger,
+                tint = extendedColors.danger,
                 modifier = Modifier.size(120.dp),
             )
         }
@@ -349,7 +349,7 @@ private fun StatusVisual(status: TransactionResultStatus) {
             Icon(
                 imageVector = Icons.Filled.HourglassEmpty,
                 contentDescription = null,
-                tint = MaterialTheme.extendedColors.warning,
+                tint = extendedColors.warning,
                 modifier = Modifier.size(120.dp),
             )
         }

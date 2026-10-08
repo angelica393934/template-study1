@@ -76,7 +76,7 @@ fun ChangeEmailPage(
             Text(
                 text = "Masukkan alamat email baru Anda untuk memperbarui akun.",
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.extendedColors.textSecondary,
+                color = extendedColors.textSecondary,
             )
             Spacer(modifier = Modifier.height(24.dp))
 

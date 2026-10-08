@@ -63,7 +63,7 @@ fun SkeletonSaldoCard(modifier: Modifier = Modifier) {
             }
 
             Spacer(modifier = Modifier.height(12.dp))
-            HorizontalDivider(thickness = 1.dp, color =  MaterialTheme.extendedColors.strip)
+            HorizontalDivider(thickness = 1.dp, color =  extendedColors.strip)
             Spacer(modifier = Modifier.height(8.dp))
 
             // Footer: klasifikasi + tombol "Rekening Lainnya"

@@ -2,6 +2,7 @@ package bsb.dev.bsb_bangking_jp.feature.beranda
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -25,7 +26,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntOffset
@@ -50,6 +50,10 @@ import bsb.dev.bsb_bangking_jp.shared.profile.presentation.ProfileViewModel
 import bsb.dev.bsb_bangking_jp.shared.rekening_lainnya.presentation.RekeningLainnyaViewModel
 import org.koin.compose.koinInject
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
+import bsb.dev.bsb_bangking_jp.core.theme.appLayout
+import bsb.dev.bsb_bangking_jp.core.theme.appSpacing
 
 private val PULL_REFRESH_MAX_PUSH = 60.dp // 🔹 seberapa jauh konten terdorong turun saat full refresh
 
@@ -70,6 +74,7 @@ fun BerandaPage(
     profileViewModel: ProfileViewModel = koinInject(),
     rekeningViewModel: RekeningLainnyaViewModel = koinInject(),
 ) {
+    val screenHeight = LocalConfiguration.current.screenHeightDp.dp
     val uiState by berandaViewModel.uiState.collectAsStateWithLifecycle()
     val toastState = LocalToastState.current
     val pullToRefreshState = rememberPullToRefreshState()
@@ -120,21 +125,22 @@ fun BerandaPage(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(450.dp)
+                .height(screenHeight * 0.65f)
                 .clip(RoundedCornerShape(bottomStart = 50.dp, bottomEnd = 50.dp))
                 .background(MaterialTheme.colorScheme.primary),
-        )
-        Image(
-            painter = painterResource(id = R.drawable.bgfull),
-            contentDescription = null,
-            modifier = Modifier.fillMaxWidth(),
-            contentScale = ContentScale.Crop,
-        )
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.bgfull),
+                contentDescription = null,
+                modifier = Modifier.fillMaxWidth(),
+                contentScale = ContentScale.Crop
+            )
+        }
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 24.dp, vertical = 60.dp),
+                .padding(start = appLayout.defaultPadding, end = appLayout.defaultPadding, top = 60.dp),
         ) {
             if (profileUiState.isLoading) {
                 HaloUserSkeleton()
@@ -147,7 +153,7 @@ fun BerandaPage(
                 )
             }
 
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(appSpacing.xxxs))
 
             PullToRefreshBox(
                 isRefreshing = isRefreshing,
@@ -172,12 +178,11 @@ fun BerandaPage(
                             IntOffset(x = 0, y = pushOffsetPx.roundToInt())
                         }
                         .verticalScroll(rememberScrollState()),
+                    verticalArrangement = Arrangement.spacedBy(appSpacing.xxxs)
                 ) {
                     uiState.bannerList?.let { banners ->
                         BannerKeamanan(banners = banners) // persistKey default "beranda_pemberitahuan"
                     }
-
-                    Spacer(modifier = Modifier.height(15.dp))
 
                     if (rekeningUiState.isLoading && rekeningUiState.rekeningList == null) {
                         // Loading pertama kali, belum ada data sama sekali -> skeleton
@@ -186,10 +191,6 @@ fun BerandaPage(
                         // Sudah pernah ada data -> tetap tampilkan data lama walau sedang refresh
                         // (uiState.isRekeningRefreshing true tidak mengubah kondisi ini)
                         when {
-                            rekeningUiState.isLoading && rekeningUiState.rekeningList == null -> {
-                                // Loading pertama kali, belum ada data sama sekali -> skeleton
-                                SkeletonSaldoCard()
-                            }
                             rekeningUiState.rekeningList != null -> {
                                 // Sudah pernah ada data -> tetap tampilkan data lama walau sedang refresh
                                 // (uiState.isRekeningRefreshing true tidak mengubah kondisi ini)
@@ -209,8 +210,6 @@ fun BerandaPage(
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(15.dp))
-
                     MenuUtama(
                         onTransferClick = onTransferClick,
                         onTopUpClick = onTopUpClick,
@@ -222,11 +221,7 @@ fun BerandaPage(
                         onLainnyaClick = onLainnyaClick,
                     )
 
-                    Spacer(modifier = Modifier.height(15.dp))
-
                     NewsSection(navController = navController)
-
-                    Spacer(modifier = Modifier.height(40.dp))
                 }
             }
         }

@@ -113,7 +113,7 @@ fun ManageScheduledTransferPage(
                         Icon(
                             imageVector = if (isDeleteMode) Icons.Default.Close else Icons.Default.Delete,
                             contentDescription = null,
-                            tint = if (isDeleteMode) MaterialTheme.extendedColors.danger else MaterialTheme.colorScheme.primary,
+                            tint = if (isDeleteMode) extendedColors.danger else MaterialTheme.colorScheme.primary,
                             modifier = Modifier.width(18.dp),
                         )
                         Spacer(modifier = Modifier.width(6.dp))
@@ -121,7 +121,7 @@ fun ManageScheduledTransferPage(
                             text = if (isDeleteMode) "Batal" else "Hapus",
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.SemiBold,
-                            color = if (isDeleteMode) MaterialTheme.extendedColors.danger else MaterialTheme.colorScheme.primary,
+                            color = if (isDeleteMode) extendedColors.danger else MaterialTheme.colorScheme.primary,
                         )
                     }
                 }
@@ -191,7 +191,7 @@ fun ManageScheduledTransferPage(
 
             // Tombol bawah -- hanya muncul kalau ListSuccess.
             if (listState != null) {
-                Box(modifier = Modifier.padding(24.dp)) {
+                Box(modifier = Modifier.padding(bottom = 10.dp, start = 24.dp, end = 24.dp, top = 24.dp )) {
                     AppButton(
                         text = if (isDeleteMode) "Hapus" else "Buat Transfer Terjadwal",
                         enabled = !isDeleteMode || selectedIds.isNotEmpty(),
@@ -259,7 +259,7 @@ private fun ScheduledTransferRow(
             Text(
                 text = item.bankInfo,
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.extendedColors.textSecondary,
+                color = extendedColors.textSecondary,
             )
         }
 
@@ -271,7 +271,7 @@ private fun ScheduledTransferRow(
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(20.dp))
-                    .background(if (item.isActive) MaterialTheme.extendedColors.success else MaterialTheme.extendedColors.textDisabled)
+                    .background(if (item.isActive) extendedColors.success else extendedColors.textDisabled)
                     .padding(horizontal = 14.dp, vertical = 4.dp),
             ) {
                 Text(text = item.statusLabel, color = Color.White, fontSize = 10.sp)

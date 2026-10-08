@@ -33,7 +33,7 @@ fun SkeletonRekeningCard(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(25.dp))
-                .border(1.dp, MaterialTheme.extendedColors.divider, RoundedCornerShape(25.dp))
+                .border(1.dp, extendedColors.divider, RoundedCornerShape(25.dp))
                 .background(MaterialTheme.colorScheme.surface),
         ) {
             // Background dekoratif (pengganti SVG asli), sangat tipis
@@ -41,7 +41,7 @@ fun SkeletonRekeningCard(modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .fillMaxSize()
                     .alpha(0.05f)
-                    .background(MaterialTheme.extendedColors.divider),
+                    .background(extendedColors.divider),
             )
 
             // Isi konten utama

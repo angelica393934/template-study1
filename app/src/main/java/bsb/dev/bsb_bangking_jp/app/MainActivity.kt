@@ -14,8 +14,11 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -77,6 +80,7 @@ class MainActivity : ComponentActivity() {
             BSBBangkingJPTheme(darkTheme = settings.darkTheme) {
                 Surface(
                     modifier = Modifier
+                        .windowInsetsPadding(WindowInsets.ime.union(WindowInsets.navigationBars))
                         .windowInsetsPadding(WindowInsets.systemBars.only(WindowInsetsSides.Bottom))
                         .pointerInput(Unit) {
                             detectTapGestures(onTap = {
