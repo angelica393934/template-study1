@@ -3,15 +3,12 @@ package bsb.dev.bsb_bangking_jp.feature.transfer.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,17 +27,15 @@ fun AccountTile(
     nama: String,
     bank: String,
     accountNumber: String,
-    modifier: Modifier = Modifier,
     onTap: (() -> Unit)? = null,
-    onEdit: (() -> Unit)? = null,
-    onDeleteTap: (() -> Unit)? = null,
     showCheckbox: Boolean = false,
     checkboxValue: Boolean = false,
     onCheckboxChanged: ((Boolean) -> Unit)? = null,
     isSelected: Boolean = false,
+    contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
             .background(
                 if (isSelected) MaterialTheme.colorScheme.tertiaryContainer
@@ -50,8 +45,8 @@ fun AccountTile(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .padding(contentPadding)
                 .clickable(enabled = onTap != null) { onTap?.invoke() },
-//                .padding(start = 24.dp, end = 24.dp, top = 11.dp, bottom = 11.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             // leading: checkbox (opsional) + avatar
@@ -84,26 +79,6 @@ fun AccountTile(
                     text = accountNumber,
                     style = MaterialTheme.typography.bodyMedium,
                     color = extendedColors.textSecondary,
-                )
-            }
-
-            // trailing: onEdit ATAU onDeleteTap (saling eksklusif, sama seperti )
-            when {
-                onEdit != null -> Icon(
-                    imageVector = Icons.Default.Edit,
-                    contentDescription = "Ubah alias",
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier
-                        .size(20.dp)
-                        .clickable { onEdit() },
-                )
-                onDeleteTap != null -> Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = "Hapus",
-                    tint = MaterialTheme.colorScheme.error,
-                    modifier = Modifier
-                        .size(20.dp)
-                        .clickable { onDeleteTap() },
                 )
             }
         }

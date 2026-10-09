@@ -8,12 +8,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import android.net.Uri
 import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
+import androidx.compose.material.icons.filled.DisplaySettings
+import androidx.compose.material.icons.filled.Tune
 import bsb.dev.bsb_bangking_jp.core.components.LocalLoadingOverlay
 import bsb.dev.bsb_bangking_jp.feature.transfer.transfer_core.presentation.TransferNavEvent
 import bsb.dev.bsb_bangking_jp.feature.transfer.transfer_core.presentation.TransferUiEvent
@@ -30,6 +30,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation.NavController
 import bsb.dev.bsb_bangking_jp.R
 import bsb.dev.bsb_bangking_jp.feature.transfer.components.AccountTile
@@ -41,9 +43,6 @@ import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bsb.dev.bsb_bangking_jp.core.components.LocalToastState
 import bsb.dev.bsb_bangking_jp.core.skeleton.SkeletonList
-import bsb.dev.bsb_bangking_jp.feature.transfer.components.DeleteConfirmSheet
-import bsb.dev.bsb_bangking_jp.feature.transfer.components.UbahAliasSheet
-import bsb.dev.bsb_bangking_jp.feature.transfer.saved_recipient.domain.SavedRecipientItem
 import org.koin.androidx.compose.koinViewModel
 import bsb.dev.bsb_bangking_jp.feature.transfer.last_transfer.presentation.LastTransferUiState
 import bsb.dev.bsb_bangking_jp.feature.transfer.last_transfer.presentation.LastTransferViewModel
@@ -57,25 +56,20 @@ fun TransferHomePage(
     onBackClick: () -> Unit = {},
     onTransferSekarang: () -> Unit = {},
     onAturTerjadwalClick: () -> Unit = {},
+    onAturDaftarClick: () -> Unit = {},
     savedRecipientViewModel: SavedRecipientViewModel = koinViewModel(),
     lastTransferViewModel: LastTransferViewModel = koinViewModel(),
     transferViewModel: TransferViewModel = koinInject()
 ) {
     var showRecent by remember { mutableStateOf(true) }
-    var isDeleteMode by remember { mutableStateOf(false) }
     val selectedAccounts = remember { mutableStateListOf<String>() }
     var query by remember { mutableStateOf("") }
-    var showDeleteConfirm by remember { mutableStateOf(false) }
-    var editingItem by remember { mutableStateOf<SavedRecipientItem?>(null) }
-
     val lastTransferState by lastTransferViewModel.uiState.collectAsStateWithLifecycle()
-
     val savedState by savedRecipientViewModel.uiState.collectAsStateWithLifecycle()
     val toastState = LocalToastState.current
     LaunchedEffect(Unit) {
         lastTransferViewModel.load()
     }
-
     val transferUiState by transferViewModel.uiState.collectAsStateWithLifecycle()
     val loadingOverlay = LocalLoadingOverlay.current
 
@@ -127,6 +121,12 @@ fun TransferHomePage(
             }
         }
     }
+    // Tiap halaman ini tampil lagi (mis. kembali dari SetSavedListPage),
+// ambil ulang daftar tersimpan. Repository sudah punya cache terbaru,
+// jadi biasanya langsung dari memori tanpa hit API.
+    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
+        savedRecipientViewModel.getSavedRecipients()
+    }
 
     Scaffold(
         topBar = {
@@ -138,15 +138,8 @@ fun TransferHomePage(
         bottomBar = {
             Box(modifier = Modifier.padding(horizontal = 24.dp, vertical =10.dp)) {
                 AppButton(
-                    text = if (isDeleteMode) "Hapus Rekening Terpilih" else "Transfer Sekarang",
-                    enabled = !(isDeleteMode && selectedAccounts.isEmpty()),
-                    onClick = {
-                        if (isDeleteMode) {
-                            showDeleteConfirm = true
-                        } else {
-                            onTransferSekarang()
-                        }
-                    },
+                    text =  "Transfer Sekarang",
+                    onClick = { onTransferSekarang() },
                 )
             }
         }
@@ -168,7 +161,6 @@ fun TransferHomePage(
                     contentDescription = "Terjadwal",
                     modifier = Modifier.size(53.dp)
                 )
-                Spacer(modifier = Modifier.width(8.dp))
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = "Transfer terjadwal lebih mudah!",
@@ -197,7 +189,7 @@ fun TransferHomePage(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 24.dp, vertical = 15.dp),
+                    .padding(horizontal = 24.dp, vertical = 6.dp),
                 horizontalArrangement = Arrangement.SpaceAround,
             ) {
                 TransferTab(
@@ -222,29 +214,26 @@ fun TransferHomePage(
                         onValueChange = { query = it },
                         hintText = "Cari Daftar Tersimpan",
                     )
-                    Spacer(modifier = Modifier.height(15.dp))
+                    Spacer(modifier = Modifier.height(10.dp))
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable {
-                                isDeleteMode = !isDeleteMode
-                                selectedAccounts.clear()
-                            },
+                            .clickable {onAturDaftarClick() },
                         horizontalArrangement = Arrangement.End,
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Icon(
-                            imageVector = if (isDeleteMode) Icons.Default.Close else Icons.Default.Delete,
+                            imageVector = Icons.Default.Tune,
                             contentDescription = null,
-                            tint = if (isDeleteMode) extendedColors.danger else MaterialTheme.colorScheme.primary,
+                            tint = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.size(18.dp),
                         )
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
-                            text = if (isDeleteMode) "Batal" else "Hapus Daftar",
+                            text = "Atur Daftar",
                             style = MaterialTheme.typography.titleSmall,
                             fontWeight = FontWeight.SemiBold,
-                            color = if (isDeleteMode) extendedColors.danger else MaterialTheme.colorScheme.primary,
+                            color = MaterialTheme.colorScheme.primary,
                         )
                     }
                     Spacer(modifier = Modifier.height(8.dp))
@@ -328,26 +317,17 @@ fun TransferHomePage(
                                             bank = item.bankName,
                                             accountNumber = item.accountNumber,
                                             isSelected = isSelected,
-                                            showCheckbox = isDeleteMode,
                                             checkboxValue = isSelected,
                                             onCheckboxChanged = { checked ->
                                                 if (checked) selectedAccounts.add(item.id)
                                                 else selectedAccounts.remove(item.id)
                                             },
                                             onTap = {
-                                                if (isDeleteMode) {
-                                                    if (isSelected) selectedAccounts.remove(item.id)
-                                                    else selectedAccounts.add(item.id)
-                                                } else {
                                                     transferViewModel.getAccountDest(
                                                         code = item.bankCode,
                                                         accountNumber = item.accountNumber,
                                                     )
-                                                }
                                             },
-                                            onEdit = if (!isDeleteMode) {
-                                                { editingItem = item }
-                                            } else null,
                                         )
                                     }
                                 }
@@ -358,32 +338,6 @@ fun TransferHomePage(
             }
         }
     }
-    //sheet hapus
-    if (showDeleteConfirm) {
-        DeleteConfirmSheet(
-            onDismiss = {
-                showDeleteConfirm = false
-            },
-            onConfirm = {
-                savedRecipientViewModel.deleteSavedRecipients(
-                    selectedAccounts.toList()
-                )
-
-                selectedAccounts.clear()
-                isDeleteMode = false
-                showDeleteConfirm = false
-            }
-        )
-    }
-    // Sheet ubah alias
-    editingItem?.let { item ->
-        UbahAliasSheet(
-            item = item,
-            viewModel = savedRecipientViewModel,
-            onDismiss = { editingItem = null },
-        )
-    }
-
 }
 
 @Composable
@@ -403,7 +357,7 @@ private fun TransferTab(
             textAlign = TextAlign.Center,
             color = if (active) extendedColors.textPrimary else extendedColors.textDisabled,
         )
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(6.dp))
         Box(
             modifier = Modifier
                 .height(3.dp)

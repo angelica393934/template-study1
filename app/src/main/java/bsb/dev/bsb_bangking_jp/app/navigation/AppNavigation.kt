@@ -70,6 +70,7 @@ import bsb.dev.bsb_bangking_jp.feature.pengaturan.SyaratKetentuanPage
 import bsb.dev.bsb_bangking_jp.feature.pengaturan.TentangAplikasiPage
 import bsb.dev.bsb_bangking_jp.feature.registration.registrationNavGraph
 import bsb.dev.bsb_bangking_jp.feature.scan_qris.ScanQrisPage
+import bsb.dev.bsb_bangking_jp.feature.transfer.SetSavedListPage
 import bsb.dev.bsb_bangking_jp.shared.session.SessionExpiredDialog
 import bsb.dev.bsb_bangking_jp.shared.session.SessionGuard
 import org.koin.compose.koinInject
@@ -320,8 +321,15 @@ fun AppNavigation(
                         navController = navController,
                         onBackClick = { navController.popBackStack() },
                         onTransferSekarang = { navController.navigate("transfer_baru") },
-                        onAturTerjadwalClick = { navController.navigate("manage_scheduled_transfer") }, // 🔹 tambahkan
+                        onAturTerjadwalClick = { navController.navigate("manage_scheduled_transfer") },
+                        onAturDaftarClick={navController.navigate("set_saved_list")}
                     )
+                }
+
+                composable("set_saved_list") {
+                    SetSavedListPage(
+                        onBackClick = { navController.popBackStack() },
+                        )
                 }
 
                 composable("transfer_baru") {

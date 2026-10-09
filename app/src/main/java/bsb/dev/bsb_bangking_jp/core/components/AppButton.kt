@@ -1,6 +1,7 @@
 package bsb.dev.bsb_bangking_jp.core.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -55,7 +56,9 @@ fun AppButton(
 
     val content: @Composable () -> Unit = {
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
         ) {
 
             if (iconBeforeText && icon != null) {
@@ -71,6 +74,7 @@ fun AppButton(
                 text = text,
                 style = textStyle,
                 color = textColor,
+                maxLines = 1,
                 textAlign = TextAlign.Center,
                 )
 

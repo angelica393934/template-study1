@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import bsb.dev.bsb_bangking_jp.core.network.ApiException
 import bsb.dev.bsb_bangking_jp.feature.transfer.saved_recipient.domain.SavedRecipientRepository
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -12,10 +13,12 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.coroutines.cancellation.CancellationException
 
 class SavedRecipientViewModel(
     private val repository: SavedRecipientRepository,
 ) : ViewModel() {
+    private var loadJob: Job? = null
 
     private val _uiState = MutableStateFlow(SavedRecipientUiState())
     val uiState: StateFlow<SavedRecipientUiState> = _uiState.asStateFlow()
@@ -29,7 +32,12 @@ class SavedRecipientViewModel(
     }
 
     fun getSavedRecipients(forceRefresh: Boolean = false) {
-        viewModelScope.launch {
+        // Sudah ada fetch berjalan dan bukan paksa refresh -> tidak perlu dobel.
+        if (!forceRefresh && loadJob?.isActive == true) return
+        // Paksa refresh -> batalkan fetch lama supaya hasilnya tidak menimpa data baru.
+        if (forceRefresh) loadJob?.cancel()
+
+        loadJob = viewModelScope.launch {
             val hasExisting = _uiState.value.list != null
 
             if (hasExisting && forceRefresh) {
@@ -43,6 +51,8 @@ class SavedRecipientViewModel(
                 _uiState.update {
                     it.copy(isLoading = false, isRefreshing = false, list = result, error = null)
                 }
+            } catch (e: CancellationException) {
+                throw e // jangan ditelan sebagai error
             } catch (e: Exception) {
                 val message = (e as? ApiException)?.respMessage
                     ?: e.message

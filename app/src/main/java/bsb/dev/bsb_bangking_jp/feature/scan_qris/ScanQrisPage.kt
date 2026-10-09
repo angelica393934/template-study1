@@ -72,26 +72,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.concurrent.Executors
 
-/**
- * Padanan ScanQrisPage.dart -- halaman pindai QRIS.
- * Preview kamera pakai CameraX, deteksi barcode pakai ML Kit (Barcode Scanning),
- * dan overlay kotak pemindai (sudut + laser berjalan) digambar manual via Canvas,
- * padanan `_ScannerOverlayPainter` (CustomPainter) di Dart.
- *
- * Dependency tambahan yang WAJIB ditambahkan ke module build.gradle(.kts) app:
- *   implementation("androidx.camera:camera-core:1.3.4")
- *   implementation("androidx.camera:camera-camera2:1.3.4")
- *   implementation("androidx.camera:camera-lifecycle:1.3.4")
- *   implementation("androidx.camera:camera-view:1.3.4")
- *   implementation("com.google.mlkit:barcode-scanning:17.3.0")
- * Dan izin kamera di AndroidManifest.xml:
- *   <uses-permission android:name="android.permission.CAMERA" />
- *   <uses-feature android:name="android.hardware.camera" android:required="false" />
- *
- * @param onBackClick dipanggil saat tombol back di header ditekan.
- * @param onResult dipanggil begitu QR/kode berhasil dipindai (nilai mentah hasil scan) --
- *   padanan `Navigator.pop(context, value)` di versi Dart.
- */
 @OptIn(ExperimentalGetImage::class)
 @Composable
 fun ScanQrisPage(

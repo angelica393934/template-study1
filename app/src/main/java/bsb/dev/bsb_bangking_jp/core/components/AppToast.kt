@@ -39,7 +39,7 @@ import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
 import androidx.compose.material3.MaterialTheme
 import kotlinx.coroutines.delay
 
-enum class ToastType { SUCCESS, ERROR }
+enum class ToastType { SUCCESS, ERROR, WARNING}
 
 data class ToastMessage(
     val message: String,
@@ -57,6 +57,10 @@ class ToastState {
 
     fun showError(message: String) {
         current = ToastMessage(message, ToastType.ERROR)
+    }
+
+    fun showWarning(message: String) {
+        current = ToastMessage(message, ToastType.WARNING)
     }
 
     fun dismiss() {
@@ -133,6 +137,7 @@ fun ToastHost(
                     when (current.type) {
                         ToastType.SUCCESS -> SuccessToastContent(current.message)
                         ToastType.ERROR -> ErrorToastContent(current.message)
+                        ToastType.WARNING -> WarningToastContent(current.message)
                     }
                 }
             }
@@ -172,6 +177,31 @@ private fun ErrorToastContent(message: String) {
         modifier = Modifier
             .background(
                 color = extendedColors.danger,
+                shape = RoundedCornerShape(10.dp),
+            )
+            .padding(horizontal = 12.dp, vertical = 10.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(
+            imageVector = Icons.Filled.Error,
+            contentDescription = null,
+            tint =  MaterialTheme.colorScheme.surface,
+        )
+        Spacer(Modifier.width(8.dp))
+        Text(
+            text = message,
+            color = MaterialTheme.colorScheme.surface,
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier.weight(1f),
+        )
+    }
+}
+@Composable
+private fun WarningToastContent(message: String) {
+    Row(
+        modifier = Modifier
+            .background(
+                color = extendedColors.warning,
                 shape = RoundedCornerShape(10.dp),
             )
             .padding(horizontal = 12.dp, vertical = 10.dp),
