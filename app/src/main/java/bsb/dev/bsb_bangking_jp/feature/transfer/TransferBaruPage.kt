@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
@@ -22,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import bsb.dev.bsb_bangking_jp.core.components.AdaptiveScrollColumn
 import bsb.dev.bsb_bangking_jp.core.components.AppButton
 import bsb.dev.bsb_bangking_jp.core.components.AppHeader
 import bsb.dev.bsb_bangking_jp.core.components.AppModalBottomSheet
@@ -142,39 +144,44 @@ fun TransferBaruPage(
         },
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {
+            AdaptiveScrollColumn(
+                modifier = Modifier
+                    .weight(1f)
+                    .imePadding(),                       // supaya tidak tertutup keyboard
+            ) {
+                Column(modifier = Modifier.padding(horizontal = 24.dp, vertical = 20.dp)) {
+                    AppTextField(
+                        value = selectedBankName ?: "",
+                        onValueChange = {},
+                        labelText = "Pilih Bank Tujuan",
+                        hintText = "Bank Tujuan",
+                        readOnly = true,
+                        isDropdown = true,
+                        errorText = bankError,
+                        showError = bankError != null,
+                        onClick = { showBankSheet = true },
+                    )
 
-            Column(modifier = Modifier.padding(horizontal = 24.dp, vertical = 20.dp)) {
-                AppTextField(
-                    value = selectedBankName ?: "",
-                    onValueChange = {},
-                    labelText = "Pilih Bank Tujuan",
-                    hintText = "Bank Tujuan",
-                    readOnly = true,
-                    isDropdown = true,
-                    errorText = bankError,
-                    showError = bankError != null,
-                    onClick = { showBankSheet = true },
-                )
+                    Spacer(modifier = Modifier.height(8.dp))
 
-                Spacer(modifier = Modifier.height(16.dp))
-
-                AppTextField(
-                    value = rekeningValue,
-                    onValueChange = { newValue ->
-                        rekeningValue = newValue.filter { it.isDigit() }.take(16)
-                        if (rekeningValue.isNotEmpty()) {
-                            rekeningLocalError = null
-                            viewModel.clearInquiryError() // 🔹 hapus error server (respCode 0602) begitu diketik ulang
-                        }
-                    },
-                    labelText = "Nomor Rekening",
-                    hintText = "Masukkan Nomor Rekening",
-                    keyboardType = KeyboardType.Number,
-                    maxLength = 16,
-                    // 🔹 gabungkan error lokal (kosong) dengan error dari server (respCode "0602")
-                    errorText = rekeningLocalError ?: uiState.inquiryError,
-                    showError = rekeningLocalError != null || uiState.inquiryError != null,
-                )
+                    AppTextField(
+                        value = rekeningValue,
+                        onValueChange = { newValue ->
+                            rekeningValue = newValue.filter { it.isDigit() }.take(16)
+                            if (rekeningValue.isNotEmpty()) {
+                                rekeningLocalError = null
+                                viewModel.clearInquiryError() // 🔹 hapus error server (respCode 0602) begitu diketik ulang
+                            }
+                        },
+                        labelText = "Nomor Rekening",
+                        hintText = "Masukkan Nomor Rekening",
+                        keyboardType = KeyboardType.Number,
+                        maxLength = 16,
+                        // 🔹 gabungkan error lokal (kosong) dengan error dari server (respCode "0602")
+                        errorText = rekeningLocalError ?: uiState.inquiryError,
+                        showError = rekeningLocalError != null || uiState.inquiryError != null,
+                    )
+                }
             }
         }
     }
@@ -184,7 +191,6 @@ fun TransferBaruPage(
         AppModalBottomSheet(
             onDismissRequest = { closeBankSheet() },
             sheetState = bankSheetState,
-            scrollable = false,
         ) {
             PilihBankSheet(
                 viewModel = daftarBankViewModel,

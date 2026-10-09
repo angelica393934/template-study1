@@ -40,7 +40,6 @@ import bsb.dev.bsb_bangking_jp.feature.registration.presentation.RegistrationNav
 import bsb.dev.bsb_bangking_jp.feature.registration.presentation.RegistrationUiEvent
 import bsb.dev.bsb_bangking_jp.feature.registration.presentation.RegistrationViewModel
 
-
 @Composable
 fun FindAccountPageRegistration(
     viewModel: RegistrationViewModel,

@@ -7,6 +7,7 @@ import bsb.dev.bsb_bangking_jp.core.session.ClearableRepository
 import bsb.dev.bsb_bangking_jp.feature.manage_scheduled_transfer.domain.ScheduledTransferRepository
 import bsb.dev.bsb_bangking_jp.feature.message.presentation.MessageHistoryViewModel
 import bsb.dev.bsb_bangking_jp.feature.transfer.last_transfer.presentation.LastTransferViewModel
+import bsb.dev.bsb_bangking_jp.feature.transfer.saved_recipient.domain.SavedRecipientRepository
 import bsb.dev.bsb_bangking_jp.feature.transfer.transfer_core.domain.TransferRepository
 import bsb.dev.bsb_bangking_jp.feature.transfer.transfer_core.domain.TransferRequestPayload
 import bsb.dev.bsb_bangking_jp.shared.rekening_lainnya.presentation.RekeningLainnyaViewModel
@@ -44,6 +45,7 @@ class TransferViewModel(
     private val activityViewModel: ActivityHistoryViewModel,
     private val lastTransferViewModel: LastTransferViewModel,
     private val repository: TransferRepository,
+    private val savedRecipientRepository: SavedRecipientRepository,
     private val scheduledTransferRepository : ScheduledTransferRepository,
 ) {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
@@ -95,6 +97,12 @@ class TransferViewModel(
             repository.saveRecipient(alias)
                 .onSuccess {
                     _uiState.update { it.copy(isSavingRecipient = false) }
+
+                    // 🔹 Buang cache daftar tersimpan supaya fetch berikutnya ambil data baru
+                    (savedRecipientRepository as? ClearableRepository)?.clear()
+
+                    // 🔹 Toast sukses, lalu baru lanjut (navEvent memicu onDismiss + onContinue)
+                    _uiEvent.emit(TransferUiEvent.ShowToastSuccess("Penerima berhasil disimpan"))
                     _navEvent.send(TransferNavEvent.RecipientSaved)
                 }
                 .onFailure { error ->

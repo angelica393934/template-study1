@@ -40,4 +40,5 @@ sealed class TransferNavEvent {
 
 sealed class TransferUiEvent {
     data class ShowToastError(val message: String) : TransferUiEvent()
+    data class ShowToastSuccess(val message: String) : TransferUiEvent()
 }

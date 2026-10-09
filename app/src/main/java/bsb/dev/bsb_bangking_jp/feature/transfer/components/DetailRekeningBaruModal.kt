@@ -47,8 +47,9 @@ fun DetailRekeningBaruModal(
     }
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { event ->
-            if (event is TransferUiEvent.ShowToastError) {
-                toastState.showError(event.message)
+            when (event) {
+                is TransferUiEvent.ShowToastError -> toastState.showError(event.message)
+                is TransferUiEvent.ShowToastSuccess -> toastState.showSuccess(event.message)
             }
         }
     }
