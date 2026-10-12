@@ -3,12 +3,7 @@ package bsb.dev.bsb_bangking_jp.feature.activation.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import bsb.dev.bsb_bangking_jp.core.network.ApiException
-import bsb.dev.bsb_bangking_jp.feature.activation.domain.ActivationResendOtpUseCase
-import bsb.dev.bsb_bangking_jp.feature.activation.domain.ActivationVerifyOtpUseCase
-import bsb.dev.bsb_bangking_jp.feature.activation.domain.ConfirmMpinActivationUseCase
-import bsb.dev.bsb_bangking_jp.feature.activation.domain.GetAccountActivationUseCase
-import bsb.dev.bsb_bangking_jp.feature.activation.domain.ValidatePasscodeUseCase
-import bsb.dev.bsb_bangking_jp.feature.activation.domain.ValidateUserIdUseCase
+import bsb.dev.bsb_bangking_jp.feature.activation.domain.ActivationRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -28,12 +23,7 @@ private const val INLINE_ERROR_CODE = "0612"
 private enum class FailureContext { ATM_CARD, USER_ID, OTP, PASSCODE, CONFIRM_PIN }
 
 class ActivationViewModel(
-    private val getAccountActivationUseCase: GetAccountActivationUseCase,
-    private val validateUserIdUseCase: ValidateUserIdUseCase,
-    private val resendOtpUseCase: ActivationResendOtpUseCase,
-    private val verifyOtpUseCase: ActivationVerifyOtpUseCase,
-    private val validatePasscodeUseCase: ValidatePasscodeUseCase,
-    private val confirmMpinUseCase: ConfirmMpinActivationUseCase,
+    private val repository: ActivationRepository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ActivationUiState())
@@ -55,7 +45,7 @@ class ActivationViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, atmCardError = null, atmCardNo = atmCardNo) }
 
-            getAccountActivationUseCase(atmCardNo)
+            repository.getAccountActivation(atmCardNo)
                 .onSuccess {
                     _uiState.update { it.copy(isLoading = false) }
                     _navEvent.send(ActivationNavEvent.ToIdPage)
@@ -77,7 +67,7 @@ class ActivationViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, userIdError = null) }
 
-            validateUserIdUseCase(userId)
+            repository.validateUserId(userId)
                 .onSuccess { mobileNumber ->
                     _uiState.update { it.copy(isLoading = false, mobileNumber = mobileNumber) }
                     _navEvent.send(ActivationNavEvent.ToOtpPage)
@@ -95,7 +85,7 @@ class ActivationViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, otpErrorMessage = null) }
 
-            verifyOtpUseCase(mobileNumber, otp)
+            repository.verifyOtp(mobileNumber, otp)
                 .onSuccess {
                     _uiState.update { it.copy(isLoading = false) }
                     _navEvent.send(ActivationNavEvent.ToPasswordPage)
@@ -112,7 +102,7 @@ class ActivationViewModel(
         val mobileNumber = _uiState.value.mobileNumber
         _uiState.update { it.copy(isLoading = true, otpErrorMessage = null) }
 
-        val result = resendOtpUseCase(mobileNumber)
+        val result = repository.resendOtp(mobileNumber)
         _uiState.update { it.copy(isLoading = false) }
 
         return result.fold(
@@ -134,7 +124,7 @@ class ActivationViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, passcodeError = null) }
 
-            validatePasscodeUseCase(passcode)
+            repository.validatePasscode(passcode)
                 .onSuccess {
                     _uiState.update { it.copy(isLoading = false) }
                     _navEvent.send(ActivationNavEvent.ToPinPage)
@@ -151,7 +141,7 @@ class ActivationViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, confirmPinError = null) }
 
-            confirmMpinUseCase(pin)
+            repository.confirmMpin(pin)
                 .onSuccess {
                     _uiState.update { it.copy(isLoading = false) }
                     _navEvent.send(ActivationNavEvent.ToPortal)
