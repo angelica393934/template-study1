@@ -222,6 +222,8 @@ fun BerandaPage(
                     )
 
                     NewsSection(navController = navController)
+                    Spacer(modifier = Modifier.height( 100.dp))
+
                 }
             }
         }

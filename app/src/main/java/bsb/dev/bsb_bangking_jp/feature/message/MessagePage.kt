@@ -352,7 +352,7 @@ fun MessagePage(
                             }
 
                             item(key = "bottom_spacer") {
-                                Spacer(modifier = Modifier.height(100.dp))
+                                Spacer(modifier = Modifier.height(200.dp))
                             }
                         }
                     }

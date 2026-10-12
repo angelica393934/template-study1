@@ -167,7 +167,6 @@ class TransferViewModel(
     fun confirmTransfer(mobilePin: String) {
         scope.launch {
             _uiState.update { it.copy(isConfirming = true, confirmError = null) }
-
             repository.confirmTransfer(mobilePin)
                 .onSuccess { result ->
                     _uiState.update { it.copy(isConfirming = false) }
@@ -178,7 +177,6 @@ class TransferViewModel(
                         messageViewModel.refresh()
                         lastTransferViewModel.load(forceRefresh = true)
                     }else{
-
                         // ManageScheduledTransferPage dibuka (LaunchedEffect(Unit) -> getList()),
                         // dia otomatis hit API lagi karena cache-nya sudah kosong,
                         // walaupun halaman itu sebelumnya sudah pernah dibuka.
@@ -188,10 +186,8 @@ class TransferViewModel(
                 }
                 .onFailure { error ->
                     _uiState.update { it.copy(isConfirming = false) }
-
                     val respCode = (error as? ApiException)?.respCode
                     val message = error.message ?: "Konfirmasi transfer gagal."
-
                     if (respCode == CONFIRM_SESSION_EXPIRED_CODE_1 || respCode == CONFIRM_SESSION_EXPIRED_CODE_2) {
                         _uiEvent.emit(TransferUiEvent.ShowToastError(SESSION_EXPIRED_MESSAGE))
                         _navEvent.send(TransferNavEvent.ConfirmSessionExpired)

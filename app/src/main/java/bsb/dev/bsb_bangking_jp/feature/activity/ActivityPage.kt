@@ -269,6 +269,8 @@ fun ActivityPage(
                         message = "Data rekening tidak dapat dimuat.",
                         subMessage = "Riwayat aktivitas butuh data rekening terlebih dahulu.\nPeriksa koneksi Anda dan coba lagi.",
                         actionText = "Coba Lagi",
+                        smallWidth = true,
+
                         onAction = {
                             rekeningViewModel.load(forceRefresh = true)
                         },
@@ -376,7 +378,8 @@ fun ActivityPage(
                                 }
                             }
 
-                            item(key = "bottom_spacer") { Spacer(modifier = Modifier.height(100.dp))
+                            item(key = "bottom_spacer") {
+                                Spacer(modifier = Modifier.height(200.dp))
                             }
                         }
                     }

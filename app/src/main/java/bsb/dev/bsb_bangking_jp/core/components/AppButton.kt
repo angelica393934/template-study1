@@ -54,69 +54,69 @@ fun AppButton(
                 .fillMaxWidth()
                 .height(50.dp)
 
-    val content: @Composable () -> Unit = {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
+        val content: @Composable () -> Unit = {
+            Row(
+                modifier = if (smallWidth) Modifier else Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
 
-            if (iconBeforeText && icon != null) {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = null,
-                    tint = textColor
+                if (iconBeforeText && icon != null) {
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = null,
+                        tint = textColor
+                    )
+                    Spacer(Modifier.width(8.dp))
+                }
+
+                Text(
+                    text = text,
+                    style = textStyle,
+                    color = textColor,
+                    maxLines = 1,
+                    textAlign = TextAlign.Center,
                 )
-                Spacer(Modifier.width(8.dp))
+
+                if (!iconBeforeText && icon != null) {
+                    Spacer(Modifier.width(8.dp))
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = null,
+                        tint = textColor
+                    )
+                }
             }
+        }
 
-            Text(
-                text = text,
-                style = textStyle,
-                color = textColor,
-                maxLines = 1,
-                textAlign = TextAlign.Center,
+        if (outlined) {
+            OutlinedButton(
+                onClick = onClick,
+                enabled = enabled,
+                modifier = buttonModifier,
+                shape = RoundedCornerShape(100.dp),
+                border = BorderStroke(
+                    1.dp,
+                    backgroundColor
                 )
-
-            if (!iconBeforeText && icon != null) {
-                Spacer(Modifier.width(8.dp))
-                Icon(
-                    imageVector = icon,
-                    contentDescription = null,
-                    tint = textColor
+            ) {
+                content()
+            }
+        } else {
+            Button(
+                onClick = onClick,
+                enabled = enabled,
+                modifier = buttonModifier,
+                shape = RoundedCornerShape(100.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = backgroundColor,
+                    contentColor = textColor
+                ),
+                elevation = ButtonDefaults.buttonElevation(
+                    defaultElevation = 0.dp
                 )
+            ) {
+                content()
             }
         }
     }
-
-    if (outlined) {
-        OutlinedButton(
-            onClick = onClick,
-            enabled = enabled,
-            modifier = buttonModifier,
-            shape = RoundedCornerShape(100.dp),
-            border = BorderStroke(
-                1.dp,
-                backgroundColor
-            )
-        ) {
-            content()
-        }
-    } else {
-        Button(
-            onClick = onClick,
-            enabled = enabled,
-            modifier = buttonModifier,
-            shape = RoundedCornerShape(100.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = backgroundColor,
-                contentColor = textColor
-            ),
-            elevation = ButtonDefaults.buttonElevation(
-                defaultElevation = 0.dp
-            )
-        ) {
-            content()
-        }
-    }
-}

@@ -253,6 +253,7 @@ fun TransferHomePage(
                                 message = "Gagal memuat data transfer terakhir.",
                                 subMessage = "Terjadi kesalahan saat mengambil data.\nPeriksa koneksi anda dan coba lagi.",
                                 actionText = "Coba Lagi",
+                                smallWidth = true,
                                 onAction = { lastTransferViewModel.retry() },
                             )
                         }

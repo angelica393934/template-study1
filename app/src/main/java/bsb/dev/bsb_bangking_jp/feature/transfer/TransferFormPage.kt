@@ -110,7 +110,6 @@ fun TransferFormPage(
     var sampai by remember { mutableStateOf("") }
     var activeAccountNumber by remember { mutableStateOf<String?>(null) }
     var sumberAktif by remember { mutableStateOf<RekeningItem?>(null) }
-
     var showLayananSheet by remember { mutableStateOf(false) }
     var showTujuanSheet by remember { mutableStateOf(false) }
     var showFrekuensiSheet by remember { mutableStateOf(false) }
@@ -118,17 +117,14 @@ fun TransferFormPage(
     var showKalenderPicker by remember { mutableStateOf(false) }
     var showMulaiSheet by remember { mutableStateOf(false) }
     var showSampaiSheet by remember { mutableStateOf(false) }
-
     var showPeriksaSheet by remember { mutableStateOf(false) }
     var pendingResult by remember { mutableStateOf<TransferFormResult?>(null) }
 
     val coroutineScope = rememberCoroutineScope()
     val periksaSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val kalenderSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-
     val transferUiState by transferViewModel.uiState.collectAsStateWithLifecycle()
     val rekeningUiState by rekeningViewModel.uiState.collectAsStateWithLifecycle()
-
     val toastState = LocalToastState.current
     val loadingOverlay = LocalLoadingOverlay.current
 
@@ -228,7 +224,6 @@ fun TransferFormPage(
     val isFormValid = when (jenis) {
         TransferJenis.SESAMA_BSB ->
             isAmountValid && (!isScheduled || tanggalValidUntukJadwal)
-
         TransferJenis.ANTAR_BANK ->
             isAmountValid &&
                     selectedLayanan != null &&

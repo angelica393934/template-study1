@@ -9,6 +9,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -81,7 +84,6 @@ fun Navbar(
     onCardlessClick : () -> Unit = {},
 ) {
     var currentIndex by rememberSaveable { mutableIntStateOf(initialIndex) }
-
     Scaffold(
         Modifier.background(Color.Transparent),
         containerColor = Color.Transparent,
@@ -101,12 +103,13 @@ fun Navbar(
             }
         }
     ){ innerPadding ->
+        val layoutDirection = LocalLayoutDirection.current
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(
-                    bottom = innerPadding.calculateBottomPadding()
-                )
+                    start = innerPadding.calculateStartPadding(layoutDirection),
+                    end = innerPadding.calculateEndPadding(layoutDirection))
         ) {
             when (currentIndex) {
                 0 -> BerandaPage(
