@@ -36,6 +36,7 @@ fun SaldoCardEmpty(
         rekening = "-",
         saldo = "-",
         modifier = modifier,
+        initiallyVisible = true,
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -43,7 +44,7 @@ fun SaldoCardEmpty(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = "Data rekening tidak tersedia",
+                text = "Rekening tidak tersedia",
                 style = MaterialTheme.typography.titleMedium,
                 color = extendedColors.textSecondary,
                 maxLines = 1,

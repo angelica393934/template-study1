@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
@@ -33,7 +34,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.dropShadow
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bsb.dev.bsb_bangking_jp.core.components.AppButton
@@ -64,7 +69,6 @@ import bsb.dev.bsb_bangking_jp.shared.rekening_lainnya.presentation.RekeningLain
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 import java.time.LocalDate
-import java.util.Calendar
 
 enum class TransferJenis {
     ANTAR_BANK,
@@ -257,8 +261,19 @@ fun TransferFormPage(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .dropShadow(
+                        shape = RoundedCornerShape(1.dp),
+                        shadow = Shadow(
+                            radius = 6.dp,
+                            color = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f),
+                            offset = DpOffset(
+                                x = 0.dp,
+                                y = (-2).dp
+                            )
+                        )
+                    )
                     .background(MaterialTheme.colorScheme.background)
-                    .padding(horizontal = 24.dp, vertical = 10.dp),
+                    .padding(horizontal = 24.dp, vertical = 10.dp)
             ) {
                 Text(
                     text = "Penerima Dana",

@@ -41,10 +41,13 @@ fun SaldoCardBase(
     nama: String,
     rekening: String,
     saldo: String,
+    initiallyVisible: Boolean = false,
     modifier: Modifier = Modifier,
     bottomContent: (@Composable () -> Unit)? = null,
 ) {
-    var isVisible by rememberSaveable { mutableStateOf(false) }
+    var isVisible by rememberSaveable {
+        mutableStateOf(initiallyVisible)
+    }
     val clipboardManager = LocalClipboardManager.current
     val toastState = LocalToastState.current
 

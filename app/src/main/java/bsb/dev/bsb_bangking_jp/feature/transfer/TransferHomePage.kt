@@ -25,10 +25,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.dropShadow
+import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
@@ -136,7 +139,20 @@ fun TransferHomePage(
             )
         },
         bottomBar = {
-            Box(modifier = Modifier.padding(horizontal = 24.dp, vertical =10.dp)) {
+            Box(modifier = Modifier
+                .dropShadow(
+                    shape = RoundedCornerShape(1.dp),
+                    shadow = Shadow(
+                        radius = 6.dp,
+                        color = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f),
+                        offset = DpOffset(
+                            x = 0.dp,
+                            y = (-2).dp
+                        )
+                    )
+                )
+                .background(MaterialTheme.colorScheme.background)
+                .padding(horizontal = 24.dp, vertical =20.dp)) {
                 AppButton(
                     text =  "Transfer Sekarang",
                     onClick = { onTransferSekarang() },

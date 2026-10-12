@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Backspace
 import androidx.compose.material3.Icon
@@ -24,7 +25,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.dropShadow
+import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
 
@@ -35,7 +39,8 @@ private val KeyRows = listOf(
     listOf("", "0", "back"),
 )
 
-private val KeyboardVerticalPadding = 10.dp
+private val KeyboardTopPadding = 18.dp
+private val KeyboardBottomPadding = 10.dp
 private val KeyboardRowSpacing = 4.dp
 private val MinButtonSize = 48.dp
 private val MaxButtonSize = 80.dp
@@ -45,7 +50,7 @@ private val MaxButtonSize = 80.dp
  * Dipakai InputPinPage supaya keyboard tidak memakan terlalu banyak tinggi layar.
  */
 fun pinKeyboardButtonSize(availableHeight: Dp): Dp {
-    val fixed = KeyboardVerticalPadding * 2 + KeyboardRowSpacing * KeyRows.size
+    val fixed = KeyboardTopPadding +KeyboardBottomPadding + KeyboardRowSpacing * KeyRows.size
     return ((availableHeight - fixed) / KeyRows.size).coerceIn(MinButtonSize, MaxButtonSize)
 }
 
@@ -65,8 +70,20 @@ fun AppPinKeyboard(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .dropShadow(
+                    shape = RoundedCornerShape(1.dp),
+                    shadow = Shadow(
+                        radius = 6.dp,
+                        color = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f),
+                        offset = DpOffset(
+                            x = 0.dp,
+                            y = (-2).dp
+                        )
+                    )
+                )
                 .background(MaterialTheme.colorScheme.background)
-                .padding(vertical = KeyboardVerticalPadding),
+                .padding(top = KeyboardTopPadding, bottom = KeyboardBottomPadding )
+
         ) {
             KeyRows.forEach { row ->
                 Row(

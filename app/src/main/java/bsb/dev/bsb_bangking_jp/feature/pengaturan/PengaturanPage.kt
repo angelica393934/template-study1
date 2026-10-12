@@ -1,10 +1,7 @@
-
 package bsb.dev.bsb_bangking_jp.feature.pengaturan
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -26,7 +22,6 @@ import androidx.compose.material.icons.filled.PermDeviceInformation
 import androidx.compose.material.icons.filled.VpnKey
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -65,8 +60,6 @@ private val ProfileCardHalfHeight = 44.dp
 @Composable
 fun PengaturanPage(
     navController: NavController,
-    darkTheme: Boolean,
-    onThemeChange: (Boolean) -> Unit,
     profileViewModel: ProfileViewModel = koinInject(), // 🔹 sumber data profile yang sama dengan Beranda
     settingsViewModel: SettingsViewModel = viewModel(),
 ) {
@@ -108,25 +101,6 @@ fun PengaturanPage(
                         .padding(horizontal = appLayout.defaultPadding)
                 ) {
                     Spacer(modifier = Modifier.height(ProfileCardHalfHeight + 16.dp))
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.End,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = if (darkTheme) stringResource(R.string.theme_dark)
-                            else stringResource(R.string.theme_light),
-                            color = MaterialTheme.colorScheme.primary
-                        )
-
-                        Spacer(modifier = Modifier.width(8.dp))
-
-                        Switch(
-                            checked = darkTheme,
-                            onCheckedChange = onThemeChange
-                        )
-                    }
 
                     SettingSection(
                         title = stringResource(R.string.section_akun),
@@ -192,7 +166,7 @@ fun PengaturanPage(
                     SettingSection(
                         title = stringResource(R.string.section_keluar),
                         items = listOf(
-                            SettingItemData(Icons.Default.ExitToApp, stringResource(R.string.menu_keluar), onClick= { showLogoutSheet = true },),
+                            SettingItemData(Icons.Default.ExitToApp, stringResource(R.string.menu_keluar), onClick= { showLogoutSheet = true }),
                         ),
 
                     )
@@ -266,4 +240,3 @@ fun PengaturanPage(
     }
 }
 
-private fun Int.sp() = androidx.compose.ui.unit.TextUnit(this.toFloat(), androidx.compose.ui.unit.TextUnitType.Sp)

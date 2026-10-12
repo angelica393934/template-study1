@@ -36,14 +36,16 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import bsb.dev.bsb_bangking_jp.R
 import bsb.dev.bsb_bangking_jp.feature.pengaturan.PengaturanPage
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.DpOffset
 import androidx.navigation.NavController
 import bsb.dev.bsb_bangking_jp.feature.activity.ActivityPage
 import bsb.dev.bsb_bangking_jp.feature.beranda.BerandaPage
@@ -51,7 +53,6 @@ import bsb.dev.bsb_bangking_jp.feature.message.MessagePage
 import kotlin.Unit
 
 val NAVBAR_HEIGHT = 70.dp
-val NAVBAR_PADDING = 60.dp
 
 private data class NavItem(
     val imgactive: Int,
@@ -71,8 +72,6 @@ fun Navbar(
     navController : NavController,
     initialIndex: Int = 0,
     onNavigateToScanQris: () -> Unit,
-    darkTheme: Boolean,
-    onThemeChange: (Boolean) -> Unit,
     onNotificationClick : () -> Unit = {},
     onLainnyaClick: () -> Unit = {},
     onTransferClick: () -> Unit = {},
@@ -127,8 +126,6 @@ fun Navbar(
                 1 -> ActivityPage()
                 2 -> MessagePage()
                 3 -> PengaturanPage(
-                    darkTheme = darkTheme,
-                    onThemeChange = onThemeChange,
                     navController = navController,)
             }
         }
@@ -146,6 +143,17 @@ private fun ScanQrisFab(
 
     Box(
         modifier = modifier
+            .dropShadow(
+                shape = RoundedCornerShape(22.dp),
+                shadow = Shadow(
+                    radius = 6.dp,
+                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f),
+                    offset = DpOffset(
+                        x = 0.dp,
+                        y = (-3).dp
+                    )
+                )
+            )
             .size(outerSize)
             .clip(RoundedCornerShape(22.dp))
             .background(MaterialTheme.colorScheme.inversePrimary),
@@ -206,12 +214,16 @@ private fun BankBottomBar(
         modifier = Modifier
             .fillMaxWidth()
             .height(NAVBAR_HEIGHT)
-            .shadow(
-                elevation = 16.dp,
-                shape = cornerShape,
-                clip = false,
-                ambientColor = Color.Black.copy(alpha = 0.25f),
-                spotColor = Color.Black.copy(alpha = 0.25f),
+            .dropShadow(
+                shape = RoundedCornerShape(30.dp),
+                shadow = Shadow(
+                    radius = 6.dp,
+                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f),
+                    offset = DpOffset(
+                        x = 0.dp,
+                        y = (-3).dp
+                    )
+                )
             ),
         shape = cornerShape,
         color = MaterialTheme.colorScheme.surface,

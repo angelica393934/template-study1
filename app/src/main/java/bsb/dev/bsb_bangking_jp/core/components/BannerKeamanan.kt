@@ -39,7 +39,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import bsb.dev.bsb_bangking_jp.R
 import bsb.dev.bsb_bangking_jp.core.device.AppPreferences
@@ -127,6 +126,7 @@ private fun DismissibleBanner(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 5.dp),
+
     ) {
         AnimatedContent(
             targetState = currentIndex,

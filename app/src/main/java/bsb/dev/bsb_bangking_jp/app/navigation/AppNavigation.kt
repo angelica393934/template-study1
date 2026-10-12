@@ -247,8 +247,6 @@ fun AppNavigation(
                 composable("navbar") {
                     Navbar(
                         navController = navController,
-                        darkTheme = darkTheme,
-                        onThemeChange = onThemeChange,
                         initialIndex = 0,
                         onNotificationClick ={navController.navigate("notifikasi")},
                         onNavigateToScanQris = {

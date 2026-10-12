@@ -11,6 +11,5 @@ import retrofit2.Retrofit
 val activationModule = module {
     single { get<Retrofit>().create(ActivationApiService::class.java) }
     single<ActivationRepository> { ActivationRepositoryImpl(get(), get(), get()) }
-
-    viewModel { ActivationViewModel(get(), get()) }
+    viewModel { ActivationViewModel(get()) }
 }
