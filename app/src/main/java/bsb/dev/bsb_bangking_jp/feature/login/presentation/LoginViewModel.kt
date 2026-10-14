@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import bsb.dev.bsb_bangking_jp.core.device.AppPreferences
 import bsb.dev.bsb_bangking_jp.core.network.ApiException
-import bsb.dev.bsb_bangking_jp.feature.login.domain.LoginUseCase
+import bsb.dev.bsb_bangking_jp.feature.login.domain.LoginRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -22,7 +22,7 @@ private const val PASSCODE_ERROR_CODE = "0601"
 private const val USERID_ERROR_CODE = "0610"
 
 class LoginViewModel(
-    private val loginUseCase: LoginUseCase,
+    private val repository: LoginRepository,
     private val appPreferences: AppPreferences,
 ) : ViewModel() {
 
@@ -80,7 +80,7 @@ class LoginViewModel(
                 it.copy(isLoading = true, useridError = null, passcodeError = null, useridLogin = useridLogin)
             }
 
-            loginUseCase(useridLogin, passcode)
+            repository.login(useridLogin, passcode)
                 .onSuccess {
                     _uiState.update { it.copy(isLoading = false) }
 
