@@ -5,7 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import bsb.dev.bsb_bangking_jp.core.device.AppPreferences
 import bsb.dev.bsb_bangking_jp.core.util.getAppVersion
-import bsb.dev.bsb_bangking_jp.feature.init.domain.InitDeviceUseCase
+import bsb.dev.bsb_bangking_jp.feature.init.domain.InitRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -17,10 +17,9 @@ import kotlinx.coroutines.launch
 
 class InitViewModel(
     application: Application,
-    private val initDeviceUseCase: InitDeviceUseCase,
+    private val repository: InitRepository,
     private val appPreferences: AppPreferences,
 ) : AndroidViewModel(application) {
-
     private val _uiState = MutableStateFlow<SplashUiState>(SplashUiState.Loading)
     val uiState: StateFlow<SplashUiState> = _uiState.asStateFlow()
 
@@ -32,7 +31,6 @@ class InitViewModel(
     val appVersion: String = getAppVersion(application) ?: "1.0.0"
 
     private var navigated = false
-
     init {
         checkDeviceInit()
     }
@@ -46,7 +44,7 @@ class InitViewModel(
                 return@launch
             }
 
-            initDeviceUseCase()
+            repository.initDevice()
                 .onSuccess { checkStatus() }
                 .onFailure { error ->
                     _uiState.value = SplashUiState.Error(

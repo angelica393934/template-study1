@@ -3,12 +3,7 @@ package bsb.dev.bsb_bangking_jp.feature.registration.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import bsb.dev.bsb_bangking_jp.core.network.ApiException
-import bsb.dev.bsb_bangking_jp.feature.registration.domain.AddIdUserUseCase
-import bsb.dev.bsb_bangking_jp.feature.registration.domain.AddPasscodeUseCase
-import bsb.dev.bsb_bangking_jp.feature.registration.domain.GetAccountUseCase
-import bsb.dev.bsb_bangking_jp.feature.registration.domain.RegistResendOtpUseCase
-import bsb.dev.bsb_bangking_jp.feature.registration.domain.RegistVerifyDeviceUseCase
-import bsb.dev.bsb_bangking_jp.feature.registration.domain.RegistVerifyOtpUseCase
+import bsb.dev.bsb_bangking_jp.feature.registration.domain.RegistrationRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -26,12 +21,7 @@ private const val PHONE_ERROR_CODE = "0611"
 private const val ATM_CARD_ERROR_CODE = "0612"
 
 class RegistrationViewModel(
-    private val getAccountUseCase: GetAccountUseCase,
-    private val resendOtpUseCase: RegistResendOtpUseCase,
-    private val verifyOtpUseCase: RegistVerifyOtpUseCase,
-    private val verifyDeviceUseCase: RegistVerifyDeviceUseCase,
-    private val addIdUserUseCase: AddIdUserUseCase,
-    private val addPasscodeUseCase: AddPasscodeUseCase,
+    private val repository: RegistrationRepository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(RegistrationUiState())
@@ -64,7 +54,7 @@ class RegistrationViewModel(
                 )
             }
 
-            getAccountUseCase(atmCardNo, mobileNumber)
+            repository.getAccount(atmCardNo, mobileNumber)
                 .onSuccess {
                     _uiState.update { it.copy(isLoading = false) }
                     _navEvent.send(RegistrationNavEvent.ToOtpPage)
@@ -79,9 +69,9 @@ class RegistrationViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, otpErrorMessage = null) }
 
-            verifyOtpUseCase(mobileNumber, otp)
+            repository.verifyOtp(mobileNumber, otp)
                 .onSuccess { challengeToken ->
-                    verifyDeviceUseCase(challengeToken, mobileNumber)
+                    repository.verifyDevice(challengeToken, mobileNumber)
                         .onSuccess {
                             _uiState.update { it.copy(isLoading = false) }
                             _navEvent.send(RegistrationNavEvent.ToBuatIdPage)
@@ -108,7 +98,7 @@ class RegistrationViewModel(
         val mobileNumber = _uiState.value.mobileNumber
         _uiState.update { it.copy(isLoading = true, otpErrorMessage = null) }
 
-        val result = resendOtpUseCase(mobileNumber)
+        val result = repository.resendOtp(mobileNumber)
         _uiState.update { it.copy(isLoading = false) }
 
         return result.fold(
@@ -131,7 +121,7 @@ class RegistrationViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, userIdError = null) }
 
-            addIdUserUseCase(mobileNumber, userId, confirmUserId)
+            repository.addIdUser(mobileNumber, userId, confirmUserId)
                 .onSuccess {
                     _uiState.update { it.copy(isLoading = false) }
                     _navEvent.send(RegistrationNavEvent.ToBuatPasswordPage)
@@ -150,7 +140,7 @@ class RegistrationViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, passcodeError = null) }
 
-            addPasscodeUseCase(mobileNumber, passcode, confirmPasscode)
+            repository.addPasscode(mobileNumber, passcode, confirmPasscode)
                 .onSuccess {
                     _uiState.update { it.copy(isLoading = false) }
                     _navEvent.send(RegistrationNavEvent.ToPortal)

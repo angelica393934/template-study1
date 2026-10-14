@@ -1,14 +1,9 @@
-// feature/login_existing/presentation/LoginExistingViewModel.kt
 package bsb.dev.bsb_bangking_jp.feature.login_existing.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import bsb.dev.bsb_bangking_jp.core.network.ApiException
-import bsb.dev.bsb_bangking_jp.feature.login_existing.domain.ConfirmMpinUseCase
-import bsb.dev.bsb_bangking_jp.feature.login_existing.domain.LoginInitUseCase
-import bsb.dev.bsb_bangking_jp.feature.login_existing.domain.ResendOtpUseCase
-import bsb.dev.bsb_bangking_jp.feature.login_existing.domain.VerifyDeviceUseCase
-import bsb.dev.bsb_bangking_jp.feature.login_existing.domain.VerifyOtpUseCase
+import bsb.dev.bsb_bangking_jp.feature.login_existing.domain.LoginExistingRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -27,12 +22,8 @@ private const val INLINE_ERROR_CODE = "0626"
 private enum class FailureContext { PHONE, OTP, CONFIRM_PIN }
 
 class LoginExistingViewModel(
-    private val loginInitUseCase: LoginInitUseCase,
-    private val verifyOtpUseCase: VerifyOtpUseCase,
-    private val resendOtpUseCase: ResendOtpUseCase,
-    private val verifyDeviceUseCase: VerifyDeviceUseCase,
-    private val confirmMpinUseCase: ConfirmMpinUseCase,
-) : ViewModel() {
+    private val repository: LoginExistingRepository,
+    ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(LoginExistingUiState())
     val uiState: StateFlow<LoginExistingUiState> = _uiState.asStateFlow()
@@ -52,7 +43,7 @@ class LoginExistingViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, phoneInlineError = null, phoneNumber = phoneNumber) }
 
-            loginInitUseCase(phoneNumber)
+            repository.loginInit(phoneNumber)
                 .onSuccess {
                     _uiState.update { it.copy(isLoading = false) }
                     _navEvent.send(LoginExistingNavEvent.ToOtpPage)
@@ -69,9 +60,9 @@ class LoginExistingViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, otpErrorMessage = null) }
 
-            verifyOtpUseCase(phoneNumber, otp)
+            repository.verifyOtp(phoneNumber, otp)
                 .onSuccess { challengeToken ->
-                    verifyDeviceUseCase(challengeToken, phoneNumber)
+                    repository.verifyDevice(challengeToken, phoneNumber)
                         .onSuccess {
                             _uiState.update { it.copy(isLoading = false) }
                             _navEvent.send(LoginExistingNavEvent.ToPinPage)
@@ -93,7 +84,7 @@ class LoginExistingViewModel(
         val phoneNumber = _uiState.value.phoneNumber
             _uiState.update { it.copy(isLoading = true, otpErrorMessage = null) }
 
-        val result = resendOtpUseCase(phoneNumber)
+        val result = repository.resendOtp(phoneNumber)
         _uiState.update { it.copy(isLoading = false) }
 
         return result.fold(
@@ -113,7 +104,7 @@ class LoginExistingViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, confirmPinError = null) }
 
-            confirmMpinUseCase(phoneNumber, pin)
+            repository.confirmMpin(phoneNumber, pin)
                 .onSuccess {
                     _uiState.update { it.copy(isLoading = false) }
                     _navEvent.send(LoginExistingNavEvent.ToPortal)

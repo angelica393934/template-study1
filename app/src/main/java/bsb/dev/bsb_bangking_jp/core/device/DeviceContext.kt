@@ -25,7 +25,6 @@ object DeviceContext {
         deviceId = secureStorage.getDeviceId() ?: UUID.randomUUID().toString().also {
             secureStorage.saveDeviceId(it)
         }
-
         deviceName = "${Build.MANUFACTURER} ${Build.MODEL}"
         os = "Android"
         osVersion = Build.VERSION.RELEASE ?: "Unknown"
@@ -35,7 +34,6 @@ object DeviceContext {
         } catch (e: Exception) {
             "Unknown"
         }
-
         initialized = true
     }
 }
