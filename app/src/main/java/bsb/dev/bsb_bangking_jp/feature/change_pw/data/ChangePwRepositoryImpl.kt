@@ -86,7 +86,7 @@ class ChangePwRepositoryImpl(
         }
     }
 
-    override suspend fun verifyOtp(otp: String): Result<Unit> {
+    override suspend fun verifyOtpChangePw(otp: String): Result<Unit> {
         return try {
             val privateKey = secureStorage.getPrivateKey()
                 ?: return Result.failure(IllegalStateException("Private key tidak ditemukan, device belum ter-init."))
@@ -119,7 +119,7 @@ class ChangePwRepositoryImpl(
         }
     }
 
-    override suspend fun resendOtp(mobileNumber: String): Result<Unit> {
+    override suspend fun resendOtpChangePw(mobileNumber: String): Result<Unit> {
         return try {
             val privateKey = secureStorage.getPrivateKey()
                 ?: return Result.failure(IllegalStateException("Private key tidak ditemukan, device belum ter-init."))

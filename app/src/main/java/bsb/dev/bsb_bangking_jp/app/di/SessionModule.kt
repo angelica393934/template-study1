@@ -44,7 +44,7 @@ val sessionModule = module {
     single(createdAtStart = true) {
         SessionGuard(
             sessionManager = get(),
-            logoutUseCase = get(),
+            logoutRepository = get(),
             sessionExpiredNotifier = get(),
         )
     }

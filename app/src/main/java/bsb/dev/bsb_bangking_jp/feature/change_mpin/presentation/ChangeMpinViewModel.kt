@@ -2,9 +2,7 @@ package bsb.dev.bsb_bangking_jp.feature.change_mpin.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import bsb.dev.bsb_bangking_jp.feature.change_mpin.domain.ChangeMpinUseCase
-import bsb.dev.bsb_bangking_jp.feature.change_mpin.domain.ValidateOldMpinUseCase
-import bsb.dev.bsb_bangking_jp.feature.change_mpin.domain.VerifyOtpChangeMpinUseCase
+import bsb.dev.bsb_bangking_jp.feature.change_mpin.domain.ChangeMpinRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,9 +13,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ChangeMpinViewModel(
-    private val validateOldMpinUseCase: ValidateOldMpinUseCase,
-    private val changeMpinUseCase: ChangeMpinUseCase,
-    private val verifyOtpChangeMpinUseCase: VerifyOtpChangeMpinUseCase,
+    private val repository: ChangeMpinRepository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ChangeMpinUiState())
@@ -31,7 +27,7 @@ class ChangeMpinViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, oldMpinError = null) }
 
-            validateOldMpinUseCase(oldMpin)
+            repository.validateOldMpin(oldMpin)
                 .onSuccess {
                     _uiState.update { it.copy(isLoading = false) }
                     _navEvent.send(ChangeMpinNavEvent.ToNewPinPage)
@@ -49,7 +45,7 @@ class ChangeMpinViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, confirmMpinError = null) }
 
-            changeMpinUseCase(newMpin, confirmMpin)
+            repository.changeMpin(newMpin, confirmMpin)
                 .onSuccess { mobileNumber ->
                     _uiState.update { it.copy(isLoading = false, mobileNumber = mobileNumber) }
                     _navEvent.send(ChangeMpinNavEvent.ToOtpPage)
@@ -68,7 +64,7 @@ class ChangeMpinViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, otpErrorMessage = null) }
 
-            verifyOtpChangeMpinUseCase(mobileNumber, otp)
+            repository.verifyOtpChangeMpin(mobileNumber, otp)
                 .onSuccess {
                     _uiState.update { it.copy(isLoading = false) }
                     _navEvent.send(ChangeMpinNavEvent.ToPortalSuccess)
@@ -80,10 +76,4 @@ class ChangeMpinViewModel(
                 }
         }
     }
-
-    /**
-     * Padanan `onResend` di OtpGantiPinPage.dart -- Flutter TIDAK memanggil API apapun
-     * di sini, cuma langsung `showSuccessToast`. Dipertahankan apa adanya (no-op API).
-     */
-    fun clearOtpError() = _uiState.update { it.copy(otpErrorMessage = null) }
 }

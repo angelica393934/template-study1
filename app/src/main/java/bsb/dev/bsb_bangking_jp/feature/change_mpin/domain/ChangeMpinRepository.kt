@@ -8,5 +8,5 @@ interface ChangeMpinRepository {
     suspend fun changeMpin(newMpin: String, confirmMpin: String): Result<String>
 
     /** Padanan GantiMpinService.verifyOtp() -- POST /v1/dashboard/verify-otp-changempin. */
-    suspend fun verifyOtp(mobileNumber: String, otp: String): Result<Unit>
+    suspend fun verifyOtpChangeMpin(mobileNumber: String, otp: String): Result<Unit>
 }

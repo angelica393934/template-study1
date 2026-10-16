@@ -2,10 +2,7 @@ package bsb.dev.bsb_bangking_jp.feature.change_pw.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import bsb.dev.bsb_bangking_jp.feature.change_pw.domain.ChangePwUseCase
-import bsb.dev.bsb_bangking_jp.feature.change_pw.domain.ResendOtpChangePwUseCase
-import bsb.dev.bsb_bangking_jp.feature.change_pw.domain.ValidateOldPwUseCase
-import bsb.dev.bsb_bangking_jp.feature.change_pw.domain.VerifyOtpChangePwUseCase
+import bsb.dev.bsb_bangking_jp.feature.change_pw.domain.ChangePwRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -19,10 +16,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ChangePwViewModel(
-    private val validateOldPwUseCase: ValidateOldPwUseCase,
-    private val changePwUseCase: ChangePwUseCase,
-    private val verifyOtpChangePwUseCase: VerifyOtpChangePwUseCase,
-    private val resendOtpChangePwUseCase: ResendOtpChangePwUseCase,
+    private val repository: ChangePwRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ChangePwUiState())
@@ -39,7 +33,7 @@ class ChangePwViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, oldPasscodeError = null) }
 
-            validateOldPwUseCase(oldPasscode)
+            repository.validateOldPw(oldPasscode)
                 .onSuccess {
                     _uiState.update { it.copy(isLoading = false) }
                     _navEvent.send(ChangePwNavEvent.ToNewPasswordPage)
@@ -59,7 +53,7 @@ class ChangePwViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, newPasscodeError = null) }
 
-            changePwUseCase(newPasscode, confirmPasscode)
+            repository.changePw(newPasscode, confirmPasscode)
                 .onSuccess { mobileNumber ->
                     _uiState.update { it.copy(isLoading = false, mobileNumber = mobileNumber) }
                     _navEvent.send(ChangePwNavEvent.ToOtpPage)
@@ -79,7 +73,7 @@ class ChangePwViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, otpErrorMessage = null) }
 
-            verifyOtpChangePwUseCase(otp)
+            repository.verifyOtpChangePw(otp)
                 .onSuccess {
                     _uiState.update { it.copy(isLoading = false) }
                     _navEvent.send(ChangePwNavEvent.ToPortalSuccess)
@@ -97,7 +91,7 @@ class ChangePwViewModel(
         val mobileNumber = _uiState.value.mobileNumber
         _uiState.update { it.copy(isLoading = true, otpErrorMessage = null) }
 
-        val result = resendOtpChangePwUseCase(mobileNumber)
+        val result = repository.resendOtpChangePw(mobileNumber)
         _uiState.update { it.copy(isLoading = false) }
 
         return result.fold(

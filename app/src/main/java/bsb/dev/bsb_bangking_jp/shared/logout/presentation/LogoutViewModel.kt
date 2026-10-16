@@ -3,7 +3,7 @@ package bsb.dev.bsb_bangking_jp.shared.logout.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import bsb.dev.bsb_bangking_jp.core.network.ApiException
-import bsb.dev.bsb_bangking_jp.shared.logout.domain.LogoutUseCase
+import bsb.dev.bsb_bangking_jp.shared.logout.domain.LogoutRepository
 import bsb.dev.bsb_bangking_jp.shared.session.SessionManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class LogoutViewModel(
-    private val logoutUseCase: LogoutUseCase,
+    private val repository: LogoutRepository,
     private val sessionManager: SessionManager,
 ) : ViewModel() {
 
@@ -23,7 +23,7 @@ class LogoutViewModel(
         viewModelScope.launch {
             _uiState.update { LogoutUiState.Loading }
 
-            logoutUseCase()
+            repository.logout()
                 .onSuccess {
                     // 🔥 padanan sessionManager.clearSession() di listener sukses LogoutBloc:
                     // hapus token + bersihkan cache semua repository.

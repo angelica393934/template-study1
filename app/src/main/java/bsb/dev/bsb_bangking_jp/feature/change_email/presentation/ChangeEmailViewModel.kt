@@ -2,8 +2,7 @@ package bsb.dev.bsb_bangking_jp.feature.change_email.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import bsb.dev.bsb_bangking_jp.feature.change_email.domain.ConfirmChangeEmailUseCase
-import bsb.dev.bsb_bangking_jp.feature.change_email.domain.ChangeEmailUseCase
+import bsb.dev.bsb_bangking_jp.feature.change_email.domain.ChangeEmailRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -17,8 +16,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ChangeEmailViewModel(
-    private val changeEmailUseCase: ChangeEmailUseCase,
-    private val confirmChangeEmailUseCase: ConfirmChangeEmailUseCase,
+    private val repository: ChangeEmailRepository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ChangeEmailUiState())
@@ -42,7 +40,7 @@ class ChangeEmailViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, emailInlineError = null, newEmail = trimmed) }
 
-            changeEmailUseCase(trimmed)
+            repository.changeEmail(trimmed)
                 .onSuccess {
                     _uiState.update { it.copy(isLoading = false) }
                     _navEvent.send(ChangeEmailNavEvent.ToPinPage)
@@ -64,7 +62,7 @@ class ChangeEmailViewModel(
      */
     suspend fun confirmEmail(pin: String): String? {
         _uiState.update { it.copy(isLoading = true) }
-        val result = confirmChangeEmailUseCase(pin)
+        val result = repository.confirmChangeEmail(pin)
         _uiState.update { it.copy(isLoading = false) }
 
         return result.fold(

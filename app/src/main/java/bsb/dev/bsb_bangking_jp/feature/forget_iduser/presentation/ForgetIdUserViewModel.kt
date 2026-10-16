@@ -3,10 +3,7 @@ package bsb.dev.bsb_bangking_jp.feature.forget_iduser.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import bsb.dev.bsb_bangking_jp.core.network.ApiException
-import bsb.dev.bsb_bangking_jp.feature.forget_iduser.domain.ChangeIdUserUseCase
-import bsb.dev.bsb_bangking_jp.feature.forget_iduser.domain.ForgetIdResendOtpUseCase
-import bsb.dev.bsb_bangking_jp.feature.forget_iduser.domain.ForgetIdVerifyOtpUseCase
-import bsb.dev.bsb_bangking_jp.feature.forget_iduser.domain.GetIdUserUseCase
+import bsb.dev.bsb_bangking_jp.feature.forget_iduser.domain.ForgetIdUserRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -25,10 +22,7 @@ private const val ACCOUNT_ERROR_CODE_2 = "0805"
 private const val PHONE_ERROR_CODE = "0611"
 
 class ForgetIdUserViewModel(
-    private val getIdUserUseCase: GetIdUserUseCase,
-    private val verifyOtpUseCase: ForgetIdVerifyOtpUseCase,
-    private val resendOtpUseCase: ForgetIdResendOtpUseCase,
-    private val changeIdUserUseCase: ChangeIdUserUseCase,
+    private val repository: ForgetIdUserRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ForgetIdUserUiState())
@@ -64,7 +58,7 @@ class ForgetIdUserViewModel(
                 )
             }
 
-            getIdUserUseCase(trimmedAccount, trimmedPhone)
+            repository.getIdUser(trimmedAccount, trimmedPhone)
                 .onSuccess {
                     _uiState.update { it.copy(isLoading = false) }
                     _navEvent.send(ForgetIdUserNavEvent.ToOtpPage)
@@ -89,7 +83,7 @@ class ForgetIdUserViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, otpErrorMessage = null) }
 
-            verifyOtpUseCase(mobileNumber, otp)
+            repository.verifyOtp(mobileNumber, otp)
                 .onSuccess {
                     _uiState.update { it.copy(isLoading = false) }
                     _navEvent.send(ForgetIdUserNavEvent.ToResetIdPage)
@@ -106,7 +100,7 @@ class ForgetIdUserViewModel(
         val mobileNumber = _uiState.value.mobileNumber
         _uiState.update { it.copy(isLoading = true, otpErrorMessage = null) }
 
-        val result = resendOtpUseCase(mobileNumber)
+        val result =  repository.resendOtp(mobileNumber)
         _uiState.update { it.copy(isLoading = false) }
 
         return result.fold(
@@ -129,7 +123,7 @@ class ForgetIdUserViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, newUserIdError = null) }
 
-            changeIdUserUseCase(mobileNumber, newUserId, confirmUserId)
+            repository.changeIdUser(mobileNumber, newUserId, confirmUserId)
                 .onSuccess {
                     _uiState.update { it.copy(isLoading = false) }
                     _navEvent.send(ForgetIdUserNavEvent.ToPortalSuccess)

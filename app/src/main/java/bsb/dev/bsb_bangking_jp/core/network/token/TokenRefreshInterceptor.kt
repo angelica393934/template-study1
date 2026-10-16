@@ -1,9 +1,6 @@
 package bsb.dev.bsb_bangking_jp.core.network.token
 
-import bsb.dev.bsb_bangking_jp.core.crypto.SignatureUtils
-import bsb.dev.bsb_bangking_jp.core.device.SecureStorageService
-import bsb.dev.bsb_bangking_jp.core.network.header.ApiHeaders
-import bsb.dev.bsb_bangking_jp.shared.session.SessionExpiredNotifier
+import bsb.dev.bsb_bangking_jp.core.network.token.domain.TokenRepository
 import com.google.gson.Gson
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
@@ -11,191 +8,48 @@ import okhttp3.Request
 import okhttp3.Response
 
 private const val EXPIRED_RESP_CODE = "0465"
+private const val PEEK_LIMIT_BYTES = 64 * 1024L
 
+/** Hanya urusan OkHttp: pasang Bearer, deteksi 0465, retry sekali. Logika refresh ada di [TokenRepository]. */
 class TokenRefreshInterceptor(
-    private val secureStorage: SecureStorageService,
-    private val refreshApiService: () -> RefreshTokenApiService,
-    private val sessionExpiredNotifier: SessionExpiredNotifier,
+    private val tokenRepository: TokenRepository,
 ) : Interceptor {
 
     private val gson = Gson()
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        val originalRequest = chain.request()
-        val phaseTag = originalRequest.tag(TokenPhaseTag::class.java)
-            ?: return chain.proceed(originalRequest)
+        val original = chain.request()
+        val phase = original.tag(TokenPhaseTag::class.java)?.phase
+            ?: return chain.proceed(original)
 
-        val requestWithAuth = attachAuthorization(originalRequest, phaseTag.phase)
-        val response = chain.proceed(requestWithAuth)
+        val usedToken = tokenRepository.getAccessToken(phase)
+        val response = chain.proceed(original.withBearer(usedToken))
 
-        if (peekRespCode(response) != EXPIRED_RESP_CODE) return response
+        if (!response.isExpired()) return response
 
-        val newAccessToken = runBlocking { tryRefresh(phaseTag.phase) } ?: return response
+        val newToken = runBlocking { tokenRepository.refresh(phase, usedToken) }
+            ?: return response
+
         response.close()
-
-        val retryRequest = requestWithAuth.newBuilder()
-            .removeHeader("Authorization")
-            .addHeader("Authorization", "Bearer $newAccessToken")
-            .build()
-
-        return chain.proceed(retryRequest)
+        return chain.proceed(original.withBearer(newToken))
     }
 
-    private fun attachAuthorization(request: Request, phase: TokenPhase): Request {
-        val token = getStoredAccessToken(phase) ?: return request
-        return request.newBuilder()
-            .removeHeader("Authorization")
-            .addHeader("Authorization", "Bearer $token")
+    private fun Request.withBearer(token: String?): Request {
+        if (token == null) return this
+        return newBuilder()
+            .header("Authorization", "Bearer $token") // header() = replace, tidak dobel
             .build()
     }
 
-    private fun getStoredAccessToken(phase: TokenPhase): String? =
-        when (phase) {
-        TokenPhase.INIT -> secureStorage.getInitAccessToken()
-        TokenPhase.REGIST -> secureStorage.getRegistAccessToken()
-        TokenPhase.ACTIVATION -> secureStorage.getActivationAccessToken()
-        TokenPhase.LOGIN -> secureStorage.getLoginAccessToken()
-        TokenPhase.FORGET_ID_USER -> secureStorage.getForgetIdUserAccessToken()
-        TokenPhase.FORGET_PW_USER -> secureStorage.getForgetPwUserAccessToken()
-        TokenPhase.TRANSFER -> secureStorage.getTransferAccessToken()
-    }
-
-    private suspend fun tryRefresh(phase: TokenPhase): String? = try {
-        when (phase) {
-            TokenPhase.INIT -> refreshInitToken()
-            TokenPhase.REGIST ->  refreshRegistToken()
-            TokenPhase.ACTIVATION -> refreshActivationToken()
-            TokenPhase.LOGIN -> refreshLoginToken()
-            TokenPhase.FORGET_ID_USER -> refreshForgetIdUserToken()
-            TokenPhase.FORGET_PW_USER -> refreshForgetPwUserToken()
-            TokenPhase.TRANSFER -> null
+    /** Hanya mengintip body JSON dan dibatasi ukurannya (gambar/file tidak ikut dibaca). */
+    private fun Response.isExpired(): Boolean = try {
+        if (body?.contentType()?.subtype != "json") {
+            false
+        } else {
+            val text = peekBody(PEEK_LIMIT_BYTES).string()
+            gson.fromJson(text, Map::class.java)?.get("respCode") == EXPIRED_RESP_CODE
         }
     } catch (e: Exception) {
-        null
-    }
-
-    private suspend fun refreshInitToken(): String? {
-        val refreshToken = secureStorage.getInitRefreshToken() ?: return null
-        val privateKey = secureStorage.getPrivateKey() ?: return null
-
-        val timestamp = ApiHeaders.currentTimestamp()
-        val baseHeaders = ApiHeaders.full(timestamp)
-        val signature = SignatureUtils.sign(emptyMap<String, String>(), timestamp, privateKey)
-        val headers = ApiHeaders.withSignature(signature, baseHeaders) +
-                ("Authorization" to "Bearer $refreshToken")
-
-        val response = refreshApiService().refreshInitToken(headers = headers)
-        if (!response.isSuccessful) return null
-
-        val data = response.body()?.data ?: return null
-        val newAccess = data.accessToken ?: return null
-
-        secureStorage.saveInitAccessToken(newAccess)
-        data.refreshToken?.let { secureStorage.saveInitRefreshToken(it) }
-        return newAccess
-    }
-
-    private suspend fun refreshRegistToken(): String? {
-        val refreshToken = secureStorage.getRegistRefreshToken() ?: return null
-
-        val headers = mapOf("Authorization" to "Bearer $refreshToken")
-
-        val response = refreshApiService().refreshRegistToken(headers = headers)
-        if (!response.isSuccessful) return null
-
-        val data = response.body()?.data ?: return null
-        val newAccess = data.accessToken ?: return null
-
-        secureStorage.saveRegistAccessToken(newAccess)
-        data.refreshToken?.let { secureStorage.saveRegistRefreshToken(it) }
-        return newAccess
-    }
-
-    private suspend fun refreshActivationToken(): String? {
-        val refreshToken = secureStorage.getActivationRefreshToken() ?: return null
-
-        val headers = mapOf("Authorization" to "Bearer $refreshToken")
-
-        val response = refreshApiService().refreshActivationToken(headers = headers)
-        if (!response.isSuccessful) return null
-
-        val data = response.body()?.data ?: return null
-        val newAccess = data.accessToken ?: return null
-
-        secureStorage.saveActivationAccessToken(newAccess)
-        data.refreshToken?.let { secureStorage.saveActivationRefreshToken(it) }
-        return newAccess
-    }
-
-    private suspend fun refreshLoginToken(): String? {
-        val refreshToken = secureStorage.getLoginRefreshToken() ?: return null
-        val privateKey = secureStorage.getPrivateKey()
-        if (refreshToken == null || privateKey == null) {
-            sessionExpiredNotifier.notifyExpired()
-            return null
-        }
-
-        val timestamp = ApiHeaders.currentTimestamp()
-        val baseHeaders = ApiHeaders.full(timestamp)
-        val signature = SignatureUtils.sign(emptyMap<String, String>(), timestamp, privateKey)
-        val headers = ApiHeaders.withSignature(signature, baseHeaders) +
-                ("Authorization" to "Bearer $refreshToken")
-
-        val response = refreshApiService().refreshLoginToken(headers = headers)
-        if (!response.isSuccessful) {
-            if (response.code() in 400..499) sessionExpiredNotifier.notifyExpired()
-            return null
-        }
-
-        val data = response.body()?.data
-        val newAccess = data?.accessToken
-        if (newAccess == null) {
-            sessionExpiredNotifier.notifyExpired()
-            return null
-        }
-
-        secureStorage.saveLoginAccessToken(newAccess)
-        data.refreshToken?.let { secureStorage.saveLoginRefreshToken(it) }
-        return newAccess
-    }
-
-    private suspend fun refreshForgetIdUserToken(): String? {
-        val refreshToken = secureStorage.getForgetIdUserRefreshToken() ?: return null
-
-        val headers = mapOf("Authorization" to "Bearer $refreshToken")
-
-        val response = refreshApiService().refreshForgetIdUserToken(headers = headers)
-        if (!response.isSuccessful) return null
-
-        val data = response.body()?.data ?: return null
-        val newAccess = data.accessToken ?: return null
-
-        secureStorage.saveForgetIdUserAccessToken(newAccess)
-        data.refreshToken?.let { secureStorage.saveForgetIdUserRefreshToken(it) }
-        return newAccess
-    }
-
-    private suspend fun refreshForgetPwUserToken(): String? {
-        val refreshToken = secureStorage.getForgetPwUserRefreshToken() ?: return null
-
-        val headers = mapOf("Authorization" to "Bearer $refreshToken")
-
-        val response = refreshApiService().refreshForgetPwUserToken(headers = headers)
-        if (!response.isSuccessful) return null
-
-        val data = response.body()?.data ?: return null
-        val newAccess = data.accessToken ?: return null
-
-        secureStorage.saveForgetPwUserAccessToken(newAccess)
-        data.refreshToken?.let { secureStorage.saveForgetPwUserRefreshToken(it) }
-        return newAccess
-    }
-
-
-    private fun peekRespCode(response: Response): String? = try {
-        val bodyString = response.peekBody(Long.MAX_VALUE).string()
-        (gson.fromJson(bodyString, Map::class.java))["respCode"] as? String
-    } catch (e: Exception) {
-        null
+        false
     }
 }

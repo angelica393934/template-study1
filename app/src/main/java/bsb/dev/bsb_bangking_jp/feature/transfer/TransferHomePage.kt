@@ -125,12 +125,11 @@ fun TransferHomePage(
         }
     }
     // Tiap halaman ini tampil lagi (mis. kembali dari SetSavedListPage),
-// ambil ulang daftar tersimpan. Repository sudah punya cache terbaru,
-// jadi biasanya langsung dari memori tanpa hit API.
+    // ambil ulang daftar tersimpan. Repository sudah punya cache terbaru,
+    // jadi biasanya langsung dari memori tanpa hit API.
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
         savedRecipientViewModel.getSavedRecipients()
     }
-
     Scaffold(
         topBar = {
             AppHeader(

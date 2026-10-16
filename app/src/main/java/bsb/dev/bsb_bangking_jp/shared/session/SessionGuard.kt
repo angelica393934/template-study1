@@ -1,6 +1,6 @@
 package bsb.dev.bsb_bangking_jp.shared.session
 
-import bsb.dev.bsb_bangking_jp.shared.logout.domain.LogoutUseCase
+import bsb.dev.bsb_bangking_jp.shared.logout.domain.LogoutRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -22,7 +22,7 @@ import kotlinx.coroutines.withTimeoutOrNull
  */
 class SessionGuard(
     private val sessionManager: SessionManager,
-    private val logoutUseCase: LogoutUseCase,
+    private val logoutRepository: LogoutRepository,
     sessionExpiredNotifier: SessionExpiredNotifier,
 ) {
 
@@ -50,7 +50,7 @@ class SessionGuard(
         isForceLoggingOut = true
         scope.launch {
             // hit API dulu, tapi jangan sampai dialog tertahan lama kalau jaringan jelek / token sudah mati
-            withTimeoutOrNull(LOGOUT_TIMEOUT_MILLIS) { logoutUseCase() }
+            withTimeoutOrNull(LOGOUT_TIMEOUT_MILLIS) { logoutRepository.logout() }
             sessionManager.clearSession() // SELALU clear lokal, apapun hasil API-nya
             _showSessionExpired.value = true
         }

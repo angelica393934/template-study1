@@ -86,7 +86,7 @@ class ChangeMpinRepositoryImpl(
         }
     }
 
-    override suspend fun verifyOtp(mobileNumber: String, otp: String): Result<Unit> {
+    override suspend fun verifyOtpChangeMpin(mobileNumber: String, otp: String): Result<Unit> {
         return try {
             val privateKey = secureStorage.getPrivateKey()
                 ?: return Result.failure(IllegalStateException("Private key tidak ditemukan, device belum ter-init."))
