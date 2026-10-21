@@ -72,14 +72,14 @@ fun FindAccountPageRegistration(
                 modifier = Modifier
                     .weight(1f)
                     .imePadding(),                       // supaya tidak tertutup keyboard
-            ) {
+            ){
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(all = appLayout.defaultPadding),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(appSpacing.xxxs),
-            ) {
+            ){
                 Image(
                     painter = painterResource(R.drawable.asset_atur_id),
                     contentDescription = "asset_atur_id"

@@ -54,7 +54,6 @@ fun LainnyaPajakPage(
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-
             SearchTextField(
                 value = searchQuery,
                 onValueChange = { searchQuery = it },

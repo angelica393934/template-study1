@@ -46,6 +46,7 @@ val transferModule = module {
         )
     }
 
+    single { TransferFlowHolder() }
     viewModel {
         LastTransferViewModel(
             repository = get()

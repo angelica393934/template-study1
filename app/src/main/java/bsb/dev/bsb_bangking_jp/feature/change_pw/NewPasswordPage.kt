@@ -3,6 +3,7 @@ package bsb.dev.bsb_bangking_jp.feature.change_pw
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
@@ -16,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import bsb.dev.bsb_bangking_jp.core.components.AdaptiveScrollColumn
 import bsb.dev.bsb_bangking_jp.core.components.AppButton
 import bsb.dev.bsb_bangking_jp.core.components.AppHeader
 import bsb.dev.bsb_bangking_jp.core.components.AppTextField
@@ -55,64 +57,76 @@ fun NewPasswordPage(
 
     Column(modifier = Modifier.fillMaxSize()) {
         AppHeader(title = "Ganti Kata Sandi", onBackClick = onBackClick)
-        Column(
-            verticalArrangement = Arrangement.spacedBy(appSpacing.xs),
-            modifier = Modifier.padding(appLayout.defaultPadding)
-        ){
+        AdaptiveScrollColumn(
+            modifier = Modifier
+                .weight(1f)
+                .imePadding(),                       // supaya tidak tertutup keyboard
+        ) {
             Column(
-                verticalArrangement = Arrangement.spacedBy(appSpacing.xxxs),
+                verticalArrangement = Arrangement.spacedBy(appSpacing.xs),
+                modifier = Modifier.padding(appLayout.defaultPadding)
             ) {
-                Text(text = "Masukkan Kata Sandi Baru", style = MaterialTheme.typography.titleLarge)
-                AppTextField(
-                    value = newPasscode,
-                    onValueChange = {
-                        newPasscode = it
-                        viewModel.clearNewPasscodeError()
-                    },
-                    labelText = "Kata Sandi Baru",
-                    hintText = "Masukkan Kata Sandi Baru",
-                    icon = Icons.Default.Lock,
-                    obscureText = true,
-                    errorText = uiState.newPasscodeError,
-                    showError = uiState.newPasscodeError != null,
-                    enableFocusBackground = true,
-                )
-                AppTextField(
-                    value = confirmPasscode,
-                    onValueChange = {
-                        confirmPasscode = it
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(appSpacing.xxxs),
+                ) {
+                    Text(
+                        text = "Masukkan Kata Sandi Baru",
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                    AppTextField(
+                        value = newPasscode,
+                        onValueChange = {
+                            newPasscode = it
+                            viewModel.clearNewPasscodeError()
+                        },
+                        labelText = "Kata Sandi Baru",
+                        hintText = "Masukkan Kata Sandi Baru",
+                        icon = Icons.Default.Lock,
+                        obscureText = true,
+                        errorText = uiState.newPasscodeError,
+                        showError = uiState.newPasscodeError != null,
+                        enableFocusBackground = true,
+                    )
+                    AppTextField(
+                        value = confirmPasscode,
+                        onValueChange = {
+                            confirmPasscode = it
+                            confirmError = null
+                        },
+                        labelText = "Ulangi Kata Sandi Baru",
+                        hintText = "Ulangi Kata Sandi Baru",
+                        icon = Icons.Default.Lock,
+                        obscureText = true,
+                        errorText = confirmError,
+                        showError = confirmError != null,
+                        enableFocusBackground = true,
+                    )
+                    Text(text = "Aturan Kata Sandi", style = MaterialTheme.typography.titleSmall)
+                    RuleBullet("Gunakan tepat 8 karakter", newPasscode.isNotEmpty(), has8Chars)
+                    RuleBullet(
+                        "Gunakan huruf besar dan kecil",
+                        newPasscode.isNotEmpty(),
+                        hasUpperLower
+                    )
+                    RuleBullet("Sertakan angka", newPasscode.isNotEmpty(), hasNumber)
+                }
+                AppButton(
+                    text = "Simpan",
+                    enabled = isPasswordValid,
+                    onClick = {
+                        if (confirmPasscode.isEmpty()) {
+                            confirmError = "Ulangi kata sandi tidak boleh kosong"
+                            return@AppButton
+                        }
+                        if (confirmPasscode != newPasscode) {
+                            confirmError = "Kata sandi tidak sama"
+                            return@AppButton
+                        }
                         confirmError = null
+                        viewModel.changePw(newPasscode, confirmPasscode)
                     },
-                    labelText = "Ulangi Kata Sandi Baru",
-                    hintText = "Ulangi Kata Sandi Baru",
-                    icon = Icons.Default.Lock,
-                    obscureText = true,
-                    errorText = confirmError,
-                    showError = confirmError != null,
-                    enableFocusBackground = true,
                 )
-                Text(text = "Aturan Kata Sandi", style = MaterialTheme.typography.titleSmall)
-                RuleBullet("Gunakan tepat 8 karakter", newPasscode.isNotEmpty(), has8Chars)
-                RuleBullet("Gunakan huruf besar dan kecil", newPasscode.isNotEmpty(), hasUpperLower)
-                RuleBullet("Sertakan angka", newPasscode.isNotEmpty(), hasNumber)
             }
-
-            AppButton(
-                text = "Simpan",
-                enabled = isPasswordValid,
-                onClick = {
-                    if (confirmPasscode.isEmpty()) {
-                        confirmError = "Ulangi kata sandi tidak boleh kosong"
-                        return@AppButton
-                    }
-                    if (confirmPasscode != newPasscode) {
-                        confirmError = "Kata sandi tidak sama"
-                        return@AppButton
-                    }
-                    confirmError = null
-                    viewModel.changePw(newPasscode, confirmPasscode)
-                },
-            )
         }
     }
 }

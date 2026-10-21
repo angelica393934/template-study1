@@ -84,6 +84,9 @@ fun AppNavigation(
                 navController = navController,
                 startDestination = "navbar",
             ) {
+                composable("under_construction") {
+                    UnderConstructionPage(onBackClick = { navController.popBackStack() })
+                }
                 composable("splash") {
                     SplashScreen(navController)
                 }
@@ -147,9 +150,10 @@ fun AppNavigation(
                         onNavigateToRoute = { route ->
                             navController.navigate(route)
                         },
-                        onNavigateToUnavailable = { },
+                        onNavigateToUnavailable = { navController.navigateToUnderConstruction() },
                     )
                 }
+
                 composable("va") {
                     VaPage(
                         onBackClick = {
@@ -157,6 +161,7 @@ fun AppNavigation(
                         },
                     )
                 }
+
                 composable("bsbcash") {
                     BsbCashHomePage(
                         onBackClick = {
@@ -173,7 +178,9 @@ fun AppNavigation(
                         onNavigateToRoute = { route ->
                             Log.d("NAVIGATION", "Navigate ke $route")
                             navController.navigate(route)
-                        }
+                        },
+                        onNavigateToUnavailable = { navController.navigateToUnderConstruction()
+                        },
                     )
                 }
 
@@ -185,12 +192,12 @@ fun AppNavigation(
                     )
                 }
 
-
                 composable("tagihan") {
                     TagihanPage(
                         onBackClick = {
                             navController.popBackStack()
                         },
+                        onNavigateToUnavailable = { navController.navigateToUnderConstruction() },
                     )
                 }
 
@@ -199,6 +206,7 @@ fun AppNavigation(
                         onBackClick = {
                             navController.popBackStack()
                         },
+                        onNavigateToUnavailable = { navController.navigateToUnderConstruction() },
                     )
                 }
 
@@ -211,9 +219,8 @@ fun AppNavigation(
                         onNavigateToRoute = { route ->
                             navController.navigate(route)
                         },
-                        onNavigateToUnavailable = {
-
-                        },
+                        onNavigateToUnavailable = { navController.navigateToUnderConstruction()
+                       },
                     )
                 }
 
@@ -229,7 +236,7 @@ fun AppNavigation(
                             navController.navigate("menu_lainnya")
                         },
                         onTransferClick = {
-                            navController.navigate("transfer_home")
+                            navController.navigate("transfer")
                         },
                         onVirtualAccountClick = {
                             navController.navigate("va")
@@ -270,3 +277,5 @@ fun AppNavigation(
         }
     }
 }
+
+

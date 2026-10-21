@@ -1,9 +1,11 @@
 package bsb.dev.bsb_bangking_jp.feature.change_email
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -18,12 +20,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import bsb.dev.bsb_bangking_jp.core.components.AdaptiveScrollColumn
 import bsb.dev.bsb_bangking_jp.core.components.AppButton
 import bsb.dev.bsb_bangking_jp.core.components.AppHeader
 import bsb.dev.bsb_bangking_jp.core.components.AppModalConfirm
 import bsb.dev.bsb_bangking_jp.core.components.AppTextField
 import bsb.dev.bsb_bangking_jp.core.components.LocalLoadingOverlay
 import bsb.dev.bsb_bangking_jp.core.components.LocalToastState
+import bsb.dev.bsb_bangking_jp.core.theme.appLayout
+import bsb.dev.bsb_bangking_jp.core.theme.appSpacing
 import bsb.dev.bsb_bangking_jp.core.theme.extendedColors
 import bsb.dev.bsb_bangking_jp.feature.change_email.presentation.ChangeEmailNavEvent
 import bsb.dev.bsb_bangking_jp.feature.change_email.presentation.ChangeEmailUiEvent
@@ -67,48 +72,50 @@ fun ChangeEmailPage(
 
     Column(modifier = Modifier.fillMaxSize()) {
         AppHeader(title = "Email", onBackClick = onBackClick)
-
-        Column(
-            modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp),
+        AdaptiveScrollColumn(
+            modifier = Modifier
+                .weight(1f)
+                .imePadding(),                       // supaya tidak tertutup keyboard
         ) {
-            Text(text = "Ganti Alamat Email", style = MaterialTheme.typography.titleLarge)
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = "Masukkan alamat email baru Anda untuk memperbarui akun.",
-                style = MaterialTheme.typography.bodyMedium,
-                color = extendedColors.textSecondary,
-            )
-            Spacer(modifier = Modifier.height(24.dp))
-
-            AppTextField(
-                value = emailInput,
-                onValueChange = {
-                    emailInput = it
-                    localEmailError = null
-                    viewModel.clearEmailError()
-                },
-                hintText = "Alamat Email Baru",
-                keyboardType = KeyboardType.Email,
-                errorText = localEmailError ?: uiState.emailInlineError,
-                showError = localEmailError != null || uiState.emailInlineError != null,
-                onClearError = { localEmailError = null; viewModel.clearEmailError() },
-                enableFocusBackground = true,
-            )
-
-            Spacer(modifier = Modifier.height(30.dp))
-
-            AppButton(
-                text = "Simpan",
-                onClick = {
-                    val error = validateEmailLocal(emailInput)
-                    if (error != null) {
-                        localEmailError = error
-                    } else {
+            Column(
+                modifier = Modifier
+                    .padding(all = appLayout.defaultPadding),
+                verticalArrangement = Arrangement.spacedBy(appSpacing.xxxs),
+            ) {
+                Text(text = "Ganti Alamat Email", style = MaterialTheme.typography.titleLarge)
+                Text(
+                    text = "Masukkan alamat email baru Anda untuk memperbarui akun.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = extendedColors.textSecondary,
+                )
+                AppTextField(
+                    value = emailInput,
+                    onValueChange = {
+                        emailInput = it
                         localEmailError = null
-                        showConfirmModal = true
-                    }
-                },
-            )
+                        viewModel.clearEmailError()
+                    },
+                    hintText = "Alamat Email Baru",
+                    keyboardType = KeyboardType.Email,
+                    errorText = localEmailError ?: uiState.emailInlineError,
+                    showError = localEmailError != null || uiState.emailInlineError != null,
+                    onClearError = { localEmailError = null; viewModel.clearEmailError() },
+                    enableFocusBackground = true,
+                )
+                Spacer(modifier = Modifier.height(appSpacing.ss))
+                AppButton(
+                    text = "Simpan",
+                    onClick = {
+                        val error = validateEmailLocal(emailInput)
+                        if (error != null) {
+                            localEmailError = error
+                        } else {
+                            localEmailError = null
+                            showConfirmModal = true
+                        }
+                    },
+                )
+            }
         }
     }
 
