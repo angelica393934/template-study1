@@ -78,27 +78,10 @@ fun LainnyaPage(
     // ---- Menu Teratas ----
     val menuTeratas = remember {
         listOf(
-            LainnyaMenuItem(
-                labelRes = R.string.menu_transfer,
-                iconImg = R.drawable.ic_transfer,
-                route = "transfer",
-                scale = 0.45f,
-            ),
-            LainnyaMenuItem(
-                labelRes = R.string.menu_virtual_account,
-                iconImg = R.drawable.ic_va1,
-                scale = 0.5f,
-
-                ),
-            LainnyaMenuItem(
-                labelRes = R.string.menu_bsb_cash,
-                icon = Icons.Default.CreditCard,
-            ),
-            LainnyaMenuItem(
-                labelRes = R.string.menu_cardless,
-                iconImg = R.drawable.ic_cardless1,
-                scale = 0.5f,
-            ),
+            LainnyaMenuItem(R.string.menu_transfer, iconImg = R.drawable.ic_transfer, route = "transfer", scale = 0.45f),
+            LainnyaMenuItem(R.string.menu_virtual_account, iconImg = R.drawable.ic_va1, route = "va", scale = 0.5f),   // "virtual_home" belum ada, yang ada "va"
+            LainnyaMenuItem(R.string.menu_bsb_cash, icon = Icons.Default.CreditCard, route = "bsbcash"),
+            LainnyaMenuItem(R.string.menu_cardless, iconImg = R.drawable.ic_cardless1, route = "cardless", scale = 0.5f),
         )
     }
 

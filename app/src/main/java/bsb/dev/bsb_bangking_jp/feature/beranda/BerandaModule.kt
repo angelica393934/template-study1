@@ -10,6 +10,6 @@ import retrofit2.Retrofit
 val BerandaModule = module {
     single { get<Retrofit>().create(BerandaApiService::class.java) }
     single<GetBannerRepository> { GetBannerRepositoryImpl(get(), get()) }
-
     // 🔹 single, BUKAN viewModel -- state banner tetap bertahan lintas navigasi.
-    single { BerandaViewModel(get(), get(),  get()) }}
+    single { BerandaViewModel(get(), get(),  get()) }
+}

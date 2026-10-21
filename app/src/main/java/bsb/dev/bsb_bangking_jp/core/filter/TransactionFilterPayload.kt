@@ -3,8 +3,7 @@ package bsb.dev.bsb_bangking_jp.core.filter
 import bsb.dev.bsb_bangking_jp.core.util.DefaultRangeDate
 
 /**
- * Payload filter generik untuk transaksi/message — dipakai bareng oleh Aktivitas & message
- * (sebelumnyaTransactionFilterPayload, khusus fitur Aktivitas saja).
+ * Payload filter generik untuk transaksi/message — dipakai bareng oleh Aktivitas & message.
  */
 data class TransactionFilterPayload(
     val fromDate: String? = null,

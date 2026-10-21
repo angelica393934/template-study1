@@ -379,7 +379,7 @@ fun ActivityPage(
                             }
 
                             item(key = "bottom_spacer") {
-                                Spacer(modifier = Modifier.height(200.dp))
+                                Spacer(modifier = Modifier.height(50.dp))
                             }
                         }
                     }

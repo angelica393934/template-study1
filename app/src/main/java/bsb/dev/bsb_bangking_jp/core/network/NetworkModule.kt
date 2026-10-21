@@ -14,7 +14,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 private const val TIMEOUT_SECONDS = 30L
-
 // Qualifier dijadikan konstanta supaya tidak typo string di banyak tempat.
 private val REFRESH_OKHTTP = named("refreshOkHttp")
 private val REFRESH_RETROFIT = named("refreshRetrofit")
@@ -109,5 +108,5 @@ val networkModule = module {
     // Bypass OkHttp berarti interceptor ikut ter-bypass, jadi helper
     // ini memakai TokenRepository langsung untuk refresh + retry.
     // ============================================================
-//    single { GetWithBodyApiHelper(secureStorage = get(), tokenRepository = get()) }
+    single { GetWithBodyApiHelper(secureStorage = get(), tokenRepository = get()) }
 }

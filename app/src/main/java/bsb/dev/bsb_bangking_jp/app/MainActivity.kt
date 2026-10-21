@@ -37,11 +37,12 @@ import bsb.dev.bsb_bangking_jp.app.navigation.AppNavigation
 import bsb.dev.bsb_bangking_jp.core.notification.FcmTokenHelper
 import bsb.dev.bsb_bangking_jp.core.theme.BSBBangkingJPTheme
 import bsb.dev.bsb_bangking_jp.viewmodel.SettingsViewModel
-
+//komponen layar
 class MainActivity : ComponentActivity() {
+
     private val settingsViewModel: SettingsViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?){
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 

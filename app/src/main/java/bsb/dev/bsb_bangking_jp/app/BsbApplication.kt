@@ -36,7 +36,6 @@ import org.koin.core.context.startKoin
 class BsbApplication : Application() {
     override fun onCreate() {
         super.onCreate()
-
         startKoin {
             androidContext(this@BsbApplication)
             modules(
@@ -68,7 +67,6 @@ class BsbApplication : Application() {
                 // tambahkan module fitur lain di sini
             )
         }
-
         // DeviceContext perlu SecureStorageService dari Koin, jadi diinit setelah startKoin
         DeviceContext.init(this, get<SecureStorageService>())
         NotificationHelper.createNotificationChannel(this) //untuk notif
