@@ -8,6 +8,8 @@ data class ApiErrorResponse(
     @SerializedName("respCode") val respCode: String? = null,
     @SerializedName("respMessage") val respMessage: String? = null,
 )
+/** Dilempar saat request LOGIN dibatalkan karena access token tidak ada. */
+class MissingSessionException : java.io.IOException("Sesi login tidak ditemukan.")
 
 /** Exception yang membawa respCode & respMessage dari body error backend. */
 class ApiException(

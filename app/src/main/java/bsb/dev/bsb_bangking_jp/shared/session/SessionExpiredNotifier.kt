@@ -14,8 +14,19 @@ class SessionExpiredNotifier(private val secureStorage: SecureStorageService) {
     private val _events = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
     val events: SharedFlow<Unit> = _events.asSharedFlow()
 
+    private val _missingTokenEvents = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+    val missingTokenEvents: SharedFlow<Unit> = _missingTokenEvents.asSharedFlow()
+
+    // 🔹 BARU: token login null saat ada request yang butuh token login
+    private val _missingEvents = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+    val missingEvents: SharedFlow<Unit> = _missingEvents.asSharedFlow()
+
     fun notifyExpired() {
         if (secureStorage.getLoginAccessToken() == null) return
         _events.tryEmit(Unit)
+    }
+
+    fun notifyTokenMissing() {
+        _missingEvents.tryEmit(Unit)
     }
 }

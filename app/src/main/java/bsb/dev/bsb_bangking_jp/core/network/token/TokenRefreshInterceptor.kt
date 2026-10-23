@@ -1,6 +1,8 @@
 package bsb.dev.bsb_bangking_jp.core.network.token
 
+import bsb.dev.bsb_bangking_jp.core.network.MissingSessionException
 import bsb.dev.bsb_bangking_jp.core.network.token.domain.TokenRepository
+import bsb.dev.bsb_bangking_jp.shared.session.SessionExpiredNotifier
 import com.google.gson.Gson
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
@@ -13,6 +15,7 @@ private const val PEEK_LIMIT_BYTES = 64 * 1024L
 /** Hanya urusan OkHttp: pasang Bearer, deteksi 0465, retry sekali. Logika refresh ada di [TokenRepository]. */
 class TokenRefreshInterceptor(
     private val tokenRepository: TokenRepository,
+    private val sessionExpiredNotifier: SessionExpiredNotifier,
 ) : Interceptor {
 
     private val gson = Gson()
@@ -23,6 +26,12 @@ class TokenRefreshInterceptor(
             ?: return chain.proceed(original)
 
         val usedToken = tokenRepository.getAccessToken(phase)
+        // 🔒 Token LOGIN kosong -> jangan kirim request, paksa kembali ke portal.
+        if (phase == TokenPhase.LOGIN && usedToken.isNullOrEmpty()) {
+            sessionExpiredNotifier.notifyTokenMissing()
+            throw MissingSessionException()
+        }
+
         val response = chain.proceed(original.withBearer(usedToken))
 
         if (!response.isExpired()) return response

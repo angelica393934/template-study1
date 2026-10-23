@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
@@ -27,6 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bsb.dev.bsb_bangking_jp.R
+import bsb.dev.bsb_bangking_jp.core.components.AdaptiveScrollColumn
 import bsb.dev.bsb_bangking_jp.core.components.AppButton
 import bsb.dev.bsb_bangking_jp.core.components.AppHeader
 import bsb.dev.bsb_bangking_jp.core.components.AppModalConfirm
@@ -78,82 +80,87 @@ fun ResetPwPageForgetPw(
 
     Column(modifier = Modifier.fillMaxSize()) {
         AppHeader(title = "Atur Ulang Kata Sandi", onBackClick = onBackClick)
-
-        Column(
+        AdaptiveScrollColumn(
             modifier = Modifier
-                .padding(appLayout.defaultPadding),
-            verticalArrangement = Arrangement.spacedBy(appSpacing.xxxs)
+                .weight(1f)
+                .imePadding(),                       // supaya tidak tertutup keyboard
         ) {
-            Box(
-                modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.Center
+            Column(
+                modifier = Modifier
+                    .padding(appLayout.defaultPadding),
+                verticalArrangement = Arrangement.spacedBy(appSpacing.xxxs)
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.asset_pw),
-                    contentDescription = null,
-                    modifier = Modifier.height(100.dp),
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.asset_pw),
+                        contentDescription = null,
+                        modifier = Modifier.height(100.dp),
+                    )
+                }
+                Text(
+                    textAlign = TextAlign.Center,
+                    text = "Buat Kata Sandi baru untuk pengalaman masuk lebih nyaman.",
+                    style = MaterialTheme.typography.titleLarge,
+                )
+                AppTextField(
+                    value = newPasscode,
+                    onValueChange = {
+                        newPasscode = it
+                        viewModel.clearNewPasscodeError()
+                    },
+                    labelText = "Kata Sandi Baru",
+                    hintText = "Masukkan Kata Sandi Baru",
+                    icon = Icons.Default.Lock,
+                    obscureText = true,
+                    errorText = uiState.newPasscodeError,
+                    showError = uiState.newPasscodeError != null,
+                    enableFocusBackground = true,
+                )
+                AppTextField(
+                    value = confirmPasscode,
+                    onValueChange = {
+                        confirmPasscode = it
+                        confirmError = null
+                    },
+                    labelText = "Ulangi Kata Sandi",
+                    hintText = "Ulangi Kata Sandi Baru",
+                    icon = Icons.Default.Lock,
+                    obscureText = true,
+                    errorText = confirmError,
+                    showError = confirmError != null,
+                    enableFocusBackground = true,
+                )
+                Text(
+                    text = "Aturan Password Pengguna",
+                    style = MaterialTheme.typography.titleSmall,
+                    textAlign = TextAlign.Left,
+                    color = extendedColors.textSecondary,
+                )
+                RuleBullet("Gunakan maksimal 8 karakter", newPasscode.isNotEmpty(), has8Chars)
+                RuleBullet("Gunakan huruf besar dan kecil", newPasscode.isNotEmpty(), hasUpperLower)
+                RuleBullet("Sertakan angka", newPasscode.isNotEmpty(), hasNumber)
+                AppButton(
+                    text = "Lanjutkan",
+                    icon = Icons.AutoMirrored.Filled.ArrowForward,
+                    modifier = Modifier.padding(vertical = appSpacing.xxxs),
+                    enabled = isAllValid,
+                    onClick = {
+                        if (confirmPasscode.isEmpty()) {
+                            confirmError = "Ulangi password pengguna tidak boleh kosong"
+                            return@AppButton
+                        }
+                        if (confirmPasscode != newPasscode) {
+                            confirmError = "Password pengguna baru tidak sama"
+                            return@AppButton
+                        }
+                        confirmError = null
+                        viewModel.changePw(newPasscode, confirmPasscode)
+                    },
                 )
             }
-            Text(
-                textAlign = TextAlign.Center,
-                text = "Buat Kata Sandi baru untuk pengalaman masuk lebih nyaman.",
-                style = MaterialTheme.typography.titleLarge,
-            )
-            AppTextField(
-                value = newPasscode,
-                onValueChange = {
-                    newPasscode = it
-                    viewModel.clearNewPasscodeError()
-                },
-                labelText = "Kata Sandi Baru",
-                hintText = "Masukkan Kata Sandi Baru",
-                icon = Icons.Default.Lock,
-                obscureText = true,
-                errorText = uiState.newPasscodeError,
-                showError = uiState.newPasscodeError != null,
-                enableFocusBackground = true,
-            )
-            AppTextField(
-                value = confirmPasscode,
-                onValueChange = {
-                    confirmPasscode = it
-                    confirmError = null
-                },
-                labelText = "Ulangi Kata Sandi",
-                hintText = "Ulangi Kata Sandi Baru",
-                icon = Icons.Default.Lock,
-                obscureText = true,
-                errorText = confirmError,
-                showError = confirmError != null,
-                enableFocusBackground = true,
-            )
-            Text(
-                text = "Aturan Password Pengguna",
-                style = MaterialTheme.typography.titleSmall,
-                textAlign = TextAlign.Left,
-                color = extendedColors.textSecondary,
-            )
-            RuleBullet("Gunakan maksimal 8 karakter", newPasscode.isNotEmpty(), has8Chars)
-            RuleBullet("Gunakan huruf besar dan kecil", newPasscode.isNotEmpty(), hasUpperLower)
-            RuleBullet("Sertakan angka", newPasscode.isNotEmpty(), hasNumber)
-            AppButton(
-                text = "Lanjutkan",
-                icon =  Icons.AutoMirrored.Filled.ArrowForward,
-                modifier = Modifier.padding(vertical = appSpacing.xxxs),
-                enabled = isAllValid,
-                onClick = {
-                    if (confirmPasscode.isEmpty()) {
-                        confirmError = "Ulangi password pengguna tidak boleh kosong"
-                        return@AppButton
-                    }
-                    if (confirmPasscode != newPasscode) {
-                        confirmError = "Password pengguna baru tidak sama"
-                        return@AppButton
-                    }
-                    confirmError = null
-                    viewModel.changePw(newPasscode, confirmPasscode)
-                },
-            )
         }
     }
 

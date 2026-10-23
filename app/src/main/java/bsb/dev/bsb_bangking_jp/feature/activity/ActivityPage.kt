@@ -304,6 +304,8 @@ fun ActivityPage(
                         subMessage = "Belum ditemukan catatan transaksi pada periode ini.",
                         actionText = null,
                     )
+                    Spacer(modifier = Modifier.height(100.dp))
+
                 }
 
                 else -> {
@@ -379,7 +381,7 @@ fun ActivityPage(
                             }
 
                             item(key = "bottom_spacer") {
-                                Spacer(modifier = Modifier.height(50.dp))
+                                Spacer(modifier = Modifier.height(100.dp))
                             }
                         }
                     }

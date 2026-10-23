@@ -27,6 +27,9 @@ object NetworkErrorMapper {
         is ApiException ->
             throwable.respMessage // sudah message dari server, aman ditampilkan
 
+        is MissingSessionException ->
+            "Sesi Anda telah berakhir. Silakan masuk kembali."
+
         // 🔒 Tangkap SEMUA IOException lain (mis. "unexpected end of stream",
         // ProtocolException, EOFException, dll) SEBELUM jatuh ke else -- message
         // aslinya sering menyertakan URL/host, jadi jangan pernah diteruskan.

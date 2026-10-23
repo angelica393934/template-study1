@@ -67,22 +67,35 @@ fun AppNavigation(
     LaunchedEffect(showSessionExpired) {
         if (showSessionExpired) loadingOverlayState.hide() // jangan sampai overlay loading menggantung
     }
+
+    LaunchedEffect(Unit) {
+        sessionGuard.redirectToPortal.collect {
+            // Cek route supaya request sisa setelah logout tidak me-reset portal berulang kali.
+            if (navController.currentDestination?.route != "portal") {
+                loadingOverlayState.hide()
+                berandaViewModel.resetLocalState()          // Profile & Rekening VM
+                navController.navigate("portal") { popUpTo(0) }   // hapus seluruh back stack
+            }
+        }
+    }
+
     if (showSessionExpired) {
         SessionExpiredDialog(
             onLoginAgain = {
                 sessionGuard.onLoginAgain()
                 berandaViewModel.resetLocalState() // reset Profile & Rekening ViewModel (singleton)
-                navController.navigate("splash") { popUpTo(0) }
+                navController.navigate("portal") { popUpTo(0) }
             },
         )
     }
+
     CompositionLocalProvider(LocalToastState provides toastState,
         LocalLoadingOverlay provides loadingOverlayState,
         ) {
         Box(modifier = Modifier.fillMaxSize()) {
             NavHost(
                 navController = navController,
-                startDestination = "navbar",
+                startDestination = "portal",
             ) {
                 composable("under_construction") {
                     UnderConstructionPage(onBackClick = { navController.popBackStack() })

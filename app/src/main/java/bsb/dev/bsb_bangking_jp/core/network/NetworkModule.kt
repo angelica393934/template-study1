@@ -76,7 +76,7 @@ val networkModule = module {
     }
 
     // Interceptor tipis: hanya pasang Bearer, deteksi 0465, lalu retry sekali.
-    single { TokenRefreshInterceptor(tokenRepository = get()) }
+    single { TokenRefreshInterceptor(get(), get()) }
 
     // ============================================================
     // 4) CLIENT UTAMA (semua endpoint biasa lewat Retrofit)
@@ -108,5 +108,5 @@ val networkModule = module {
     // Bypass OkHttp berarti interceptor ikut ter-bypass, jadi helper
     // ini memakai TokenRepository langsung untuk refresh + retry.
     // ============================================================
-    single { GetWithBodyApiHelper(secureStorage = get(), tokenRepository = get()) }
+    single { GetWithBodyApiHelper(secureStorage = get(), tokenRepository = get(), get()) }
 }

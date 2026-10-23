@@ -151,20 +151,20 @@ fun IntroPage(
                 )
             }
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                AppSwitch(
-                    checked = darkTheme,
-                    onCheckedChange = onThemeChange,
-                    modifier = Modifier.size(
-                        width = 40.dp,
-                        height = 20.dp
-                    )
-                )
-            }
+//            Row(
+//                modifier = Modifier.fillMaxWidth(),
+//                horizontalArrangement = Arrangement.End,
+//                verticalAlignment = Alignment.CenterVertically
+//            ) {
+//                AppSwitch(
+//                    checked = darkTheme,
+//                    onCheckedChange = onThemeChange,
+//                    modifier = Modifier.size(
+//                        width = 40.dp,
+//                        height = 20.dp
+//                    )
+//                )
+//            }
         }
 
         // 🔹 Card bawah: tinggi proporsional + isi bisa scroll

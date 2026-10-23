@@ -283,6 +283,8 @@ fun MessagePage(
                         subMessage = stringResource(R.string.msg_belum_ada_message),
                         actionText = null,
                     )
+                    Spacer(modifier = Modifier.height(100.dp))
+
                 }
 
                 else -> {
@@ -352,7 +354,7 @@ fun MessagePage(
                             }
 
                             item(key = "bottom_spacer") {
-                                Spacer(modifier = Modifier.height(50.dp))
+                                Spacer(modifier = Modifier.height(100.dp))
                             }
                         }
                     }

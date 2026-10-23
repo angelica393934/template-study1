@@ -4,9 +4,12 @@ import bsb.dev.bsb_bangking_jp.shared.logout.domain.LogoutRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
 
@@ -61,6 +64,24 @@ class SessionGuard(
         _showSessionExpired.value = false
         isForceLoggingOut = false
     }
+
+    // kalau token login null
+    private val _redirectToPortal = Channel<Unit>(Channel.CONFLATED)
+    val redirectToPortal: Flow<Unit> = _redirectToPortal.receiveAsFlow()
+
+    init {
+        scope.launch { sessionExpiredNotifier.events.collect { forceLogout() } }
+        scope.launch { sessionExpiredNotifier.missingTokenEvents.collect { handleMissingToken() } }
+    }
+
+    private fun handleMissingToken() {
+        // Kalau dialog "Sesi berakhir" sedang jalan, biarkan dialog yang mengatur alurnya.
+        if (isForceLoggingOut || _showSessionExpired.value) return
+        sessionManager.clearSession()   // hapus token + clear semua ClearableRepository
+        _redirectToPortal.trySend(Unit)
+    }
+
+
     /** Padanan startIdleTimer()/resetIdleTimer() -- panggil tiap ada interaksi user. */
     fun resetIdleTimer() {
         // idleJob?.cancel()

@@ -11,7 +11,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -36,14 +36,16 @@ class MessageHistoryViewModel(
     private fun observeRekeningUntukAutoLoad() {
         scope.launch {
             rekeningViewModel.uiState
-                .map { it.rekeningList }
-                .distinctUntilChangedBy { it?.size to it?.firstOrNull()?.number }
-                .collect { rekeningList ->
-                    if (_uiState.value.accountNumber != null) return@collect
-                    if (rekeningList.isNullOrEmpty()) return@collect
-
-                    val primary = rekeningList.firstOrNull { it.isPrimary } ?: rekeningList.first()
-                    getInitial(primary.number)
+                .map { state ->
+                    val list = state.rekeningList
+                    if (list.isNullOrEmpty()) null
+                    else (list.firstOrNull { it.isPrimary } ?: list.first()).number
+                }
+                .distinctUntilChanged()
+                .collect { primaryNumber ->
+                    if (primaryNumber == null) return@collect
+                    if (_uiState.value.accountNumber == primaryNumber) return@collect
+                    getInitial(primaryNumber)
                 }
         }
     }
@@ -52,10 +54,10 @@ class MessageHistoryViewModel(
         load(accountNumber, TransactionFilterPayload.initial())
     }
 
-    fun switchAccount(accountNumber: String) {
-        if (_uiState.value.accountNumber == accountNumber) return
-        getInitial(accountNumber)
-    }
+//    fun switchAccount(accountNumber: String) {
+//        if (_uiState.value.accountNumber == accountNumber) return
+//        getInitial(accountNumber)
+//    }
 
     fun applyFilter(filter: TransactionFilterPayload) {
         val accountNumber = _uiState.value.accountNumber ?: return
@@ -117,5 +119,8 @@ class MessageHistoryViewModel(
         }
         val def = DefaultRangeDate.getCurrentMonth()
         return filter.with(fromDate = def.from, toDate = def.to, resetQuickRange = true)
+    }
+    fun clear() {
+        _uiState.value = MessageHistoryUiState()
     }
 }

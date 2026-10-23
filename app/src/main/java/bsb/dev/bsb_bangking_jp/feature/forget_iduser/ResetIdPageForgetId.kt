@@ -8,6 +8,7 @@ import bsb.dev.bsb_bangking_jp.R
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
@@ -27,6 +28,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import bsb.dev.bsb_bangking_jp.core.components.AdaptiveScrollColumn
 import bsb.dev.bsb_bangking_jp.core.components.AppButton
 import bsb.dev.bsb_bangking_jp.core.components.AppHeader
 import bsb.dev.bsb_bangking_jp.core.components.AppModalConfirm
@@ -78,7 +80,11 @@ fun ResetIdPageForgetId(
 
     Column(modifier = Modifier.fillMaxSize()) {
         AppHeader(title = "Ubah ID Pengguna", onBackClick = onBackClick)
-
+        AdaptiveScrollColumn(
+            modifier = Modifier
+                .weight(1f)
+                .imePadding(),                       // supaya tidak tertutup keyboard
+        ) {
         Column(
             modifier = Modifier
                 .padding(appLayout.defaultPadding),
@@ -156,6 +162,7 @@ fun ResetIdPageForgetId(
                     viewModel.changeIdUser(newUserId, confirmUserId)
                 },
             )
+        }
         }
     }
 
