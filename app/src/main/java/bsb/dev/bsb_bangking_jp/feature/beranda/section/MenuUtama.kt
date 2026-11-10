@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,7 +18,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import bsb.dev.bsb_bangking_jp.R
 import bsb.dev.bsb_bangking_jp.core.components.AppMenu
-
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -90,25 +89,34 @@ fun MenuUtama(
         Text(
             text = stringResource(R.string.label_menu_utama),
             style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.padding( start = 16.dp,bottom = 20.dp),
+            modifier = Modifier.padding(start = 16.dp, bottom = 20.dp),
         )
 
         BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
-            val itemWidth = maxWidth / 4
+            // Maksimal 4 kolom; kalau layar terlalu sempit (item < 72dp) turun ke 3
+            val minItemWidth = 72.dp
+            val columns = if (maxWidth / 4 >= minItemWidth) 4 else 3
+            val itemWidth = maxWidth / columns
 
-            FlowRow(
+            Column(
                 modifier = Modifier.fillMaxWidth(),
-                maxItemsInEachRow = 4,
-                verticalArrangement = Arrangement.spacedBy(20.dp)
+                verticalArrangement = Arrangement.spacedBy(20.dp),
             ) {
-                menuItems.forEach { item ->
-                    AppMenu(
-                        label = stringResource(item.labelRes),
-                        iconImg = item.iconRes,
-                        width = itemWidth,
-                        useThemeStyle = true,
-                        onTap = item.onClick,
-                    )
+                menuItems.chunked(columns).forEach { rowItems ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center, // baris tidak penuh -> di tengah
+                    ) {
+                        rowItems.forEach { item ->
+                            AppMenu(
+                                label = stringResource(item.labelRes),
+                                iconImg = item.iconRes,
+                                width = itemWidth,
+                                useThemeStyle = true,
+                                onTap = item.onClick,
+                            )
+                        }
+                    }
                 }
             }
         }

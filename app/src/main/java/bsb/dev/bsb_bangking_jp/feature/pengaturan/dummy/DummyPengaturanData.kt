@@ -29,8 +29,7 @@ data class DummySyaratKetentuanSection(
 
 data class DummyTentangAplikasi(
     val description: String,
-    val featuresTitle: String,
-    val features: List<String>,
+    val features: String,
     val closingText: String,
     val playStoreUrl: String,
     val appStoreUrl: String,
@@ -242,15 +241,10 @@ object DummyPengaturanData {
     )
 
     val tentangAplikasi = DummyTentangAplikasi(
-        description = "Aplikasi ini dirancang untuk memberikan kemudahan dalam mengelola keuangan Anda. Dengan fitur-fitur yang lengkap dan antarmuka yang user-friendly, Anda dapat dengan mudah melacak pengeluaran, membuat anggaran, dan merencanakan keuangan masa depan Anda.",
-        featuresTitle = "Fitur Utama:",
-        features = listOf(
-            "Pelacakan Pengeluaran: Catat semua pengeluaran harian Anda dengan mudah.",
-            "Pembuatan Anggaran: Buat anggaran bulanan untuk membantu mengontrol pengeluaran.",
-            "Laporan Keuangan: Dapatkan laporan keuangan yang detail untuk analisis lebih lanjut.",
-            "Notifikasi Pengingat: Dapatkan notifikasi untuk tagihan dan pengingat penting lainnya.",
-        ),
-        closingText = "Kami berkomitmen untuk terus meningkatkan aplikasi ini berdasarkan masukan dari pengguna. Jika Anda memiliki saran atau pertanyaan, jangan ragu untuk menghubungi tim dukungan kami.",
+        description = "Halo.....\n" +
+                "Terima kasih sudah mempercayai kami dalam melayani setiap aktivitas transaksi Anda. Kami berkomitmen untuk memberikan layanan yang cepat, aman, dan terpercaya.",
+        features = "Kami harap setiap transaksi yang Anda lakukan melalui BSB Mobile ini dapat memberikan kenyamanan dan kemudahan dalam aktivitas sehari-hari.",
+        closingText = "Kami berupaya akan terus mengembangkan aplikasi ini agar dapat memberikan layanan yang lebih baik, aman, dan bermanfaat bagi Anda.",
         playStoreUrl = "https://play.google.com/store/apps/details?id=mlpt.siemo.mobilebankingbsb&pcampaignid=web_share",
         appStoreUrl = "https://apps.apple.com/id/app/mobile-bank-sumselbabel/id1473771097",
     )

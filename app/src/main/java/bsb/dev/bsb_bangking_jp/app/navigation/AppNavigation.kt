@@ -95,7 +95,7 @@ fun AppNavigation(
         Box(modifier = Modifier.fillMaxSize()) {
             NavHost(
                 navController = navController,
-                startDestination = "portal",
+                startDestination = "navbar",
             ) {
                 composable("under_construction") {
                     UnderConstructionPage(onBackClick = { navController.popBackStack() })

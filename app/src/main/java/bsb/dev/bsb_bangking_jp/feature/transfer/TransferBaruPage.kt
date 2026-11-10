@@ -90,6 +90,20 @@ fun TransferBaruPage(
         }
     }
 
+    LaunchedEffect(Unit) {
+        viewModel.navEvent.collect { event ->
+            when (event) {
+                is TransferNavEvent.ToDetailRekening -> detailInquiry = event.inquiry
+                is TransferNavEvent.RecipientSaved -> {
+                    val inquiry = detailInquiry
+                    detailInquiry = null            // tutup sheet
+                    inquiry?.let(onContinueToNextPage)  // navigasi ke form transfer
+                }
+                else -> Unit
+            }
+        }
+    }
+
     fun closeBankSheet() {
         coroutineScope.launch {
             bankSheetState.hide()

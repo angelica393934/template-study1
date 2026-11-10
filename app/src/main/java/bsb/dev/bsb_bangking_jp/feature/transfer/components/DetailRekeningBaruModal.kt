@@ -38,14 +38,6 @@ fun DetailRekeningBaruModal(
     }
 
     LaunchedEffect(Unit) {
-        viewModel.navEvent.collect { event ->
-            if (event is TransferNavEvent.RecipientSaved) {
-                onDismiss()
-                onContinue(inquiry)
-            }
-        }
-    }
-    LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { event ->
             when (event) {
                 is TransferUiEvent.ShowToastError -> toastState.showError(event.message)

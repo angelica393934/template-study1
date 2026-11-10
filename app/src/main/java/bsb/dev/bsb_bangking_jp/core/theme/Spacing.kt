@@ -10,11 +10,11 @@ object appSpacing {
     val xxxs: Dp = 8.dp
     val xxs: Dp = 12.dp
     val xs: Dp = 16.dp
-    val sm: Dp = 24.dp
+    val sm: Dp = 20.dp
     val md: Dp = 32.dp
     val lg: Dp = 40.dp
     val xl: Dp = 48.dp
-    val xxl: Dp = 64.dp
+    val xxl: Dp = 60.dp
     val xxxl: Dp = 80.dp
     val xxxxl: Dp = 96.dp
 }

@@ -77,6 +77,7 @@ fun SyaratKetentuanPage(
                     modifier = Modifier.width(150.dp)
                 )
             }
+            Spacer(modifier = Modifier.height(appSpacing.xxxxs))
             Text(
                 text = "SYARAT DAN KETENTUAN\nBANK SUMSEL BABEL MOBILE BANKING",
                 textAlign = TextAlign.Center,
@@ -91,7 +92,7 @@ fun SyaratKetentuanPage(
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.fillMaxWidth(),
             )
-            Spacer(modifier = Modifier.height(appSpacing.xxxxs))
+            Spacer(modifier = Modifier.height(appSpacing.xxxs))
 
             sections.forEach { section ->
                 Text(text = section.title, style = MaterialTheme.typography.titleLarge)
