@@ -19,75 +19,140 @@ git remote add origin https://gitlab.com/redesign-mobile-banking/mb-android.git
 git branch -M main
 git push -uf origin main
 ```
+Now :
+Android 8.0 Oreo
+API Level 26
 
-## Integrate with your tools
+folder Redesign
+folder dibangun berdasarkan feature-based, bukan layer-based (data/, domain/, presentation/ di root lalu isinya campur semua fitur)
+pola yang sudah dipakai secara luas — namanya Package-by-Feature dengan Layered Sub-folder, dipakai di reference architecture Google (Now in Android), dan di banyak project Android skala besar.
+├── data/          → urusan bicara ke server
+├── domain/        → kontrak penghubung
+├── presentation/  → logika tampilan
 
-* [Set up project integrations](https://gitlab.com/redesign-mobile-banking/mb-android/-/settings/integrations)
+FEATURE- per fitur
+data- Semua file yang berhubungan dengan API: endpoint, bentuk JSON, dan proses mengirim/menerima.
+ApiService	: Daftar endpoint untuk request (@POST("v1/login")). Hanya definisi, tanpa logika. Kadang tidak ada kalau pakai GET-with-body (langsung lewat GetWithBodyApiHelper).
+Models	: Mendefinisikan bentuk request (yang dikirim) dan response (yang diterima), plus mapper toDomain().
+RepositoryImpl	: Otak utama. Menyusun header dan body, membuat signature, memanggil API, mengecek respCode, menyimpan token/cache, dan mengubah error jadi pesan ramah. Semua dikumpulkan di sini.
 
-## Collaborate with your team
+    domain- Lapisan penghubung antara ViewModel dan data. Isinya kontrak dan bentuk data bersih, sehingga ViewModel tidak tahu proses di baliknya (Retrofit, header, signature, dll). Bisa disebut lapisan abstraksi / kontrak.
+        Repository (interface)	:Kontrak. daftar kemampuan yang boleh dipanggil ViewModel (login(...)). ViewModel hanya kenal ini, bukan implementasinya.
+        Item / Model domain	:Bentuk data bersih untuk dipakai aplikasi, terpisah dari format JSON backend.
+    
+    presentation- Mengatur logika tampilan: state layar, validasi ringan, memutuskan kapan loading, error, atau pindah halaman.
+        Contract	: Kosakata antara ViewModel dan UI: UiState (kondisi layar), NavEvent (perintah pindah halaman), UiEvent (toast dan efek sekali jalan).
+        ViewModel	: Menerima aksi dari UI, validasi ringan, memanggil repository, lalu mengubah hasilnya menjadi UiState atau event.
+    
+    Navgraph.kt : daftar navigation
+    Page        : code UI layar
+    Module.kt   : daftar dependensi Koin.
 
-* [Invite team members and collaborators](https://docs.gitlab.com/user/project/members/)
-* [Create a new merge request](https://docs.gitlab.com/user/project/merge_requests/creating_merge_requests/)
-* [Automatically close issues from merge requests](https://docs.gitlab.com/user/project/issues/managing_issues/#closing-issues-automatically)
-* [Enable merge request approvals](https://docs.gitlab.com/user/project/merge_requests/approvals/)
-* [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
 
-## Test and Deploy
+CORE/ — fondasi umum yang dipakai semua fitur
+core/components — komponen UI reusable
+AppButton, AppTextField, AppCheckBox, AppSwitch, SearchTextField: elemen input dan tombol standar.
+AppHeader: header biru dengan tombol back.
+AppModalBottomSheet, AppModalConfirm, BottomSheetIndicator: bottom sheet dan dialog konfirmasi.
+AppToast (ToastState, ToastHost) dan LoadingOverlay: toast dan overlay loading global lewat CompositionLocal.
+OtpForm, OtpInput, InputPinPage, AppPinKeyboard: form OTP dan input PIN 6 digit dengan keyboard custom.
+EmptyState, CustomRefreshIndicator, AdaptiveScrollColumn: state kosong, indikator pull-to-refresh, dan kolom yang bisa scroll di layar kecil.
+AppMenu, AppMenuHorizontal, CardHistory, InitialAvatar, SelectableOptionCard, FilterChipBar, RuleBullet, TransactionDetailRow: komponen menu, kartu, avatar inisial, chip filter, dan baris detail transaksi.
+SaldoCardBase, SaldoCardEmpty, RekeningLainnyaSheet: kartu saldo dan sheet pilih rekening.
+BannerKeamanan: banner pengumuman yang bisa ditutup, dan tidak muncul lagi hari itu.
+PilihTanggalSheet, PilihRentangTanggalSheet: kalender pilih tanggal dan rentang tanggal.
 
-Use the built-in continuous integration in GitLab.
+    core/theme — tema aplikasi
+        Color: palet warna. 
+        ExtendedColor: warna tambahan di luar Material.
+        Theme: skema terang/gelap. 
+        Type/Font: tipografi (Plus Jakarta Sans). 
+        Spacing: konstanta jarak.
 
-* [Get started with GitLab CI/CD](https://docs.gitlab.com/ci/quick_start/)
-* [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/user/application_security/sast/)
-* [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/topics/autodevops/requirements/)
-* [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/user/clusters/agent/)
-* [Set up protected environments](https://docs.gitlab.com/ci/environments/protected_environments/)
+    core/network — lapisan jaringan
+        header/
+            ApiHeaders: pembuat header standar, yaitu timestamp, device-id, signature, dan lainnya.
+        token/: 
+            data/
+                RefreshTokenApiService.kt ; endpoint refresh token.
+                RefreshTokenModels.kt ; bentuk JSON refresh token request and respone.
+                TokenRepositoryImpl.kt: otak proses refresh. Berisi konfigurasi tiap fase (cara simpan token, endpoint refresh) dan memakai Mutex agar hanya satu refresh berjalan sekaligus. Fase TRANSFER tidak bisa di-refresh karena tokennya sekali pakai. Kalau refresh LOGIN ditolak (4xx), sesi dianggap habis dan logout paksa dipicu.
+            domain/
+                TokenRepository.kt: interface dengan dua fungsi, getAccessToken(phase) dan refresh(phase, failedToken).
+            TokenPhase.kt : pembungkus fase supaya bisa ditempel ke request Retrofit lewat @Tag.
+            TokenRefreshInterceptor.kt: penghubung ke OkHttp. Memasang Authorization: Bearer, lalu kalau respons berisi respCode "0465" (token expired), memanggil refresh dan mengulang request sekali.
+        NetworkModule (Koin): setup OkHttp dan Retrofit.
+        NetworkConstants: base URL.
+        ApiErrorResponse (ApiException, ApiErrorParser): parsing error dari backend.
+        NetworkErrorMapper: mengubah exception jaringan jadi pesan ramah user.
+        GetWithBodyHttpClient dan GetWithBodyApiHelper: client socket mentah untuk endpoint GET yang membawa body, karena OkHttp tidak mendukungnya.
 
-***
+    core/crypto — keamanan
+        Ed25519KeyUtils: generate keypair Ed25519.
+        SignatureUtils: membuat X-Signature dari body dan timestamp.
+        JwtUtils: mengambil klaim challenge dari JWT.
 
-# Editing this README
+    core/device — data perangkat dan penyimpanan lokal
+        SecureStorageService: EncryptedSharedPreferences untuk private key dan semua token.
+        AppPreferences: flag biasa (init sukses, remember me, banner ditutup, dan lainnya).
+        DeviceContext: info perangkat (id, nama, OS, versi app).
+        DeviceModule: registrasi Koin.
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+    core/session — sesi aplikasi
+        ClearableRepository: interface untuk repository yang punya cache.
+        SessionClearer: membersihkan semua cache saat logout.
 
-## Suggestions for a good README
+    core/data — tempat menyimpan pengaturan tema dan bahasa
+        datastore/
+            AppPreference dan AppPreferenceRepository: menyimpan dark mode dan bahasa di DataStore.
+        model/
+            AppSettings: model pengaturannya tema dan bahasa
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+    core/viewmodel - untuk tema dan bahasa
+        SettingsViewModel: mengelola tema dan bahasa.
 
-## Name
-Choose a self-explaining name for your project.
+    core/filter — fitur filter transaksi aktifitas dan pesan
+        TransactionFilterPayload: model filter transaksi.
+        FilterTransaksiModal: sheet filter jenis, kategori, dan tanggal.
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+    core/skeleton — placeholder loading ber-shimmer
+        SkeletonBox (dasar), SkeletonAvatar, SkeletonList, SkeletonSaldoCard, SkeletonBerita, SkeletonMenu, SkeletonMenuUtama, SkeletonBanner, SkeletonRekeningCard, HaloUserSkeleton, ProfileSettingSkeleton, SkeletonDetailTransferTerjadwal.
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+    core/notification
+        NotificationHelper: channel dan tampilan notifikasi lokal.
+        AppFirebaseMessagingService: menerima push FCM.
+        FcmTokenHelper: mengambil token FCM.
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+    core/util — fungsi bantu
+        ApiResult: wrapper hasil API.
+        RetryHelper: retry dengan delay.
+        PinValidator: aturan M-PIN (tidak berurutan, tidak berulang).
+        RupiahFormat, MaskAccountNumber, MaskPhoneNumber, InitialName: formatter dan penyamar data.
+        DateFormatterUtil, BackendDateTimeUtil, DefaultRangeDate: format dan konversi tanggal.
+        TransactionFilterChipMapper: filter menjadi chip.
+        SystemSetting, GetAppVersion, ResponsiceScreen: info sistem, versi, dan ukuran responsif.
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+    core/dummy
+        DummyData: data sementara untuk halaman yang backend-nya belum ada (top up, VA, tagihan, dan lainnya)
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+shared/ — fitur lintas halaman (punya data, repository, dan ViewModel sendiri)
+shared/profile — profil user (nama, nomor HP) dan foto profilnya, lengkap dengan cache dan ViewModel single. ProfilePhotoPathUtils mengekstrak path foto.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+    shared/rekening_lainnya — daftar rekening user, saldo, dan pengaturan rekening utama. cashBalanceValue() mengambil saldo tunai.
+    
+    shared/get_image — pengambil gambar dari server dengan autentikasi.
+        ImageRepositoryImpl: cache di memori, batas 4 request paralel, dan penggabungan request yang sama.
+        NetworkImage dan rememberNetworkImageState: composable untuk menampilkan gambar.
+        ImageCategory: kategori path (berita, bank).
+    
+    shared/logout — API logout, LogoutViewModel, dan LogoutConfirmSheet.
+    
+    shared/session — sesi aplikasi
+        SessionManager: menghapus token dan cache, lalu mengubah status login.g
+        SessionGuard: logout paksa saat sesi habis. Timer idle dan background-nya sengaja dinonaktifkan.
+        SessionExpiredNotifier: jembatan dari lapisan network ke SessionGuard.
+        SessionExpiredDialog: dialog “Sesi Anda Telah Berakhir”.
+    
+    shared/transaction_result — hasil transaksi
+        TransactionResultInfo: model hasil transaksi generik.
+        TransactionResultPage: halaman bukti transaksi (berhasil, gagal, atau pending) dengan tombol simpan dan bagikan screenshot.
